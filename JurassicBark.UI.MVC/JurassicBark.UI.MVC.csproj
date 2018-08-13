@@ -192,6 +192,11 @@
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
     <Content Include="Content\images\jdp.png" />
+    <Content Include="Content\images\pet1.jpg" />
+    <Content Include="Content\images\pet2.jpg" />
+    <Content Include="Content\images\pet3.jpg" />
+    <Content Include="Content\images\pet4.png" />
+    <Content Include="Content\images\pet5.jpg" />
     <Content Include="Content\images\tagline.png" />
     <Content Include="favicon.ico" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />

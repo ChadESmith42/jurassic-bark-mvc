@@ -4,20 +4,10 @@
     ViewBag.Title = "Details";
 }
 
-<h2>Details</h2>
+<h2>@ViewBag.Title for @Html.DisplayFor(model => model.ResortName)</h2>
 
 <div>
-    <h4>ResortLocation</h4>
-    <hr />
     <dl class="dl-horizontal">
-        <dt>
-            @Html.DisplayNameFor(model => model.ResortName)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.ResortName)
-        </dd>
-
         <dt>
             @Html.DisplayNameFor(model => model.Address)
         </dt>
