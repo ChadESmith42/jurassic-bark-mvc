@@ -14,7 +14,7 @@ namespace IdentitySample.Controllers
         [Authorize]
         public ActionResult About()
         {
-            ViewBag.Message = "Your app description page.";
+            ViewBag.Message = "We care for your good boys and clever girls.";
 
             return View();
         }

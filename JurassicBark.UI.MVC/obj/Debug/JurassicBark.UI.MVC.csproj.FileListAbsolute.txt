@@ -67,3 +67,5 @@ C:\Users\Student\Desktop\Project\src\JurassicBark.UI.MVC\bin\Microsoft.Owin.Secu
 C:\Users\Student\Desktop\Project\src\JurassicBark.UI.MVC\obj\Debug\JurassicBark.UI.MVC.csprojResolveAssemblyReference.cache
 C:\Users\Student\Desktop\Project\src\JurassicBark.UI.MVC\obj\Debug\JurassicBark.UI.MVC.dll
 C:\Users\Student\Desktop\Project\src\JurassicBark.UI.MVC\obj\Debug\JurassicBark.UI.MVC.pdb
+C:\Users\Student\Desktop\Project\src\JurassicBark.UI.MVC\bin\JurassicBark.DATA.EF.dll
+C:\Users\Student\Desktop\Project\src\JurassicBark.UI.MVC\bin\JurassicBark.DATA.EF.pdb

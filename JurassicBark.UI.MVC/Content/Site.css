@@ -1,6 +1,10 @@
-﻿body {
+﻿@import url('https://fonts.googleapis.com/css?family=Oswald|Roboto');
+
+body {
     padding-top: 50px;
     padding-bottom: 20px;
+    font-family: "Oswald";
+    font-size: 16px;
 }
 
 /* Set padding to keep content from hitting the edges */
@@ -39,4 +43,47 @@ input[type="checkbox"].input-validation-error {
 
 .validation-summary-valid {
     display: none;
+}
+
+.logo {
+    width: 50px;
+    height: 36px;
+}
+
+h1, h2, h3, h4, h5, .lead, .jumbrotron {
+    font-family: "Roboto";
+}
+
+.nav-item .dropdown-item {
+    font-size: 1.5rem;
+}
+
+.mission {
+    font-size: 2.5rem;
+}
+
+    .mission p {
+        font-size: 1.5rem;
+    }
+
+.services {
+    font-size: 2.5rem;
+}
+
+    .services p {
+        font-size: 1.5rem;
+    }
+
+
+#map {
+    top: 0;
+    bottom: 0;
+    width: 100%;
+    height: 600px;
+}
+
+@media screen and (max-width: 450px) {
+    #map {
+        height: 200px;
+    }
 }
