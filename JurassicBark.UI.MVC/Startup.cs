@@ -1,8 +1,6 @@
-﻿using Microsoft.Owin;
-using Owin;
+﻿using Owin;
 
-[assembly: OwinStartupAttribute(typeof(JurassicBark.UI.MVC.Startup))]
-namespace JurassicBark.UI.MVC
+namespace IdentitySample
 {
     public partial class Startup
     {
