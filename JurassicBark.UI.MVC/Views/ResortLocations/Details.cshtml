@@ -7,6 +7,15 @@
 <h2>@ViewBag.Title for @Html.DisplayFor(model => model.ResortName)</h2>
 
 <div>
+    <span>@Html.DisplayFor(model => model.Address)</span><br />
+    <span>@Html.DisplayFor(model => model.City), @Html.DisplayFor(model => model.State) @Html.DisplayFor(model => model.ZipCode)</span>
+</div>
+<div>
+    <p>@Html.DisplayFor(model => model.ResortName) has capacity for <span class="badge badge-primary badge-pill">@Html.DisplayFor(model => model.ReservationLimit)</span> animals per day.</p>
+    @*<p>@Html.DisplayFor(model => model.ResortName) has <span class="badge badge-primary badge-pill">@ViewBag.Available</span> available reservations today.</p>*@
+</div>
+
+@*<div>
     <dl class="dl-horizontal">
         <dt>
             @Html.DisplayNameFor(model => model.Address)
@@ -49,8 +58,13 @@
         </dd>
 
     </dl>
+</div>*@
+
+<div class="btn-group">
+    @if (User.IsInRole("Admin"))
+{
+    @Html.ActionLink("Edit", "Edit", new { id = Model.ResortLocationID }, htmlAttributes: new { @class = "btn btn-primary" })
+}
+
+@Html.ActionLink("Back to List", "Index", null, htmlAttributes: new { @class = "btn btn-primary" })
 </div>
-<p>
-    @Html.ActionLink("Edit", "Edit", new { id = Model.ResortLocationID }) |
-    @Html.ActionLink("Back to List", "Index")
-</p>

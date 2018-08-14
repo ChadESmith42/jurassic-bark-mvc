@@ -32,7 +32,7 @@
                         There are currently <span class="badge badge-primary badge-pill">@Html.DisplayFor(modelItem => item.Reservations.Count)</span> active reservations at this facility.
                     </p>
                     @Html.ActionLink("Details", "Details", new { id = item.ResortLocationID }, htmlAttributes: new { @class = "btn btn-primary" })
-                    <a href="@Url.Action("Create","Reservations", { id = item.ResortLocationID })">Reserve your spot!</a>
+                    @*<a href="@Url.Action("Create","Reservations", { new item.ResourtLocationid = item.ResortLocationID })">Reserve your spot!</a>*@
                 </div>
             </div>
         </div>

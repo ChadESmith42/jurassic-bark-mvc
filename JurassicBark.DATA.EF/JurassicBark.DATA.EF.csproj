@@ -77,6 +77,8 @@
       <DependentUpon>JurassicBarkModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Repository\GenericRepository.cs" />
+    <Compile Include="Repository\PetsRepository.cs" />
     <Compile Include="Reservation.cs">
       <DependentUpon>JurassicBarkModel.tt</DependentUpon>
     </Compile>
