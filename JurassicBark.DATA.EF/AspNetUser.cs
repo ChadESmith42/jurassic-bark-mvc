@@ -20,6 +20,7 @@ namespace JurassicBark.DATA.EF
             this.Pets = new HashSet<Pet>();
             this.UserDetails = new HashSet<UserDetail>();
             this.AspNetRoles = new HashSet<AspNetRole>();
+            this.EmployeeNotes = new HashSet<EmployeeNote>();
         }
     
         public string Id { get; set; }
@@ -41,5 +42,7 @@ namespace JurassicBark.DATA.EF
         public virtual ICollection<UserDetail> UserDetails { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<AspNetRole> AspNetRoles { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<EmployeeNote> EmployeeNotes { get; set; }
     }
 }

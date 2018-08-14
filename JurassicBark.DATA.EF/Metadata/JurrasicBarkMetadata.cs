@@ -22,6 +22,9 @@ namespace JurassicBark.DATA.EF//.Metadata
         public string SpecialNotes { get; set; }
         [Display(Name ="Active?")]
         public bool IsActive { get; set; }
+        [Display(Name="Customer Since")]
+        [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:d}")]
+        public System.DateTime DateAdded { get; set; }
     }
 
     [MetadataType(typeof(ResortLocationMetadata))]

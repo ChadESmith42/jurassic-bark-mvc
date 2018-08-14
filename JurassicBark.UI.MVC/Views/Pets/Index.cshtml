@@ -1,63 +1,85 @@
 ﻿@model IEnumerable<JurassicBark.DATA.EF.Pet>
 
 @{
-    ViewBag.Title = "Pets List";
+    ViewBag.Title = "Pet List";
 }
 
 <h2>@ViewBag.Title</h2>
 
-<p>
-    @Html.ActionLink("Create New", "Create")
-</p>
-<table class="table">
-    <tr>
-        <th>
-            @Html.DisplayNameFor(model => model.Name)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.PetPhoto)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.SpecialNotes)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.IsActive)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.DateAdded)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.AspNetUser.Email)
-        </th>
-        <th></th>
-    </tr>
-
-@foreach (var item in Model) {
-    <tr>
-        <td>
-            @Html.DisplayFor(modelItem => item.Name)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.PetPhoto)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.SpecialNotes)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.IsActive)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.DateAdded)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.AspNetUser.Email)
-        </td>
-        <td>
-            @Html.ActionLink("Edit", "Edit", new { id=item.PetID }) |
-            @Html.ActionLink("Details", "Details", new { id=item.PetID }) |
-            @Html.ActionLink("Delete", "Delete", new { id=item.PetID })
-        </td>
-    </tr>
+@if (User.IsInRole("Admin") || User.IsInRole("Customer"))
+{
+    <p>
+        @Html.ActionLink("Create New", "Create", null, htmlAttributes: new { @class = "btn btn-primary"})
+    </p>
 }
 
-</table>
+<div class="row">
+    @foreach (var item in Model)
+    {
+        <!-- Create a card for each pet -->
+        <div class="card col-md-3">
+            <img class="card-img-top" src="~/Content/images/pets/@Html.DisplayFor(modelItem => item.PetPhoto)" alt="Image for @Html.DisplayFor(modelItem => item.Name)" />
+            <div class="card-body">
+                <h3 class="card-title">
+                    @Html.DisplayFor(modelItem => item.Name)
+                </h3>
+                <p class="card-text">
+                    @Html.DisplayNameFor(model => model.SpecialNotes): @Html.DisplayFor(modelItem => item.SpecialNotes)
+                </p>
+                <p class="card-text">
+                    @Html.DisplayNameFor(model => model.IsActive) &emsp;@Html.DisplayFor(modelItem => item.IsActive)
+                </p>
+                <p class="card-text">
+                    @Html.DisplayNameFor(model => model.DateAdded): @Html.DisplayFor(modelItem => item.DateAdded)
+                </p>
+                <p class="card-text">
+                    Owner Contact Information: @Html.DisplayFor(modelItem => item.AspNetUser.Email)
+                </p>
+                
+                <div class="btn-group">
+                    @if (User.IsInRole("Admin") || User.IsInRole("Customer"))
+                {
+                        @Html.ActionLink("Edit", "Edit", new { id = item.PetID }, htmlAttributes: new { @class = "btn btn-primary" })
+                    }
+                    @Html.ActionLink("Back to List", "Index", null, htmlAttributes: new { @class = "btn btn-primary" })
+                    @if (User.IsInRole("Employee"))
+                    {
+                        @Html.ActionLink("Employee Notes", "Pet","EmployeeNotes",new { id = item.PetID }, htmlAttributes: new { @class = "btn btn-inverse"})
+                        @*<button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#@item.PetID">Get Notes</button>*@
+                    }
+
+                </div>
+            </div>
+        </div>
+    }
+</div>
+
+
+@*@foreach (var item in Model)
+{
+
+    <div class="modal fade overwritethis" id="@item.PetID" tabindex="-1" role="dialog" aria-labelledby="@item.PetID" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="">@Html.DisplayFor(modelItem => item.Name) Notes</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    @foreach (var note in item.EmployeeNotes)
+                    {
+                        <p> Date: @Html.DisplayFor(model => note.NoteDate)</p>
+                            <p> Note: @Html.DisplayFor(model => note.Note)</p><br />
+                    }
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    @*<button type="button" class="btn btn-primary">Save changes</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+}*@

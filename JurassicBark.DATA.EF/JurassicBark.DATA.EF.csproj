@@ -57,6 +57,9 @@
     <Compile Include="AspNetUser.cs">
       <DependentUpon>JurassicBarkModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="EmployeeNote.cs">
+      <DependentUpon>JurassicBarkModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="JurassicBarkModel.Context.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -79,12 +82,16 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Repository\GenericRepository.cs" />
     <Compile Include="Repository\PetsRepository.cs" />
+    <Compile Include="Repository\ReservationsRepository.cs" />
+    <Compile Include="Repository\ResortLocationRepository.cs" />
+    <Compile Include="Repository\UserDetailRepository.cs" />
     <Compile Include="Reservation.cs">
       <DependentUpon>JurassicBarkModel.tt</DependentUpon>
     </Compile>
     <Compile Include="ResortLocation.cs">
       <DependentUpon>JurassicBarkModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="UnitOfWork.cs" />
     <Compile Include="UserDetail.cs">
       <DependentUpon>JurassicBarkModel.tt</DependentUpon>
     </Compile>

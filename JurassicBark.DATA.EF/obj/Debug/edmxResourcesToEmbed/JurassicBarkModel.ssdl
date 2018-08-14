@@ -32,6 +32,16 @@
     <Property Name="AccessFailedCount" Type="int" Nullable="false" />
     <Property Name="UserName" Type="nvarchar" MaxLength="256" Nullable="false" />
   </EntityType>
+  <EntityType Name="EmployeeNotes">
+    <Key>
+      <PropertyRef Name="NoteID" />
+    </Key>
+    <Property Name="NoteID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="PetID" Type="int" Nullable="false" />
+    <Property Name="EmployeeID" Type="nvarchar" MaxLength="128" Nullable="false" />
+    <Property Name="Note" Type="nchar" MaxLength="500" Nullable="false" />
+    <Property Name="NoteDate" Type="date" Nullable="false" />
+  </EntityType>
   <EntityType Name="Pets">
     <Key>
       <PropertyRef Name="PetID" />
@@ -104,6 +114,30 @@
       </Dependent>
     </ReferentialConstraint>
   </Association>
+  <Association Name="FK_EmployeeNotes_AspNetUsers">
+    <End Role="AspNetUsers" Type="Self.AspNetUsers" Multiplicity="1" />
+    <End Role="EmployeeNotes" Type="Self.EmployeeNotes" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="AspNetUsers">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="EmployeeNotes">
+        <PropertyRef Name="EmployeeID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_EmployeeNotes_Pets">
+    <End Role="Pets" Type="Self.Pets" Multiplicity="1" />
+    <End Role="EmployeeNotes" Type="Self.EmployeeNotes" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Pets">
+        <PropertyRef Name="PetID" />
+      </Principal>
+      <Dependent Role="EmployeeNotes">
+        <PropertyRef Name="PetID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
   <Association Name="FK_Pets_AspNetUsers">
     <End Role="AspNetUsers" Type="Self.AspNetUsers" Multiplicity="1" />
     <End Role="Pets" Type="Self.Pets" Multiplicity="*" />
@@ -156,6 +190,7 @@
     <EntitySet Name="AspNetRoles" EntityType="Self.AspNetRoles" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="AspNetUserRoles" EntityType="Self.AspNetUserRoles" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="AspNetUsers" EntityType="Self.AspNetUsers" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="EmployeeNotes" EntityType="Self.EmployeeNotes" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="Pets" EntityType="Self.Pets" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="Reservations" EntityType="Self.Reservations" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="ResortLocations" EntityType="Self.ResortLocations" Schema="dbo" store:Type="Tables" />
@@ -167,6 +202,14 @@
     <AssociationSet Name="FK_dbo_AspNetUserRoles_dbo_AspNetUsers_UserId" Association="Self.FK_dbo_AspNetUserRoles_dbo_AspNetUsers_UserId">
       <End Role="AspNetUsers" EntitySet="AspNetUsers" />
       <End Role="AspNetUserRoles" EntitySet="AspNetUserRoles" />
+    </AssociationSet>
+    <AssociationSet Name="FK_EmployeeNotes_AspNetUsers" Association="Self.FK_EmployeeNotes_AspNetUsers">
+      <End Role="AspNetUsers" EntitySet="AspNetUsers" />
+      <End Role="EmployeeNotes" EntitySet="EmployeeNotes" />
+    </AssociationSet>
+    <AssociationSet Name="FK_EmployeeNotes_Pets" Association="Self.FK_EmployeeNotes_Pets">
+      <End Role="Pets" EntitySet="Pets" />
+      <End Role="EmployeeNotes" EntitySet="EmployeeNotes" />
     </AssociationSet>
     <AssociationSet Name="FK_Pets_AspNetUsers" Association="Self.FK_Pets_AspNetUsers">
       <End Role="AspNetUsers" EntitySet="AspNetUsers" />

@@ -31,5 +31,6 @@ namespace JurassicBark.DATA.EF
         public virtual DbSet<Reservation> Reservations { get; set; }
         public virtual DbSet<ResortLocation> ResortLocations { get; set; }
         public virtual DbSet<UserDetail> UserDetails { get; set; }
+        public virtual DbSet<EmployeeNote> EmployeeNotes { get; set; }
     }
 }

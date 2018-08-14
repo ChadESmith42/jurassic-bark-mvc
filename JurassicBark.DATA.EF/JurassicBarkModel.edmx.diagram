@@ -5,17 +5,20 @@
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
       <Diagram DiagramId="694f62c7c3a8442ba07397fe9c15e029" Name="Diagram1">
-        <EntityTypeShape EntityType="jurassicbarkModel.AspNetRole" Width="1.5" PointX="0.75" PointY="3.25" IsExpanded="true" />
-        <EntityTypeShape EntityType="jurassicbarkModel.AspNetUser" Width="1.5" PointX="3" PointY="2.125" IsExpanded="true" />
-        <EntityTypeShape EntityType="jurassicbarkModel.Pet" Width="1.5" PointX="5.25" PointY="1.125" IsExpanded="true" />
-        <EntityTypeShape EntityType="jurassicbarkModel.Reservation" Width="1.5" PointX="7.5" PointY="1.375" IsExpanded="true" />
-        <EntityTypeShape EntityType="jurassicbarkModel.ResortLocation" Width="1.5" PointX="5.25" PointY="8.25" IsExpanded="true" />
-        <EntityTypeShape EntityType="jurassicbarkModel.UserDetail" Width="1.5" PointX="5.25" PointY="4.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="jurassicbarkModel.AspNetRole" Width="1.5" PointX="0.5" PointY="2.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="jurassicbarkModel.AspNetUser" Width="1.5" PointX="2.5" PointY="2.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="jurassicbarkModel.Pet" Width="1.5" PointX="4.5" PointY="2.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="jurassicbarkModel.Reservation" Width="1.5" PointX="6.625" PointY="2.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="jurassicbarkModel.ResortLocation" Width="1.5" PointX="8.5" PointY="4.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="jurassicbarkModel.UserDetail" Width="1.5" PointX="4.625" PointY="6" IsExpanded="true" />
         <AssociationConnector Association="jurassicbarkModel.FK_Pets_AspNetUsers" ManuallyRouted="false" />
         <AssociationConnector Association="jurassicbarkModel.FK_UserDetails_AspNetUsers" ManuallyRouted="false" />
         <AssociationConnector Association="jurassicbarkModel.FK_Reservations_Pets" ManuallyRouted="false" />
         <AssociationConnector Association="jurassicbarkModel.FK_Reservations_ResortLocations" ManuallyRouted="false" />
         <AssociationConnector Association="jurassicbarkModel.AspNetUserRoles" ManuallyRouted="false" />
+        <EntityTypeShape EntityType="jurassicbarkModel.EmployeeNote" Width="1.5" PointX="6.5" PointY="5.75" />
+        <AssociationConnector Association="jurassicbarkModel.FK_EmployeeNotes_AspNetUsers" />
+        <AssociationConnector Association="jurassicbarkModel.FK_EmployeeNotes_Pets" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

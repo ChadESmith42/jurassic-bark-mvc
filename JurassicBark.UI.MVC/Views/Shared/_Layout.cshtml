@@ -5,22 +5,22 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@ViewBag.Title - Jurassic Bark</title>
     @Styles.Render("~/Content/css")
-    @Scripts.Render("~/bundles/modernizr")
+    @*@Scripts.Render("~/bundles/modernizr")*@
     <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
     <link href="~/Content/bootstrap.min.css" rel="stylesheet" />
     <link href="~/Content/Site.css" rel="stylesheet" />
 </head>
 <body class="body-content">
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark sticky-top shadow p-3 mb-5">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark sticky-top shadow-lg p-3 mb-5">
         <a href="@Url.Action("Index","Home")"> <img src="~/Content/images/jdp.png" class="logo" /> </a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav mr-auto">
-                <li class="nav-item active">
-                    @Html.ActionLink("Home", "Index", "Home", null, new { @class = "nav-link" })<span class="sr-only">(current)</span></a>
-                </li>
+                @*<li class="nav-item active">
+                        @Html.ActionLink("Home", "Index", "Home", null, new { @class = "nav-link" })<span class="sr-only">(current)</span></a>
+                    </li>*@
                 <li>
                     @Html.ActionLink("Locations", "Index", "ResortLocations", null, new { @class = "nav-link" })
                 </li>
@@ -29,8 +29,12 @@
                         Reservations
                     </a>
                     <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                        <a class="dropdown-item" href="@Url.Action("Index","Reservations")">My Reservations</a>
                         @if (User.Identity.IsAuthenticated)
+                        {
+                            <a class="dropdown-item" href="@Url.Action("Index","Reservations")">Reservations</a>
+                        }
+
+                        @if (User.IsInRole("Admin") || User.IsInRole("Customer"))
                         {
                             <div class="dropdown-divider"></div>
                             <a class="dropdown-item" href="@Url.Action("Create","Reservations")">New Reservation</a>
@@ -43,7 +47,14 @@
                         Pets
                     </a>
                     <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                        <a class="dropdown-item" href="@Url.Action("Index","Pets")">My Pets</a>
+                        @if (User.IsInRole("Customer"))
+                        {
+                            <a class="dropdown-item" href="@Url.Action("Index","Pets")">My Pets</a>
+                        }
+                        @if (User.IsInRole("Admin") || User.IsInRole("Employee"))
+                        {
+                            <a class="dropdown-item" href="@Url.Action("Index","Pets")">All Pets</a>
+                        }
                         @if (User.Identity.IsAuthenticated)
                         {
                             <div class="dropdown-divider"></div>
@@ -58,9 +69,9 @@
                 <li>
                     @Html.ActionLink("Contact", "Contact", "Home", null, new { @class = "nav-link" })
                 </li>
-                
-                
-                </ul>
+
+
+            </ul>
             <ul class="navbar-nav mr-auto">
                 @if (Request.IsAuthenticated && User.IsInRole("Admin"))
                 {
@@ -68,50 +79,50 @@
                     <li>@Html.ActionLink("UsersAdmin", "Index", "UsersAdmin", null, new { @class = "nav-link" })</li>
                 }
             </ul>
-                <span class="nav-item nav-link">@Html.Partial("_LoginPartial")</span>
-            </div>
-        </nav>
+            <span class="nav-item nav-link">@Html.Partial("_LoginPartial")</span>
+        </div>
+    </nav>
 
-        @*<div class="navbar navbar-inverse navbar-fixed-top">
-                <div class="container">
-                    <div class="navbar-header">
-                        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-                            <span class="icon-bar"></span>
-                            <span class="icon-bar"></span>
-                            <span class="icon-bar"></span>
-                        </button>
-                        @Html.ActionLink("Jurassic Bark", "Index", "Home", null, new { @class = "navbar-brand" })
-                    </div>
-                    <div class="navbar-collapse collapse">
-                        <ul class="nav navbar-nav">
-                            <li>@Html.ActionLink("Home", "Index", "Home")</li>
-                            <li>@Html.ActionLink("About", "About", "Home")</li>
-                            <li>@Html.ActionLink("Contact", "Contact", "Home")</li>
-
-                            @if (Request.IsAuthenticated && User.IsInRole("Admin")) {
-                                <li>@Html.ActionLink("RolesAdmin", "Index", "RolesAdmin")</li>
-                                <li>@Html.ActionLink("UsersAdmin", "Index", "UsersAdmin")</li>
-                            }
-                        </ul>
-                        @Html.Partial("_LoginPartial")
-                    </div>
+    @*<div class="navbar navbar-inverse navbar-fixed-top">
+            <div class="container">
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    @Html.ActionLink("Jurassic Bark", "Index", "Home", null, new { @class = "navbar-brand" })
                 </div>
-            </div>*@
-                    <div class="container body-content">
-                        @RenderBody()
-                        <hr />
-                        <footer>
-                            <p>&copy; @DateTime.Now.Year &emsp;<img src="~/Content/images/jdp.png" class="logo" />&emsp;Jurassic Bark </p>
-                        </footer>
-                    </div>
+                <div class="navbar-collapse collapse">
+                    <ul class="nav navbar-nav">
+                        <li>@Html.ActionLink("Home", "Index", "Home")</li>
+                        <li>@Html.ActionLink("About", "About", "Home")</li>
+                        <li>@Html.ActionLink("Contact", "Contact", "Home")</li>
 
-                    @Scripts.Render("~/bundles/jquery")
-                    @Scripts.Render("~/bundles/bootstrap")
-                    @RenderSection("scripts", required: false)
+                        @if (Request.IsAuthenticated && User.IsInRole("Admin")) {
+                            <li>@Html.ActionLink("RolesAdmin", "Index", "RolesAdmin")</li>
+                            <li>@Html.ActionLink("UsersAdmin", "Index", "UsersAdmin")</li>
+                        }
+                    </ul>
+                    @Html.Partial("_LoginPartial")
+                </div>
+            </div>
+        </div>*@
+    <div class="container body-content">
+        @RenderBody()
+        <hr />
+        <footer>
+            <p>&copy; @DateTime.Now.Year &emsp;<img src="~/Content/images/jdp.png" class="logo" />&emsp;Jurassic Bark </p>
+        </footer>
+    </div>
 
-                    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
-                    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
-                    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
+    @*@Scripts.Render("~/bundles/jquery")
+        @Scripts.Render("~/bundles/bootstrap")*@
 
-                </body>
-            </html>
+
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
+    @RenderSection("scripts", required: false)
+</body>
+</html>

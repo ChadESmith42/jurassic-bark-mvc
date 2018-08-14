@@ -4,7 +4,7 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-      <Schema Namespace="jurassicbarkModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+    <Schema Namespace="jurassicbarkModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
         <EntityType Name="AspNetRoles">
           <Key>
             <PropertyRef Name="Id" />
@@ -36,6 +36,16 @@
           <Property Name="LockoutEnabled" Type="bit" Nullable="false" />
           <Property Name="AccessFailedCount" Type="int" Nullable="false" />
           <Property Name="UserName" Type="nvarchar" MaxLength="256" Nullable="false" />
+        </EntityType>
+        <EntityType Name="EmployeeNotes">
+          <Key>
+            <PropertyRef Name="NoteID" />
+          </Key>
+          <Property Name="NoteID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="PetID" Type="int" Nullable="false" />
+          <Property Name="EmployeeID" Type="nvarchar" MaxLength="128" Nullable="false" />
+          <Property Name="Note" Type="nchar" MaxLength="500" Nullable="false" />
+          <Property Name="NoteDate" Type="date" Nullable="false" />
         </EntityType>
         <EntityType Name="Pets">
           <Key>
@@ -109,6 +119,30 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_EmployeeNotes_AspNetUsers">
+          <End Role="AspNetUsers" Type="Self.AspNetUsers" Multiplicity="1" />
+          <End Role="EmployeeNotes" Type="Self.EmployeeNotes" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="AspNetUsers">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="EmployeeNotes">
+              <PropertyRef Name="EmployeeID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_EmployeeNotes_Pets">
+          <End Role="Pets" Type="Self.Pets" Multiplicity="1" />
+          <End Role="EmployeeNotes" Type="Self.EmployeeNotes" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Pets">
+              <PropertyRef Name="PetID" />
+            </Principal>
+            <Dependent Role="EmployeeNotes">
+              <PropertyRef Name="PetID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_Pets_AspNetUsers">
           <End Role="AspNetUsers" Type="Self.AspNetUsers" Multiplicity="1" />
           <End Role="Pets" Type="Self.Pets" Multiplicity="*" />
@@ -161,6 +195,7 @@
           <EntitySet Name="AspNetRoles" EntityType="Self.AspNetRoles" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="AspNetUserRoles" EntityType="Self.AspNetUserRoles" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="AspNetUsers" EntityType="Self.AspNetUsers" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="EmployeeNotes" EntityType="Self.EmployeeNotes" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Pets" EntityType="Self.Pets" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Reservations" EntityType="Self.Reservations" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="ResortLocations" EntityType="Self.ResortLocations" Schema="dbo" store:Type="Tables" />
@@ -172,6 +207,14 @@
           <AssociationSet Name="FK_dbo_AspNetUserRoles_dbo_AspNetUsers_UserId" Association="Self.FK_dbo_AspNetUserRoles_dbo_AspNetUsers_UserId">
             <End Role="AspNetUsers" EntitySet="AspNetUsers" />
             <End Role="AspNetUserRoles" EntitySet="AspNetUserRoles" />
+          </AssociationSet>
+          <AssociationSet Name="FK_EmployeeNotes_AspNetUsers" Association="Self.FK_EmployeeNotes_AspNetUsers">
+            <End Role="AspNetUsers" EntitySet="AspNetUsers" />
+            <End Role="EmployeeNotes" EntitySet="EmployeeNotes" />
+          </AssociationSet>
+          <AssociationSet Name="FK_EmployeeNotes_Pets" Association="Self.FK_EmployeeNotes_Pets">
+            <End Role="Pets" EntitySet="Pets" />
+            <End Role="EmployeeNotes" EntitySet="EmployeeNotes" />
           </AssociationSet>
           <AssociationSet Name="FK_Pets_AspNetUsers" Association="Self.FK_Pets_AspNetUsers">
             <End Role="AspNetUsers" EntitySet="AspNetUsers" />
@@ -190,8 +233,7 @@
             <End Role="UserDetails" EntitySet="UserDetails" />
           </AssociationSet>
         </EntityContainer>
-      </Schema>
-    </edmx:StorageModels>
+      </Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="jurassicbarkModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
@@ -222,6 +264,7 @@
           <NavigationProperty Name="Pets" Relationship="Self.FK_Pets_AspNetUsers" FromRole="AspNetUsers" ToRole="Pets" />
           <NavigationProperty Name="UserDetails" Relationship="Self.FK_UserDetails_AspNetUsers" FromRole="AspNetUsers" ToRole="UserDetails" />
           <NavigationProperty Name="AspNetRoles" Relationship="Self.AspNetUserRoles" FromRole="AspNetUsers" ToRole="AspNetRoles" />
+          <NavigationProperty Name="EmployeeNotes" Relationship="jurassicbarkModel.FK_EmployeeNotes_AspNetUsers" FromRole="AspNetUser" ToRole="EmployeeNote" />
         </EntityType>
         <EntityType Name="Pet">
           <Key>
@@ -236,6 +279,7 @@
           <Property Name="DateAdded" Type="DateTime" Nullable="false" Precision="0" />
           <NavigationProperty Name="AspNetUser" Relationship="Self.FK_Pets_AspNetUsers" FromRole="Pets" ToRole="AspNetUsers" />
           <NavigationProperty Name="Reservations" Relationship="Self.FK_Reservations_Pets" FromRole="Pets" ToRole="Reservations" />
+          <NavigationProperty Name="EmployeeNotes" Relationship="jurassicbarkModel.FK_EmployeeNotes_Pets" FromRole="Pet" ToRole="EmployeeNote" />
         </EntityType>
         <EntityType Name="Reservation">
           <Key>
@@ -352,7 +396,52 @@
             <End Role="AspNetRoles" EntitySet="AspNetRoles" />
             <End Role="AspNetUsers" EntitySet="AspNetUsers" />
           </AssociationSet>
+          <EntitySet Name="EmployeeNotes" EntityType="jurassicbarkModel.EmployeeNote" />
+          <AssociationSet Name="FK_EmployeeNotes_AspNetUsers" Association="jurassicbarkModel.FK_EmployeeNotes_AspNetUsers">
+            <End Role="AspNetUser" EntitySet="AspNetUsers" />
+            <End Role="EmployeeNote" EntitySet="EmployeeNotes" />
+          </AssociationSet>
+          <AssociationSet Name="FK_EmployeeNotes_Pets" Association="jurassicbarkModel.FK_EmployeeNotes_Pets">
+            <End Role="Pet" EntitySet="Pets" />
+            <End Role="EmployeeNote" EntitySet="EmployeeNotes" />
+          </AssociationSet>
         </EntityContainer>
+        <EntityType Name="EmployeeNote">
+          <Key>
+            <PropertyRef Name="NoteID" />
+          </Key>
+          <Property Name="NoteID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="PetID" Type="Int32" Nullable="false" />
+          <Property Name="EmployeeID" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
+          <Property Name="Note" Type="String" Nullable="false" MaxLength="500" FixedLength="true" Unicode="true" />
+          <Property Name="NoteDate" Type="DateTime" Nullable="false" Precision="0" />
+          <NavigationProperty Name="AspNetUser" Relationship="jurassicbarkModel.FK_EmployeeNotes_AspNetUsers" FromRole="EmployeeNote" ToRole="AspNetUser" />
+          <NavigationProperty Name="Pet" Relationship="jurassicbarkModel.FK_EmployeeNotes_Pets" FromRole="EmployeeNote" ToRole="Pet" />
+        </EntityType>
+        <Association Name="FK_EmployeeNotes_AspNetUsers">
+          <End Type="jurassicbarkModel.AspNetUser" Role="AspNetUser" Multiplicity="1" />
+          <End Type="jurassicbarkModel.EmployeeNote" Role="EmployeeNote" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="AspNetUser">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="EmployeeNote">
+              <PropertyRef Name="EmployeeID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_EmployeeNotes_Pets">
+          <End Type="jurassicbarkModel.Pet" Role="Pet" Multiplicity="1" />
+          <End Type="jurassicbarkModel.EmployeeNote" Role="EmployeeNote" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Pet">
+              <PropertyRef Name="PetID" />
+            </Principal>
+            <Dependent Role="EmployeeNote">
+              <PropertyRef Name="PetID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -441,6 +530,17 @@
               <ScalarProperty Name="Id" ColumnName="UserId" />
             </EndProperty>
           </AssociationSetMapping>
+          <EntitySetMapping Name="EmployeeNotes">
+            <EntityTypeMapping TypeName="jurassicbarkModel.EmployeeNote">
+              <MappingFragment StoreEntitySet="EmployeeNotes">
+                <ScalarProperty Name="NoteDate" ColumnName="NoteDate" />
+                <ScalarProperty Name="Note" ColumnName="Note" />
+                <ScalarProperty Name="EmployeeID" ColumnName="EmployeeID" />
+                <ScalarProperty Name="PetID" ColumnName="PetID" />
+                <ScalarProperty Name="NoteID" ColumnName="NoteID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

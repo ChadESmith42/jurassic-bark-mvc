@@ -27,6 +27,7 @@
     <NavigationProperty Name="Pets" Relationship="Self.FK_Pets_AspNetUsers" FromRole="AspNetUsers" ToRole="Pets" />
     <NavigationProperty Name="UserDetails" Relationship="Self.FK_UserDetails_AspNetUsers" FromRole="AspNetUsers" ToRole="UserDetails" />
     <NavigationProperty Name="AspNetRoles" Relationship="Self.AspNetUserRoles" FromRole="AspNetUsers" ToRole="AspNetRoles" />
+    <NavigationProperty Name="EmployeeNotes" Relationship="jurassicbarkModel.FK_EmployeeNotes_AspNetUsers" FromRole="AspNetUser" ToRole="EmployeeNote" />
   </EntityType>
   <EntityType Name="Pet">
     <Key>
@@ -41,6 +42,7 @@
     <Property Name="DateAdded" Type="DateTime" Nullable="false" Precision="0" />
     <NavigationProperty Name="AspNetUser" Relationship="Self.FK_Pets_AspNetUsers" FromRole="Pets" ToRole="AspNetUsers" />
     <NavigationProperty Name="Reservations" Relationship="Self.FK_Reservations_Pets" FromRole="Pets" ToRole="Reservations" />
+    <NavigationProperty Name="EmployeeNotes" Relationship="jurassicbarkModel.FK_EmployeeNotes_Pets" FromRole="Pet" ToRole="EmployeeNote" />
   </EntityType>
   <EntityType Name="Reservation">
     <Key>
@@ -157,5 +159,50 @@
       <End Role="AspNetRoles" EntitySet="AspNetRoles" />
       <End Role="AspNetUsers" EntitySet="AspNetUsers" />
     </AssociationSet>
+    <EntitySet Name="EmployeeNotes" EntityType="jurassicbarkModel.EmployeeNote" />
+    <AssociationSet Name="FK_EmployeeNotes_AspNetUsers" Association="jurassicbarkModel.FK_EmployeeNotes_AspNetUsers">
+      <End Role="AspNetUser" EntitySet="AspNetUsers" />
+      <End Role="EmployeeNote" EntitySet="EmployeeNotes" />
+    </AssociationSet>
+    <AssociationSet Name="FK_EmployeeNotes_Pets" Association="jurassicbarkModel.FK_EmployeeNotes_Pets">
+      <End Role="Pet" EntitySet="Pets" />
+      <End Role="EmployeeNote" EntitySet="EmployeeNotes" />
+    </AssociationSet>
   </EntityContainer>
+  <EntityType Name="EmployeeNote">
+    <Key>
+      <PropertyRef Name="NoteID" />
+    </Key>
+    <Property Name="NoteID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="PetID" Type="Int32" Nullable="false" />
+    <Property Name="EmployeeID" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
+    <Property Name="Note" Type="String" Nullable="false" MaxLength="500" FixedLength="true" Unicode="true" />
+    <Property Name="NoteDate" Type="DateTime" Nullable="false" Precision="0" />
+    <NavigationProperty Name="AspNetUser" Relationship="jurassicbarkModel.FK_EmployeeNotes_AspNetUsers" FromRole="EmployeeNote" ToRole="AspNetUser" />
+    <NavigationProperty Name="Pet" Relationship="jurassicbarkModel.FK_EmployeeNotes_Pets" FromRole="EmployeeNote" ToRole="Pet" />
+  </EntityType>
+  <Association Name="FK_EmployeeNotes_AspNetUsers">
+    <End Type="jurassicbarkModel.AspNetUser" Role="AspNetUser" Multiplicity="1" />
+    <End Type="jurassicbarkModel.EmployeeNote" Role="EmployeeNote" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="AspNetUser">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="EmployeeNote">
+        <PropertyRef Name="EmployeeID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_EmployeeNotes_Pets">
+    <End Type="jurassicbarkModel.Pet" Role="Pet" Multiplicity="1" />
+    <End Type="jurassicbarkModel.EmployeeNote" Role="EmployeeNote" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Pet">
+        <PropertyRef Name="PetID" />
+      </Principal>
+      <Dependent Role="EmployeeNote">
+        <PropertyRef Name="PetID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
 </Schema>
