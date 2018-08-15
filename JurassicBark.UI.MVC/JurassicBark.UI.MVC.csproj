@@ -185,6 +185,7 @@
     </Compile>
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\AdminViewModel.cs" />
+    <Compile Include="Models\ContactViewModel.cs" />
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -194,14 +195,23 @@
   <ItemGroup>
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
+    <Content Include="Content\favicon.ico" />
     <Content Include="Content\images\jdp.png" />
     <Content Include="Content\images\pet1.jpg" />
     <Content Include="Content\images\pet2.jpg" />
     <Content Include="Content\images\pet3.jpg" />
     <Content Include="Content\images\pet4.png" />
     <Content Include="Content\images\pet5.jpg" />
+    <Content Include="Content\images\pets\20180814130504963_buddy.jpg" />
+    <Content Include="Content\images\pets\20180814130542399_blue.jpg" />
+    <Content Include="Content\images\pets\20180814130629539_rex.jpg" />
     <Content Include="Content\images\pets\buttons.jpg" />
     <Content Include="Content\images\pets\mittens.jpg" />
+    <Content Include="Content\images\pets\t_20180814130504963_buddy.jpg" />
+    <Content Include="Content\images\pets\t_20180814130542399_blue.jpg" />
+    <Content Include="Content\images\pets\t_20180814130629539_rex.jpg" />
+    <Content Include="Content\images\pets\t_buttons.jpg" />
+    <Content Include="Content\images\pets\t_mittens.jpg" />
     <Content Include="Content\images\tagline.png" />
     <Content Include="favicon.ico" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />

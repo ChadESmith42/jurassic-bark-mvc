@@ -7,20 +7,33 @@ using System.Net;
 using System.Web;
 using System.Web.Mvc;
 using JurassicBark.DATA.EF;
+using Microsoft.AspNet.Identity;
+using JurassicBark.DATA.EF.Repository;
 
 namespace JurassicBark.UI.MVC.Controllers
 {
     public class ReservationsController : Controller
     {
         private jurassicbarkEntities db = new jurassicbarkEntities();
+        public UnitOfWork uow = new UnitOfWork();
 
         // GET: Reservations
         [Authorize]
         public ActionResult Index()
         {
+
+            string currentUser = User.Identity.GetUserId();
+
             var reservations = db.Reservations.Include(r => r.Pet).Include(r => r.ResortLocation);
+
+            if (User.IsInRole("Customer"))
+            {
+                reservations = reservations.Where(r => r.Pet.OwnerID == currentUser);
+            }
+            
             return View(reservations.ToList());
         }
+
 
         // GET: Reservations/Details/5
         [Authorize]
@@ -42,10 +55,68 @@ namespace JurassicBark.UI.MVC.Controllers
         [Authorize]
         public ActionResult Create()
         {
-            ViewBag.PetID = new SelectList(db.Pets, "PetID", "Name");
+            //Identify the current user for filtering of records based on AspNetUserID
+            string currentUser = User.Identity.GetUserId();
+
+            //Generate a complete list of all pets for the drop-down. This will be filtered later by user role
+            List<Pet> myPets = uow.PetRepository.Get().Where(p => p.OwnerID == currentUser).ToList();
+
+            //Since a customer should only see their pets, we limit the list of pets based on
+            //the current user's AspNetUserID if they are in a customer role
+            if (User.IsInRole("Customer"))
+            {
+                ViewBag.PetID = new SelectList(myPets, "PetID", "Name");
+            }
+
+            //The Admin should see ALL pets as an option. So we "revert" back to the default
+            //list of pets from the repository
+            if (User.IsInRole("Admin"))
+            {
+                ViewBag.PetID = new SelectList(uow.PetRepository.Get(), "PetID", "Name");
+            }
+            
             ViewBag.ResortLocationID = new SelectList(db.ResortLocations, "ResortLocationID", "ResortName");
+
             return View();
         }
+
+        //TODO: Create new public ActionResult for pre-populated reservation request based on Locations Page "Book Now!" button.
+        //// GET: Reservations/Create
+        //[Authorize]
+        //public ActionResult Create()
+        //{
+        //    //Identify the current user for filtering of records based on AspNetUserID
+        //    string currentUser = User.Identity.GetUserId();
+
+        //    //Generate a complete list of all pets for the drop-down. This will be filtered later by user role
+        //    List<Pet> myPets = uow.PetRepository.Get().Where(p => p.OwnerID == currentUser).ToList();
+
+        //    //Since a customer should only see their pets, we limit the list of pets based on
+        //    //the current user's AspNetUserID if they are in a customer role
+        //    if (User.IsInRole("Customer"))
+        //    {
+        //        ViewBag.PetID = new SelectList(myPets, "PetID", "Name");
+        //    }
+
+        //    //The Admin should see ALL pets as an option. So we "revert" back to the default
+        //    //list of pets from the repository
+        //    if (User.IsInRole("Admin"))
+        //    {
+        //        ViewBag.PetID = new SelectList(uow.PetRepository.Get(), "PetID", "Name");
+        //    }
+
+        //    ViewBag.ResortLocationID = new SelectList(db.ResortLocations, "ResortLocationID", "ResortName");
+
+        //    return View();
+        //}
+
+
+
+
+
+
+
+
 
         // POST: Reservations/Create
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
@@ -55,11 +126,35 @@ namespace JurassicBark.UI.MVC.Controllers
         [Authorize]
         public ActionResult Create([Bind(Include = "ReservationID,ResortLocationID,PetID,ReservationDate")] Reservation reservation)
         {
+            //Assign User to UserID
+            string currentUser = User.Identity.GetUserId();
+            ResortLocation resort = new ResortLocation();
             if (ModelState.IsValid)
             {
-                db.Reservations.Add(reservation);
-                db.SaveChanges();
-                return RedirectToAction("Index");
+                //Count number of reservations for each resort
+                int countReservations = db.Reservations.Where(r => r.ReservationDate == reservation.ReservationDate && r.ResortLocationID == reservation.ResortLocationID).Count();
+                if (User.IsInRole("Admin"))
+                {
+                    db.Reservations.Add(reservation);
+                    db.SaveChanges();
+                    return RedirectToAction("Index");
+                }
+                if (User.IsInRole("Customer"))
+                {
+                    resort = db.ResortLocations.Where(r => r.ResortLocationID == reservation.ResortLocationID).FirstOrDefault();
+                }
+                if (countReservations < resort.ReservationLimit)
+                {
+                    db.Reservations.Add(reservation);
+                    db.SaveChanges();
+                    return RedirectToAction("Index");
+                }
+                else
+                {
+                    ViewBag.Warning = "The Jurassic Bark location you have chosen is fully booked for the date indicated. Please try another date. Or notify our offices to request an over-flow space.";
+                }
+
+
             }
 
             ViewBag.PetID = new SelectList(db.Pets, "PetID", "Name", reservation.PetID);

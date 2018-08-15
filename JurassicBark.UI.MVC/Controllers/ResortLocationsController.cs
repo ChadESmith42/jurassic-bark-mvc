@@ -13,12 +13,12 @@ namespace JurassicBark.UI.MVC.Controllers
     public class ResortLocationsController : Controller
     {
         private jurassicbarkEntities db = new jurassicbarkEntities();
+        public UnitOfWork uow = new UnitOfWork();
 
         // GET: ResortLocations
         [Authorize]
         public ActionResult Index()
         {
-
             return View(db.ResortLocations.ToList());
         }
 

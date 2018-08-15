@@ -99,3 +99,12 @@ h1, h2, h3, h4, h5, .lead, .jumbrotron {
     opacity:1;
     display:block;
 }
+
+.pet-avatar{
+    max-width: 100px;
+    max-height: 100px;
+}
+
+.push-right{
+    margin-left: 16px;
+}

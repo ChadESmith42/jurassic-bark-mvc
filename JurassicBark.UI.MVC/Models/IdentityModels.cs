@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNet.Identity;
+﻿using JurassicBark.DATA.EF;
+using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
 using System.Data.Entity;
 using System.Security.Claims;
@@ -16,6 +17,7 @@ namespace IdentitySample.Models
             // Add custom user claims here
             return userIdentity;
         }
+
     }
 
     public class ApplicationDbContext : IdentityDbContext<ApplicationUser>

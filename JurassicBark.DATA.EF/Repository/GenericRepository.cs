@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -88,6 +89,20 @@ namespace JurassicBark.DATA.EF.Repository
         {
             return Get().Count;
         }
+
+        public IEnumerable<TEntity> Include(params Expression<Func<TEntity, object>>[] includes)
+        {
+            IDbSet<TEntity> dbSet = db.Set<TEntity>();
+
+            IEnumerable<TEntity> query = null;
+            foreach (var include in includes)
+            {
+                query = dbSet.Include(include);
+            }
+
+            return query ?? dbSet;
+        }
+
 
         private bool disposed = false;
 

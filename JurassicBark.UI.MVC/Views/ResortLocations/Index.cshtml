@@ -13,7 +13,6 @@
         @Html.ActionLink("Create New", "Create", null, htmlAttributes: new { @class = "btn btn-primary" })
     </p>
 }
-
 <div class="card-group">
     @foreach (var item in Model)
     {
@@ -28,10 +27,36 @@
                     <p>
                         This facility has capacity for <span class="badge badge-primary badge-pill">@Html.DisplayFor(modelItem => item.ReservationLimit)</span> animals.
                     </p>
-                    <p>
-                        There are currently <span class="badge badge-primary badge-pill">@Html.DisplayFor(modelItem => item.Reservations.Count)</span> active reservations at this facility.
-                    </p>
+
+                    @if (item.countRes <= item.ReservationLimit)
+                    {
+                        if (item.countRes > 1 || item.countRes == 0)
+                        {
+                            <p>There are currently <span class="badge badge-info badge-pill">@item.countRes</span> active reservations at this facility for @DateTime.Now.ToShortDateString().</p>
+
+                        }
+                        if (item.countRes == 1)
+                        {
+                            <p>
+                                There is currently <span class="badge badge-info badge-pill">@item.countRes</span> active reservations at this facility for @DateTime.Now.ToShortDateString().
+                            </p>
+                        }
+                    }
+                    else
+	                {
+                    <p>There are currently <span class="badge badge-primary badge-pill">@item.countRes</span> active reservations at this facility for @DateTime.Now.ToShortDateString().</p>
+	                }
+
+
+
                     @Html.ActionLink("Details", "Details", new { id = item.ResortLocationID }, htmlAttributes: new { @class = "btn btn-primary" })
+                    @if (item.countRes < item.ReservationLimit)
+                    {
+                        @Html.ActionLink("Book Now!", "Create", "Reservations", new { id = item.ResortLocationID }, htmlAttributes: new { @class = "btn btn-secondary" })
+                    }
+
+
+
                     @*<a href="@Url.Action("Create","Reservations", { new item.ResourtLocationid = item.ResortLocationID })">Reserve your spot!</a>*@
                 </div>
             </div>

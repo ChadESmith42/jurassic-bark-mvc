@@ -4,9 +4,27 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using JurassicBark.DATA.EF;
 
 namespace JurassicBark.DATA.EF//.Metadata
 {
+    [MetadataType(typeof(ReservationMetadata))]
+    public partial class Reservation { }
+
+    public class ReservationMetadata
+    {
+        [Display(Name ="Jurassic Bark Location")]
+        public int ReservationID { get; set; }
+        public int ResortLocationID { get; set; }
+        [Display(Name ="Pet Name")]
+        public int PetID { get; set; }
+        [Display(Name ="Date")]
+        [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:d}")]
+        public System.DateTime ReservationDate { get; set; }
+    }
+
+    
+
     [MetadataType(typeof(PetMetadata))]
     public partial class Pet { }
 
@@ -28,10 +46,23 @@ namespace JurassicBark.DATA.EF//.Metadata
     }
 
     [MetadataType(typeof(ResortLocationMetadata))]
-    public partial class ResortLocation { }
+    public partial class ResortLocation {
+        UnitOfWork uow = new UnitOfWork();
+        public int countRes
+        {
+            get
+            {
+                var resLocID = this.ResortLocationID;
+                int count = uow.ReservationRepository.Get().Where(r => r.ReservationDate == DateTime.Today && r.ResortLocationID == resLocID).Count();
+
+                return count;
+            }
+        }
+    }
 
     public class ResortLocationMetadata
     {
+        public int ResortLocationID { get; set; }
         [Required]
         [Display(Name = "Resort Name")]
         [StringLength(50, ErrorMessage = "*Maximum 50 characters.")]

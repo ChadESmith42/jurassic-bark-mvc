@@ -6,28 +6,35 @@
 
 <h2>@ViewBag.Title</h2>
 
-<p>
-    @Html.ActionLink("Create New", "Create")
-</p>
-<table class="table">
-    <tr>
-        <th>
-            @Html.DisplayNameFor(model => model.Note)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.NoteDate)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.AspNetUser.Email)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Pet.Name)
-        </th>
-        <th></th>
-    </tr>
+@if (User.IsInRole("Employee"))
+{
+    <p>
+        @Html.ActionLink("Create New", "Create", null, htmlAttributes: new { @class = "btn btn-primary"})
+    </p>
+}
+
+
+<table class="table data-table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Note)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.NoteDate)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.AspNetUser.Email)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Pet.Name)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
 
 @foreach (var item in Model) {
-    <tr>
+    <tbody><tr>
         <td>
             @Html.DisplayFor(modelItem => item.Note)
         </td>
@@ -43,7 +50,7 @@
         <td>
             @Html.ActionLink("Edit", "Edit", new { id=item.NoteID }, htmlAttributes: new { @class = "btn btn-primary"})
         </td>
-    </tr>
+    </tr></tbody>
 }
 
 </table>
