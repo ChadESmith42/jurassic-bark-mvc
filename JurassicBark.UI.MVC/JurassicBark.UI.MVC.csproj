@@ -287,10 +287,7 @@
     <Content Include="Views\UserDetails\Edit.cshtml" />
     <Content Include="Views\UserDetails\Index.cshtml" />
     <Content Include="Views\EmployeeNotes\Create.cshtml" />
-    <Content Include="Views\EmployeeNotes\Delete.cshtml" />
-    <Content Include="Views\EmployeeNotes\Details.cshtml" />
     <Content Include="Views\EmployeeNotes\Edit.cshtml" />
-    <Content Include="Views\EmployeeNotes\Index.cshtml" />
     <Content Include="Views\EmployeeNotes\Pet.cshtml" />
     <Content Include="Views\EmployeeNotes\EmployeeID.cshtml" />
   </ItemGroup>

@@ -63,6 +63,19 @@ namespace JurassicBark.DATA.EF
             }
         }
 
+        private EmployeeNotesRepository _employeeNotesRepository;
+        public EmployeeNotesRepository EmployeeNotesRepository
+        {
+            get
+            {
+                if (this._employeeNotesRepository == null)
+                {
+                    this._employeeNotesRepository = new EmployeeNotesRepository(context);
+                }
+                return _employeeNotesRepository;
+            }
+        }
+
         public void Save()
         {
             context.SaveChanges();

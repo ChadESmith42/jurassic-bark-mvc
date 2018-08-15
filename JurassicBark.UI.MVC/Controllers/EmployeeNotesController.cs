@@ -13,6 +13,7 @@ namespace JurassicBark.UI.MVC.Controllers
 {
     public class EmployeeNotesController : Controller
     {
+
         private jurassicbarkEntities db = new jurassicbarkEntities();
         public UnitOfWork uow = new UnitOfWork();
         // GET: EmployeeNotes
@@ -27,17 +28,18 @@ namespace JurassicBark.UI.MVC.Controllers
         [Authorize(Roles = "Employee")]
         public ActionResult Pet(int id)
         {
-            
+            //Return all notes for a specific pet, by PetID
             var notes = db.EmployeeNotes.Where(e => e.Pet.PetID == id);
             //var employeeNotes = db.EmployeeNotes.Include(e => e.AspNetUser).Include(e => e.Pet.PetID == id);
 
             return View(notes.ToList());
         }
 
-        //GET: EmployeeNotes/EmployeeID/4
+        //GET: EmployeeNotes/EmployeeID/
         [Authorize(Roles ="Employee")]
         public ActionResult EmployeeID()
         {
+            //Returns currentUser's notes for all Pets. UserID is a GUID, so should be secure.
             string currentUserID = User.Identity.GetUserId();
             var notes = db.EmployeeNotes.Where(e => e.EmployeeID == currentUserID);
 
@@ -46,27 +48,29 @@ namespace JurassicBark.UI.MVC.Controllers
 
 
 
-        // GET: EmployeeNotes/Details/5
-        [Authorize(Roles = "Employee")]
-        public ActionResult Details(int? id)
-        {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            EmployeeNote employeeNote = db.EmployeeNotes.Find(id);
-            if (employeeNote == null)
-            {
-                return HttpNotFound();
-            }
-            return View(employeeNote);
-        }
+        //// GET: EmployeeNotes/Details/5
+        //[Authorize(Roles = "Employee")]
+        //public ActionResult Details(int? id)
+        //{
+        //    if (id == null)
+        //    {
+        //        return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+        //    }
+        //    EmployeeNote employeeNote = db.EmployeeNotes.Find(id);
+        //    if (employeeNote == null)
+        //    {
+        //        return HttpNotFound();
+        //    }
+        //    return View(employeeNote);
+        //}
 
         // GET: EmployeeNotes/Create
         [Authorize(Roles = "Employee")]
         public ActionResult Create()
         {
-            ViewBag.EmployeeID = new SelectList(db.AspNetUsers, "Id", "Email");
+            string currentUserID = User.Identity.GetUserId();
+            ViewBag.EmployeeID = currentUserID;
+            //ViewBag.EmployeeID = new SelectList(db.AspNetUsers, "Id", "Email");
             ViewBag.PetID = new SelectList(db.Pets, "PetID", "Name");
             return View();
         }
@@ -79,14 +83,17 @@ namespace JurassicBark.UI.MVC.Controllers
         [Authorize(Roles = "Employee")]
         public ActionResult Create([Bind(Include = "NoteID,PetID,EmployeeID,Note,NoteDate")] EmployeeNote employeeNote)
         {
+            string currentUserID = User.Identity.GetUserId();
+            employeeNote.EmployeeID = currentUserID;
+
             if (ModelState.IsValid)
             {
                 db.EmployeeNotes.Add(employeeNote);
                 db.SaveChanges();
-                return RedirectToAction("Index");
+                return RedirectToAction("EmployeeID");
             }
-
-            ViewBag.EmployeeID = new SelectList(db.AspNetUsers, "Id", "Email", employeeNote.EmployeeID);
+            
+            //ViewBag.EmployeeID = new SelectList(db.AspNetUsers, "Id", "Email", employeeNote.EmployeeID);
             ViewBag.PetID = new SelectList(db.Pets, "PetID", "Name", employeeNote.PetID);
             return View(employeeNote);
         }
@@ -104,7 +111,9 @@ namespace JurassicBark.UI.MVC.Controllers
             {
                 return HttpNotFound();
             }
-            ViewBag.EmployeeID = new SelectList(db.AspNetUsers, "Id", "Email", employeeNote.EmployeeID);
+            string currentUserID = User.Identity.GetUserId();
+            ViewBag.EmployeeID = currentUserID;
+            //ViewBag.EmployeeID = new SelectList(db.AspNetUsers, "Id", "Email", employeeNote.EmployeeID);
             ViewBag.PetID = new SelectList(db.Pets, "PetID", "Name", employeeNote.PetID);
             return View(employeeNote);
         }
@@ -123,38 +132,40 @@ namespace JurassicBark.UI.MVC.Controllers
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
-            ViewBag.EmployeeID = new SelectList(db.AspNetUsers, "Id", "Email", employeeNote.EmployeeID);
+            string currentUserID = User.Identity.GetUserId();
+            ViewBag.EmployeeID = currentUserID;
+            //ViewBag.EmployeeID = new SelectList(db.AspNetUsers, "Id", "Email", employeeNote.EmployeeID);
             ViewBag.PetID = new SelectList(db.Pets, "PetID", "Name", employeeNote.PetID);
             return View(employeeNote);
         }
 
-        // GET: EmployeeNotes/Delete/5
-        [Authorize(Roles = "Employee")]
-        public ActionResult Delete(int? id)
-        {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            EmployeeNote employeeNote = db.EmployeeNotes.Find(id);
-            if (employeeNote == null)
-            {
-                return HttpNotFound();
-            }
-            return View(employeeNote);
-        }
+        //// GET: EmployeeNotes/Delete/5
+        //[Authorize(Roles = "Employee")]
+        //public ActionResult Delete(int? id)
+        //{
+        //    if (id == null)
+        //    {
+        //        return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+        //    }
+        //    EmployeeNote employeeNote = db.EmployeeNotes.Find(id);
+        //    if (employeeNote == null)
+        //    {
+        //        return HttpNotFound();
+        //    }
+        //    return View(employeeNote);
+        //}
 
-        // POST: EmployeeNotes/Delete/5
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        [Authorize(Roles = "Employee")]
-        public ActionResult DeleteConfirmed(int id)
-        {
-            EmployeeNote employeeNote = db.EmployeeNotes.Find(id);
-            db.EmployeeNotes.Remove(employeeNote);
-            db.SaveChanges();
-            return RedirectToAction("Index");
-        }
+        //// POST: EmployeeNotes/Delete/5
+        //[HttpPost, ActionName("Delete")]
+        //[ValidateAntiForgeryToken]
+        //[Authorize(Roles = "Employee")]
+        //public ActionResult DeleteConfirmed(int id)
+        //{
+        //    EmployeeNote employeeNote = db.EmployeeNotes.Find(id);
+        //    db.EmployeeNotes.Remove(employeeNote);
+        //    db.SaveChanges();
+        //    return RedirectToAction("Index");
+        //}
 
         protected override void Dispose(bool disposing)
         {

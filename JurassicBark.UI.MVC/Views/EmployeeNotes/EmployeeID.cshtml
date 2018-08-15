@@ -41,9 +41,7 @@
             @Html.DisplayFor(modelItem => item.Pet.Name)
         </td>
         <td>
-            @Html.ActionLink("Edit", "Edit", new { id=item.NoteID }) |
-            @Html.ActionLink("Details", "Details", new { id=item.NoteID }) |
-            @Html.ActionLink("Delete", "Delete", new { id=item.NoteID })
+            @Html.ActionLink("Edit", "Edit", new { id=item.NoteID }, htmlAttributes: new { @class = "btn btn-primary"})
         </td>
     </tr>
 }
