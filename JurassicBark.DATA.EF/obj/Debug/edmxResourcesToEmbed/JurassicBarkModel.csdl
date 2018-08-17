@@ -67,6 +67,7 @@
     <Property Name="ZipCode" Type="Int32" Nullable="false" />
     <Property Name="ReservationLimit" Type="Byte" Nullable="false" />
     <NavigationProperty Name="Reservations" Relationship="Self.FK_Reservations_ResortLocations" FromRole="ResortLocations" ToRole="Reservations" />
+    <Property Name="Coordinates" Type="String" MaxLength="30" FixedLength="true" Unicode="true" />
   </EntityType>
   <EntityType Name="UserDetail">
     <Key>

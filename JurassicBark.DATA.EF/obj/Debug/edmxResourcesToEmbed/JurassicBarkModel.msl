@@ -53,6 +53,7 @@
     <EntitySetMapping Name="ResortLocations">
       <EntityTypeMapping TypeName="jurassicbarkModel.ResortLocation">
         <MappingFragment StoreEntitySet="ResortLocations">
+          <ScalarProperty Name="Coordinates" ColumnName="Coordinates" />
           <ScalarProperty Name="ResortLocationID" ColumnName="ResortLocationID" />
           <ScalarProperty Name="ResortName" ColumnName="ResortName" />
           <ScalarProperty Name="Address" ColumnName="Address" />

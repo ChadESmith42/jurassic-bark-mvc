@@ -54,7 +54,7 @@ namespace JurassicBark.UI.MVC.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize(Roles = "Admin")]
-        public ActionResult Create([Bind(Include = "ResortLocationID,ResortName,Address,City,State,ZipCode,ReservationLimit")] ResortLocation resortLocation)
+        public ActionResult Create([Bind(Include = "ResortLocationID,ResortName,Address,City,State,ZipCode,ReservationLimit,Coordinates")] ResortLocation resortLocation)
         {
             if (ModelState.IsValid)
             {
@@ -88,7 +88,7 @@ namespace JurassicBark.UI.MVC.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize(Roles = "Admin")]
-        public ActionResult Edit([Bind(Include = "ResortLocationID,ResortName,Address,City,State,ZipCode,ReservationLimit")] ResortLocation resortLocation)
+        public ActionResult Edit([Bind(Include = "ResortLocationID,ResortName,Address,City,State,ZipCode,ReservationLimit, Coordinates")] ResortLocation resortLocation)
         {
             if (ModelState.IsValid)
             {

@@ -15,9 +15,14 @@
         <p class="card-text">
             @Html.DisplayNameFor(model => model.SpecialNotes): @Html.DisplayFor(model => model.SpecialNotes)
         </p>
-        <p class="card-text">
+        @if (User.IsInRole("Admin"))
+        {
+            <p class="card-text">
             @Html.DisplayNameFor(model => model.IsActive) &emsp;@Html.DisplayFor(model => model.IsActive)
-        </p>
+            </p>
+
+        }
+        
         <p class="card-text">
             @Html.DisplayNameFor(model => model.DateAdded): @Html.DisplayFor(model => model.DateAdded)
         </p>
@@ -35,27 +40,3 @@
 
 </div>
 
-  
-    @*<span class="avatar img-responsive">
-        @Html.DisplayFor(model => model.PetPhoto)
-    </span>
-    <p>
-        @Html.DisplayNameFor(model => model.SpecialNotes): @Html.DisplayFor(model => model.SpecialNotes)
-    </p>   
-    <p>
-        @Html.DisplayNameFor(model => model.IsActive) &emsp;@Html.DisplayFor(model => model.IsActive)
-    </p>   
-    <p>
-        @Html.DisplayNameFor(model => model.DateAdded): @Html.DisplayFor(model => model.DateAdded)
-    </p>
-    <p>
-        Owner Contact Information: @Html.DisplayFor(model => model.AspNetUser.Email)
-    </p>
-
-<div class="btn-group">
-    @if (User.IsInRole("Admin") || User.IsInRole("Customer"))
-    {
-        @Html.ActionLink("Edit", "Edit", new { id = Model.PetID }, htmlAttributes: new { @class = "btn btn-primary" })
-    }
-    @Html.ActionLink("Back to List", "Index", null, htmlAttributes: new { @class = "btn btn-primary" })
-</div>*@

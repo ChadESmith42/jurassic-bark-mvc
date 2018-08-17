@@ -1,18 +1,15 @@
 ﻿@model IEnumerable<JurassicBark.DATA.EF.ResortLocation>
 
 @{
-    ViewBag.Title = "Locations";
-    ViewBag.Site = "Jurassic Bark";
+    ViewBag.Title = "Jurassic Bark Locations";
 }
-<h2>@ViewBag.Site&trade; @ViewBag.Title</h2>
+<h2>@ViewBag.Title</h2>
 
-@if (User.IsInRole("Admin"))
-{
-    <p>
+<div id='map' class="col-md-12">
+</div>
 
-        @Html.ActionLink("Create New", "Create", null, htmlAttributes: new { @class = "btn btn-primary" })
-    </p>
-}
+
+
 <div class="card-group">
     @foreach (var item in Model)
     {
@@ -32,25 +29,25 @@
                     {
                         if (item.countRes > 1 || item.countRes == 0)
                         {
-                            <p>There are currently <span class="badge badge-info badge-pill">@item.countRes</span> active reservations at this facility for @DateTime.Now.ToShortDateString().</p>
+                            <p>There are currently <span class="badge badge-info badge-pill">@item.countRes</span> reservations at this facility for @DateTime.Now.ToShortDateString().</p>
 
                         }
                         if (item.countRes == 1)
                         {
                             <p>
-                                There is currently <span class="badge badge-info badge-pill">@item.countRes</span> active reservations at this facility for @DateTime.Now.ToShortDateString().
+                                There is currently <span class="badge badge-info badge-pill">@item.countRes</span> reservation at this facility for @DateTime.Now.ToShortDateString().
                             </p>
                         }
                     }
                     else
-	                {
-                    <p>There are currently <span class="badge badge-primary badge-pill">@item.countRes</span> active reservations at this facility for @DateTime.Now.ToShortDateString().</p>
-	                }
+                    {
+                        <p>There are currently <span class="badge badge-primary badge-pill">@item.countRes</span> reservations at this facility for @DateTime.Now.ToShortDateString().</p>
+                    }
 
 
 
                     @Html.ActionLink("Details", "Details", new { id = item.ResortLocationID }, htmlAttributes: new { @class = "btn btn-primary" })
-                    @if (item.countRes < item.ReservationLimit)
+                    @if (item.countRes < item.ReservationLimit && !User.IsInRole("Employee"))
                     {
                         @Html.ActionLink("Book Now!", "Create", "Reservations", new { id = item.ResortLocationID }, htmlAttributes: new { @class = "btn btn-secondary" })
                     }
@@ -65,65 +62,168 @@
     }
 </div>
 
+<div class="spaced">
+    @if (User.IsInRole("Admin"))
+    {
+        <p>
 
-
-@*<table class="table">
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.ResortName)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Address)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.City)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.State)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.ZipCode)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.ReservationLimit)
-            </th>
-            <th></th>
-        </tr>
-
-    @foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.ResortName)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Address)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.City)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.State)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.ZipCode)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.ReservationLimit)
-            </td>
-            <td>
-
-                @Html.ActionLink("Details", "Details", new { id = item.ResortLocationID }, htmlAttributes: new { @class = "btn btn-primary" })
-
-                @if (User.IsInRole("Admin"))
-                {
-                    @:&emsp;
-                    @Html.ActionLink("Edit", "Edit", new { id = item.ResortLocationID }, htmlAttributes: new { @class = "btn btn-primary"}) @:&emsp;
-
-                    @Html.ActionLink("Delete", "Delete", new { id = item.ResortLocationID }, htmlAttributes: new { @class = "btn btn-primary" })
-                }
-
-            </td>
-        </tr>
+            @Html.ActionLink("Create New", "Create", null, htmlAttributes: new { @class = "btn btn-primary" })
+        </p>
     }
+</div>
 
-    </table>*@
+<script src='https://api.tiles.mapbox.com/mapbox-gl-js/v0.46.0/mapbox-gl.js'></script>
+<link href='https://api.tiles.mapbox.com/mapbox-gl-js/v0.46.0/mapbox-gl.css' rel='stylesheet' />
+
+<script>
+
+    //Since JavaScript doesn't like inserting a FOREACH into the middle of a JSON file, I've generated the JSON file
+    //using RAZOR and JavaScript below. The variable mapJson will then be substituted for the section of code that I
+    //wanted to generate from the DB and insert into the JSON.
+    //var mapJson = "{'type': 'FeatureCollection','features': [";
+    
+    //This section inserts attributes from the DB into a string that will be treated as JSON later.
+    @*@foreach (var item in Model)
+    {
+        @:mapJson += "{'type': 'Feature', 'properties': { 'description': '<h3>@item.ResortName</h3><p>Located at @item.Address, @item.City, @item.State @item.ZipCode.</p><div> @*<a href='@Url.Action("Create","Reservations")' class='btn btn-primary' role='button'>Book now!</a></div>'},'geometry': { 'type': 'Point','coordinates': [@item.Coordinates.TrimEnd()]}}, ";
+    }*@
+
+    //mapJson += " {'type': 'Feature', 'properties': {'description': '<div class='mobile'><h3>Evil League of Evil Training Grounds</h3><p>Located at Evil League of Evil HQ.</p></div>'},'geometry': {'type': 'Point','coordinates': [0, 0]}}]}}";
+    
+   //console.log(mapJson);
+
+    mapboxgl.accessToken = 'pk.eyJ1IjoiY3NtaXRoNzU1MyIsImEiOiJjaWY4OXU3NXkxbzA4c2hsem00Y3pscmMyIn0.9GAiQ-7yW9AnQKcAooeytA';
+    var map = new mapboxgl.Map({
+        container: 'map', // container id
+        style: 'mapbox://styles/mapbox/streets-v10', // stylesheet location
+        center: [-94.60, 39.00], // starting position [lng, lat]
+        zoom: 10 // starting zoom
+    });
+    map.on('load', function () {
+        map.loadImage('https://i.imgur.com/MK4NUzI.png', function (error, image) {
+            if (error) throw error;
+            map.addImage('point', image);
+            map.addLayer({
+                "id": "points",
+                "type": "symbol",
+                "source": {
+                    "type": "geojson",
+                    "data": {
+                        "type": "FeatureCollection",
+                        "features": [{
+                            "type": "Feature", "properties": {
+                                "description": "<h3>Betty Brook</h3><p>Located at 8646 Lee Blvd, Leawood, KS 66206.</p><div> <a href='http://localhost:51171/Reservations/Create' class='btn btn-primary' role='button'>Book now!</a></div>"
+                            },
+                            "geometry": {
+                                "type": "Point",
+                                "coordinates": [-94.614705, 38.971796]
+                            }
+                        },
+                        {
+                            "type": "Feature", "properties": {
+                                "description": "<h3>Leawoof</h3><p>Located at 106th & Lee Boulevard, Leawood, KS 66211.</p><div> <a href='http://localhost:51171/Reservations/Create' class='btn btn-primary' role='button'>Book now!</a></div>"
+                            },
+                            "geometry": {
+                                "type": "Point",
+                                "coordinates": [-94.6116024, 38.9332894]
+                            }
+                        },
+                        {
+                            "type": "Feature", "properties": {
+                                "description": "<div class='mobile'><h3>Swope Dog Park</h3><p>Located at 5051 E Gregory Blvd, Kansas City, MO 64132.</p><div> <a href='http://localhost:51171/Reservations/Create' class='btn btn-primary' role='button'>Book now!</a></div></div>"
+                            },
+                            "geometry": {
+                                "type": "Point",
+                                "coordinates": [-94.5275897, 38.9966864]
+                            }
+                        },
+                        {
+                            "type": "Feature", "properties": {
+                                "description": "<div class='mobile'><h3>Penn Valley Off Leash Dog Park</h3><p>Located at W 28th & Wyandotte St, Kansas City, MO 64108.</p><div> <a href='http://localhost:51171/Reservations/Create' class='btn btn-primary' role='button'>Book now!</a></div></div>"
+                            },
+                            "geometry": {
+                                "type": "Point",
+                                "coordinates": [-94.588766, 39.0757432]
+                            }
+                        },
+                        {
+                            "type": "Feature", "properties": {
+                                "description": "<div class='mobile'><h3>Stoll Off-Leash Dog Park</h3><p>Located at 12500 W 119th St, Overland Park, KS 66210.</p><div> <a href='http://localhost:51171/Reservations/Create' class='btn btn-primary' role='button'>Book now!</a></div></div>"
+                            },
+                            "geometry": {
+                                "type": "Point",
+                                "coordinates": [-94.730676, 38.916525]
+                            }
+                        },
+                        {
+                            "type": "Feature", "properties": {
+                                "description": "<div class='mobile'><h3>Tails & Trails Dog Park</h3><p>Located at 8005 E 139th St, Grandview, MO 64030.</p><div> <a href='http://localhost:51171/Reservations/Create' class='btn btn-primary' role='button'>Book now!</a></div></div>"
+                            },
+                            "geometry": {
+                                "type": "Point",
+                                "coordinates": [-94.507984, 38.871705]
+                            }
+                        },
+                        {
+                            "type": "Feature", "properties": {
+                                "description": "<div class='mobile'><h3>West Terrace Dog Park</h3><p>Located at 750 Pennsylvania Ave, Kansas City, MO 64105.</p><div> <a href='http://localhost:51171/Reservations/Create' class='btn btn-primary' role='button'>Book now!</a></div></div>"
+                            },
+                            "geometry": {
+                                "type": "Point",
+                                "coordinates": [-94.59091, 39.105213]
+                            }
+                        }
+
+                        ]
+                    }
+                },
+                    "layout": {
+                        "icon-image": "point",
+                        "icon-size": .70
+                    }
+                });
+        });
+    });
+
+    //Creates a pop-up when you click on the icon for each feature
+    map.on('click', 'points', function (e) {
+        var coordinates = e.features[0].geometry.coordinates.slice();
+        var description = e.features[0].properties.description;
+
+        while (Math.abs(e.lngLat.lng - coordinates[0]) > 180) {
+            coordinates[0] += e.lngLat.lng > coordinates[0] ? 360 : -360;
+        }
+        //Create the actual pop-up
+        new mapboxgl.Popup()
+            .setLngLat(coordinates)
+            .setHTML(description)
+            .addTo(map);
+    });
+    //Changes the mouse to a pointer when over the icon
+    map.on('mouseenter', 'points', function () {
+        map.getCanvas().style.cursor = 'pointer';
+    });
+
+    //Changes the mouse back to default when moving off of the icon
+    map.on('mouseleave', 'points', function () {
+        map.getCanvas().style.cursor = '';
+    });
+
+    // Add geolocate control to the map.
+    map.addControl(new mapboxgl.GeolocateControl({
+        positionOptions: {
+            enableHighAccuracy: true
+        },
+        trackUserLocation: true
+    }));
+
+    //Add scale bar to the bottom of the map for spatial reference
+    var scale = new mapboxgl.ScaleControl({
+        maxWidth: 100,
+        unit: 'imperial'
+    });
+    map.addControl(scale);
+
+    //scale.setUnit('metric');
+</script>
+

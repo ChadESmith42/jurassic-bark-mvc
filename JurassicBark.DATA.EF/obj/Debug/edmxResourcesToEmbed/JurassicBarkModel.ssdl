@@ -74,6 +74,7 @@
     <Property Name="State" Type="char" MaxLength="2" Nullable="false" />
     <Property Name="ZipCode" Type="int" Nullable="false" />
     <Property Name="ReservationLimit" Type="tinyint" Nullable="false" />
+    <Property Name="Coordinates" Type="nchar" MaxLength="30" />
   </EntityType>
   <EntityType Name="UserDetails">
     <Key>

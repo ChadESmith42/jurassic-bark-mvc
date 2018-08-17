@@ -69,7 +69,7 @@ namespace JurassicBark.UI.MVC.Controllers
             ViewBag.OwnerID = new SelectList(db.AspNetUsers, "Id", "Email");
             return View();
         }
-        
+
         // POST: Pets/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -109,7 +109,7 @@ namespace JurassicBark.UI.MVC.Controllers
                         Image petImage = Image.FromStream(PetPhoto.InputStream);
                         FileUtilities.ResizeImage(savePath, imageName, petImage, 500, 100);
                     }
-                    
+
                 }
                 pet.PetPhoto = imageName;
 
@@ -124,7 +124,7 @@ namespace JurassicBark.UI.MVC.Controllers
         [Authorize]
         public ActionResult Edit(int? id)
         {
-            
+
             string currentUserID = User.Identity.GetUserId();
 
             if (id == null)
@@ -157,7 +157,7 @@ namespace JurassicBark.UI.MVC.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize]
-        public ActionResult Edit([Bind(Include = "PetID,Name,OwnerID,PetPhoto,SpecialNotes,IsActive,DateAdded")] Pet pet)
+        public ActionResult Edit([Bind(Include = "PetID,Name,OwnerID,PetPhoto,SpecialNotes,IsActive,DateAdded")] Pet pet, HttpPostedFileBase fileUpload)
         {
             if (!User.IsInRole("Admin"))
             {
@@ -172,6 +172,36 @@ namespace JurassicBark.UI.MVC.Controllers
 
             if (ModelState.IsValid)
             {
+                if (fileUpload != null)
+                {
+                    pet.PetPhoto = fileUpload.FileName;
+                    //Empty string to use if image needs to be renamed.
+                    string imageName = "";
+                    //Create variable to capture the file extension
+                    string imgExt = Path.GetExtension(fileUpload.FileName).ToLower();
+                    //Create string array of allowed file extensions
+                    string[] allowedExtensions = { ".png", ".jpg", ".jpeg", ".gif" };
+                    //Check image is allowed
+                    if (allowedExtensions.Contains(imgExt))
+                    {
+                        //Save file name with identifier
+                        imageName = DateTime.Now.ToString("yyyyMMddHHmmssfff") + "_" +
+                            Path.GetFileName(fileUpload.FileName);
+
+                        //Set the path on the server to store the image:
+                        string savePath = Server.MapPath("~/Content/images/pets/");
+
+                        Image petImage = Image.FromStream(fileUpload.InputStream);
+                        FileUtilities.ResizeImage(savePath, imageName, petImage, 500, 100);
+                    }
+                    else
+                    {
+                        pet.PetPhoto = pet.PetPhoto;
+                    }
+
+                }
+
+
                 db.Entry(pet).State = EntityState.Modified;
                 db.SaveChanges();
                 return RedirectToAction("Index");

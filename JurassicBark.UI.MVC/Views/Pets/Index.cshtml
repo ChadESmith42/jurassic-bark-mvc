@@ -26,9 +26,12 @@
                 <p class="card-text">
                     @Html.DisplayNameFor(model => model.SpecialNotes): @Html.DisplayFor(modelItem => item.SpecialNotes)
                 </p>
-                <p class="card-text">
-                    @Html.DisplayNameFor(model => model.IsActive) &emsp;@Html.DisplayFor(modelItem => item.IsActive)
-                </p>
+                @if (User.IsInRole("Admin"))
+                {
+                    <p class="card-text">
+                        @Html.DisplayNameFor(model => model.IsActive) &emsp;@Html.DisplayFor(modelItem => item.IsActive)
+                    </p>
+                }
                 <p class="card-text">
                     @Html.DisplayNameFor(model => model.DateAdded): @Html.DisplayFor(modelItem => item.DateAdded)
                 </p>

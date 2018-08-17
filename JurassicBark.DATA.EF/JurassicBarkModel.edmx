@@ -79,6 +79,7 @@
           <Property Name="State" Type="char" MaxLength="2" Nullable="false" />
           <Property Name="ZipCode" Type="int" Nullable="false" />
           <Property Name="ReservationLimit" Type="tinyint" Nullable="false" />
+          <Property Name="Coordinates" Type="nchar" MaxLength="30" />
         </EntityType>
         <EntityType Name="UserDetails">
           <Key>
@@ -304,6 +305,7 @@
           <Property Name="ZipCode" Type="Int32" Nullable="false" />
           <Property Name="ReservationLimit" Type="Byte" Nullable="false" />
           <NavigationProperty Name="Reservations" Relationship="Self.FK_Reservations_ResortLocations" FromRole="ResortLocations" ToRole="Reservations" />
+          <Property Name="Coordinates" Type="String" MaxLength="30" FixedLength="true" Unicode="true" />
         </EntityType>
         <EntityType Name="UserDetail">
           <Key>
@@ -500,6 +502,7 @@
           <EntitySetMapping Name="ResortLocations">
             <EntityTypeMapping TypeName="jurassicbarkModel.ResortLocation">
               <MappingFragment StoreEntitySet="ResortLocations">
+                <ScalarProperty Name="Coordinates" ColumnName="Coordinates" />
                 <ScalarProperty Name="ResortLocationID" ColumnName="ResortLocationID" />
                 <ScalarProperty Name="ResortName" ColumnName="ResortName" />
                 <ScalarProperty Name="Address" ColumnName="Address" />

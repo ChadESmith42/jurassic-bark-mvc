@@ -12,7 +12,20 @@
 </div>
 <div>
     <p>@Html.DisplayFor(model => model.ResortName) has capacity for <span class="badge badge-primary badge-pill">@Html.DisplayFor(model => model.ReservationLimit)</span> animals per day.</p>
-    @*<p>@Html.DisplayFor(model => model.ResortName) has <span class="badge badge-primary badge-pill">@ViewBag.Available</span> available reservations today.</p>*@
+    @if (Model.countRes == 1)
+    {
+        <p>@Html.DisplayFor(model => model.ResortName) has <span class="badge badge-info badge-pill">@Html.DisplayFor(model => model.countRes)</span> reservation today.</p>
+    }
+    else
+    {
+        <p>@Html.DisplayFor(model => model.ResortName) has <span class="badge badge-info badge-pill">@Html.DisplayFor(model => model.countRes)</span> reservations today.</p>
+    }
+
+    @if (User.IsInRole("Admin"))
+    {
+        <p>@Html.DisplayNameFor(model => model.Coordinates): @Html.DisplayFor(model => model.Coordinates)</p>
+    }
+
 </div>
 
 @*<div>

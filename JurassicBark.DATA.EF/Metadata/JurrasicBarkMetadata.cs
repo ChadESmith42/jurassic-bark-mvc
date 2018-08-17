@@ -82,6 +82,8 @@ namespace JurassicBark.DATA.EF//.Metadata
         [Required]
         [Display(Name = "Reservation Limit")]
         public byte ReservationLimit { get; set; }
+        [Required]
+        public string Coordinates { get; set; }
     }
 
     [MetadataType(typeof(UserDetailMetadata))]
