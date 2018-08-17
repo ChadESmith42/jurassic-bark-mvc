@@ -97,6 +97,13 @@ h1, h2, h3, h4, h5, .lead, .jumbrotron {
         .mapboxgl-popup.h3 {
             font-size: smaller;
         }
+
+    .toggle-hidden{
+        display:none;
+    }
+    .toggle-displayed{
+        display:contents;
+    }
 }
 
 .avatar {
@@ -121,3 +128,13 @@ h1, h2, h3, h4, h5, .lead, .jumbrotron {
     margin-top: 20px; 
 }
 
+@media screen and (min-width: 451px) {
+
+    .toggle-displayed{
+        display: none;
+    }
+    .toggle-hidden{
+        display: contents;
+    }
+
+}

@@ -193,6 +193,7 @@ namespace JurassicBark.UI.MVC.Controllers
 
                         Image petImage = Image.FromStream(fileUpload.InputStream);
                         FileUtilities.ResizeImage(savePath, imageName, petImage, 500, 100);
+                        pet.PetPhoto = imageName;
                     }
                     else
                     {

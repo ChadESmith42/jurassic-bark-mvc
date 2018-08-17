@@ -9,9 +9,9 @@
 
 @using (Html.BeginForm("Edit", "Pets", FormMethod.Post, new { enctype = "multipart/form-data" }))
 {
-                @Html.AntiForgeryToken()
+    @Html.AntiForgeryToken()
 
-                <div class="form-horizontal">
+    <div class="form-horizontal">
         @Html.ValidationSummary(true, "", new { @class = "text-danger" })
         @Html.HiddenFor(model => model.PetID)
 
@@ -32,8 +32,6 @@
                 </div>
             </div>
         }
-       
-
         <div class="form-group">
             @Html.LabelFor(model => model.PetPhoto, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
