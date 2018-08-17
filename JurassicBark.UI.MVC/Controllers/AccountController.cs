@@ -6,6 +6,8 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
+using JurassicBark.DATA.EF;
+using Microsoft.AspNet.Identity.EntityFramework;
 
 namespace IdentitySample.Controllers
 {
@@ -14,6 +16,7 @@ namespace IdentitySample.Controllers
     {
         public AccountController()
         {
+           
         }
 
         public AccountController(ApplicationUserManager userManager, ApplicationSignInManager signInManager )
@@ -149,7 +152,7 @@ namespace IdentitySample.Controllers
         {
             if (ModelState.IsValid)
             {
-                var user = new ApplicationUser { UserName = model.Email, Email = model.Email };
+                var user = new ApplicationUser { UserName = model.Email, Email = model.Email, FName = model.FName, LName = model.LName, Address = model.Address, City = model.City, State = model.State, ZipCode = model.ZipCode, BirthDay = model.BirthDay };
                 var result = await UserManager.CreateAsync(user, model.Password);
                 if (result.Succeeded)
                 {

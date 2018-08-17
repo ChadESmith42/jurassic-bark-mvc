@@ -36,12 +36,19 @@
           <Property Name="LockoutEnabled" Type="bit" Nullable="false" />
           <Property Name="AccessFailedCount" Type="int" Nullable="false" />
           <Property Name="UserName" Type="nvarchar" MaxLength="256" Nullable="false" />
+          <Property Name="FName" Type="nvarchar(max)" />
+          <Property Name="LName" Type="nvarchar(max)" />
+          <Property Name="Address" Type="nvarchar(max)" />
+          <Property Name="City" Type="nvarchar(max)" />
+          <Property Name="State" Type="nvarchar(max)" />
+          <Property Name="ZipCode" Type="nvarchar(max)" />
+          <Property Name="BirthDay" Type="datetime" Nullable="false" />
         </EntityType>
         <EntityType Name="EmployeeNotes">
           <Key>
-            <PropertyRef Name="NoteID" />
+            <PropertyRef Name="EmpNoteID" />
           </Key>
-          <Property Name="NoteID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="EmpNoteID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="PetID" Type="int" Nullable="false" />
           <Property Name="EmployeeID" Type="nvarchar" MaxLength="128" Nullable="false" />
           <Property Name="Note" Type="nchar" MaxLength="500" Nullable="false" />
@@ -80,17 +87,6 @@
           <Property Name="ZipCode" Type="int" Nullable="false" />
           <Property Name="ReservationLimit" Type="tinyint" Nullable="false" />
           <Property Name="Coordinates" Type="nchar" MaxLength="30" />
-        </EntityType>
-        <EntityType Name="UserDetails">
-          <Key>
-            <PropertyRef Name="UserID" />
-          </Key>
-          <Property Name="UserID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="FName" Type="nchar" MaxLength="50" Nullable="false" />
-          <Property Name="LName" Type="nchar" MaxLength="50" Nullable="false" />
-          <Property Name="Phone" Type="nchar" MaxLength="10" />
-          <Property Name="Image" Type="nchar" MaxLength="50" />
-          <Property Name="AspNetUsersID" Type="nvarchar" MaxLength="128" />
         </EntityType>
         <Association Name="FK_dbo_AspNetUserRoles_dbo_AspNetRoles_RoleId">
           <End Role="AspNetRoles" Type="Self.AspNetRoles" Multiplicity="1">
@@ -180,18 +176,6 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_UserDetails_AspNetUsers">
-          <End Role="AspNetUsers" Type="Self.AspNetUsers" Multiplicity="0..1" />
-          <End Role="UserDetails" Type="Self.UserDetails" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="AspNetUsers">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="UserDetails">
-              <PropertyRef Name="AspNetUsersID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <EntityContainer Name="jurassicbarkModelStoreContainer">
           <EntitySet Name="AspNetRoles" EntityType="Self.AspNetRoles" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="AspNetUserRoles" EntityType="Self.AspNetUserRoles" Schema="dbo" store:Type="Tables" />
@@ -200,7 +184,6 @@
           <EntitySet Name="Pets" EntityType="Self.Pets" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Reservations" EntityType="Self.Reservations" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="ResortLocations" EntityType="Self.ResortLocations" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="UserDetails" EntityType="Self.UserDetails" Schema="dbo" store:Type="Tables" />
           <AssociationSet Name="FK_dbo_AspNetUserRoles_dbo_AspNetRoles_RoleId" Association="Self.FK_dbo_AspNetUserRoles_dbo_AspNetRoles_RoleId">
             <End Role="AspNetRoles" EntitySet="AspNetRoles" />
             <End Role="AspNetUserRoles" EntitySet="AspNetUserRoles" />
@@ -228,10 +211,6 @@
           <AssociationSet Name="FK_Reservations_ResortLocations" Association="Self.FK_Reservations_ResortLocations">
             <End Role="ResortLocations" EntitySet="ResortLocations" />
             <End Role="Reservations" EntitySet="Reservations" />
-          </AssociationSet>
-          <AssociationSet Name="FK_UserDetails_AspNetUsers" Association="Self.FK_UserDetails_AspNetUsers">
-            <End Role="AspNetUsers" EntitySet="AspNetUsers" />
-            <End Role="UserDetails" EntitySet="UserDetails" />
           </AssociationSet>
         </EntityContainer>
       </Schema></edmx:StorageModels>
@@ -263,9 +242,15 @@
           <Property Name="AccessFailedCount" Type="Int32" Nullable="false" />
           <Property Name="UserName" Type="String" MaxLength="256" FixedLength="false" Unicode="true" Nullable="false" />
           <NavigationProperty Name="Pets" Relationship="Self.FK_Pets_AspNetUsers" FromRole="AspNetUsers" ToRole="Pets" />
-          <NavigationProperty Name="UserDetails" Relationship="Self.FK_UserDetails_AspNetUsers" FromRole="AspNetUsers" ToRole="UserDetails" />
           <NavigationProperty Name="AspNetRoles" Relationship="Self.AspNetUserRoles" FromRole="AspNetUsers" ToRole="AspNetRoles" />
           <NavigationProperty Name="EmployeeNotes" Relationship="jurassicbarkModel.FK_EmployeeNotes_AspNetUsers" FromRole="AspNetUser" ToRole="EmployeeNote" />
+          <Property Name="FName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="LName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Address" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="City" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="State" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="ZipCode" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="BirthDay" Type="DateTime" Nullable="false" Precision="3" />
         </EntityType>
         <EntityType Name="Pet">
           <Key>
@@ -307,18 +292,6 @@
           <NavigationProperty Name="Reservations" Relationship="Self.FK_Reservations_ResortLocations" FromRole="ResortLocations" ToRole="Reservations" />
           <Property Name="Coordinates" Type="String" MaxLength="30" FixedLength="true" Unicode="true" />
         </EntityType>
-        <EntityType Name="UserDetail">
-          <Key>
-            <PropertyRef Name="UserID" />
-          </Key>
-          <Property Name="UserID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="FName" Type="String" MaxLength="50" FixedLength="true" Unicode="true" Nullable="false" />
-          <Property Name="LName" Type="String" MaxLength="50" FixedLength="true" Unicode="true" Nullable="false" />
-          <Property Name="Phone" Type="String" MaxLength="10" FixedLength="true" Unicode="true" />
-          <Property Name="Image" Type="String" MaxLength="50" FixedLength="true" Unicode="true" />
-          <Property Name="AspNetUsersID" Type="String" MaxLength="128" FixedLength="false" Unicode="true" />
-          <NavigationProperty Name="AspNetUser" Relationship="Self.FK_UserDetails_AspNetUsers" FromRole="UserDetails" ToRole="AspNetUsers" />
-        </EntityType>
         <Association Name="FK_Pets_AspNetUsers">
           <End Role="AspNetUsers" Type="Self.AspNetUser" Multiplicity="1" />
           <End Role="Pets" Type="Self.Pet" Multiplicity="*" />
@@ -328,18 +301,6 @@
             </Principal>
             <Dependent Role="Pets">
               <PropertyRef Name="OwnerID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_UserDetails_AspNetUsers">
-          <End Role="AspNetUsers" Type="Self.AspNetUser" Multiplicity="0..1" />
-          <End Role="UserDetails" Type="Self.UserDetail" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="AspNetUsers">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="UserDetails">
-              <PropertyRef Name="AspNetUsersID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -377,14 +338,9 @@
           <EntitySet Name="Pets" EntityType="Self.Pet" />
           <EntitySet Name="Reservations" EntityType="Self.Reservation" />
           <EntitySet Name="ResortLocations" EntityType="Self.ResortLocation" />
-          <EntitySet Name="UserDetails" EntityType="Self.UserDetail" />
           <AssociationSet Name="FK_Pets_AspNetUsers" Association="Self.FK_Pets_AspNetUsers">
             <End Role="AspNetUsers" EntitySet="AspNetUsers" />
             <End Role="Pets" EntitySet="Pets" />
-          </AssociationSet>
-          <AssociationSet Name="FK_UserDetails_AspNetUsers" Association="Self.FK_UserDetails_AspNetUsers">
-            <End Role="AspNetUsers" EntitySet="AspNetUsers" />
-            <End Role="UserDetails" EntitySet="UserDetails" />
           </AssociationSet>
           <AssociationSet Name="FK_Reservations_Pets" Association="Self.FK_Reservations_Pets">
             <End Role="Pets" EntitySet="Pets" />
@@ -410,15 +366,15 @@
         </EntityContainer>
         <EntityType Name="EmployeeNote">
           <Key>
-            <PropertyRef Name="NoteID" />
+            <PropertyRef Name="EmpNoteID" />
           </Key>
-          <Property Name="NoteID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="PetID" Type="Int32" Nullable="false" />
           <Property Name="EmployeeID" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
           <Property Name="Note" Type="String" Nullable="false" MaxLength="500" FixedLength="true" Unicode="true" />
           <Property Name="NoteDate" Type="DateTime" Nullable="false" Precision="0" />
           <NavigationProperty Name="AspNetUser" Relationship="jurassicbarkModel.FK_EmployeeNotes_AspNetUsers" FromRole="EmployeeNote" ToRole="AspNetUser" />
           <NavigationProperty Name="Pet" Relationship="jurassicbarkModel.FK_EmployeeNotes_Pets" FromRole="EmployeeNote" ToRole="Pet" />
+          <Property Name="EmpNoteID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
         </EntityType>
         <Association Name="FK_EmployeeNotes_AspNetUsers">
           <End Type="jurassicbarkModel.AspNetUser" Role="AspNetUser" Multiplicity="1" />
@@ -461,6 +417,13 @@
           <EntitySetMapping Name="AspNetUsers">
             <EntityTypeMapping TypeName="jurassicbarkModel.AspNetUser">
               <MappingFragment StoreEntitySet="AspNetUsers">
+                <ScalarProperty Name="BirthDay" ColumnName="BirthDay" />
+                <ScalarProperty Name="ZipCode" ColumnName="ZipCode" />
+                <ScalarProperty Name="State" ColumnName="State" />
+                <ScalarProperty Name="City" ColumnName="City" />
+                <ScalarProperty Name="Address" ColumnName="Address" />
+                <ScalarProperty Name="LName" ColumnName="LName" />
+                <ScalarProperty Name="FName" ColumnName="FName" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="Email" ColumnName="Email" />
                 <ScalarProperty Name="EmailConfirmed" ColumnName="EmailConfirmed" />
@@ -513,18 +476,6 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="UserDetails">
-            <EntityTypeMapping TypeName="jurassicbarkModel.UserDetail">
-              <MappingFragment StoreEntitySet="UserDetails">
-                <ScalarProperty Name="UserID" ColumnName="UserID" />
-                <ScalarProperty Name="FName" ColumnName="FName" />
-                <ScalarProperty Name="LName" ColumnName="LName" />
-                <ScalarProperty Name="Phone" ColumnName="Phone" />
-                <ScalarProperty Name="Image" ColumnName="Image" />
-                <ScalarProperty Name="AspNetUsersID" ColumnName="AspNetUsersID" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
           <AssociationSetMapping Name="AspNetUserRoles" TypeName="jurassicbarkModel.AspNetUserRoles" StoreEntitySet="AspNetUserRoles">
             <EndProperty Name="AspNetRoles">
               <ScalarProperty Name="Id" ColumnName="RoleId" />
@@ -536,11 +487,11 @@
           <EntitySetMapping Name="EmployeeNotes">
             <EntityTypeMapping TypeName="jurassicbarkModel.EmployeeNote">
               <MappingFragment StoreEntitySet="EmployeeNotes">
+                <ScalarProperty Name="EmpNoteID" ColumnName="EmpNoteID" />
                 <ScalarProperty Name="NoteDate" ColumnName="NoteDate" />
                 <ScalarProperty Name="Note" ColumnName="Note" />
                 <ScalarProperty Name="EmployeeID" ColumnName="EmployeeID" />
                 <ScalarProperty Name="PetID" ColumnName="PetID" />
-                <ScalarProperty Name="NoteID" ColumnName="NoteID" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

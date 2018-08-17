@@ -81,7 +81,7 @@ namespace JurassicBark.UI.MVC.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize(Roles = "Employee")]
-        public ActionResult Create([Bind(Include = "NoteID,PetID,EmployeeID,Note,NoteDate")] EmployeeNote employeeNote)
+        public ActionResult Create([Bind(Include = "EmpNoteID,PetID,EmployeeID,Note,NoteDate")] EmployeeNote employeeNote)
         {
             string currentUserID = User.Identity.GetUserId();
             employeeNote.EmployeeID = currentUserID;
@@ -124,7 +124,7 @@ namespace JurassicBark.UI.MVC.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize(Roles = "Employee")]
-        public ActionResult Edit([Bind(Include = "NoteID,PetID,EmployeeID,Note,NoteDate")] EmployeeNote employeeNote)
+        public ActionResult Edit([Bind(Include = "EmpNoteID,PetID,EmployeeID,Note,NoteDate")] EmployeeNote employeeNote)
         {
             if (ModelState.IsValid)
             {

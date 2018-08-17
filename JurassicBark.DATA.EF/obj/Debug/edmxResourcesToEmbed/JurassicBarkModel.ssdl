@@ -31,12 +31,19 @@
     <Property Name="LockoutEnabled" Type="bit" Nullable="false" />
     <Property Name="AccessFailedCount" Type="int" Nullable="false" />
     <Property Name="UserName" Type="nvarchar" MaxLength="256" Nullable="false" />
+    <Property Name="FName" Type="nvarchar(max)" />
+    <Property Name="LName" Type="nvarchar(max)" />
+    <Property Name="Address" Type="nvarchar(max)" />
+    <Property Name="City" Type="nvarchar(max)" />
+    <Property Name="State" Type="nvarchar(max)" />
+    <Property Name="ZipCode" Type="nvarchar(max)" />
+    <Property Name="BirthDay" Type="datetime" Nullable="false" />
   </EntityType>
   <EntityType Name="EmployeeNotes">
     <Key>
-      <PropertyRef Name="NoteID" />
+      <PropertyRef Name="EmpNoteID" />
     </Key>
-    <Property Name="NoteID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="EmpNoteID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
     <Property Name="PetID" Type="int" Nullable="false" />
     <Property Name="EmployeeID" Type="nvarchar" MaxLength="128" Nullable="false" />
     <Property Name="Note" Type="nchar" MaxLength="500" Nullable="false" />
@@ -75,17 +82,6 @@
     <Property Name="ZipCode" Type="int" Nullable="false" />
     <Property Name="ReservationLimit" Type="tinyint" Nullable="false" />
     <Property Name="Coordinates" Type="nchar" MaxLength="30" />
-  </EntityType>
-  <EntityType Name="UserDetails">
-    <Key>
-      <PropertyRef Name="UserID" />
-    </Key>
-    <Property Name="UserID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-    <Property Name="FName" Type="nchar" MaxLength="50" Nullable="false" />
-    <Property Name="LName" Type="nchar" MaxLength="50" Nullable="false" />
-    <Property Name="Phone" Type="nchar" MaxLength="10" />
-    <Property Name="Image" Type="nchar" MaxLength="50" />
-    <Property Name="AspNetUsersID" Type="nvarchar" MaxLength="128" />
   </EntityType>
   <Association Name="FK_dbo_AspNetUserRoles_dbo_AspNetRoles_RoleId">
     <End Role="AspNetRoles" Type="Self.AspNetRoles" Multiplicity="1">
@@ -175,18 +171,6 @@
       </Dependent>
     </ReferentialConstraint>
   </Association>
-  <Association Name="FK_UserDetails_AspNetUsers">
-    <End Role="AspNetUsers" Type="Self.AspNetUsers" Multiplicity="0..1" />
-    <End Role="UserDetails" Type="Self.UserDetails" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="AspNetUsers">
-        <PropertyRef Name="Id" />
-      </Principal>
-      <Dependent Role="UserDetails">
-        <PropertyRef Name="AspNetUsersID" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
   <EntityContainer Name="jurassicbarkModelStoreContainer">
     <EntitySet Name="AspNetRoles" EntityType="Self.AspNetRoles" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="AspNetUserRoles" EntityType="Self.AspNetUserRoles" Schema="dbo" store:Type="Tables" />
@@ -195,7 +179,6 @@
     <EntitySet Name="Pets" EntityType="Self.Pets" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="Reservations" EntityType="Self.Reservations" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="ResortLocations" EntityType="Self.ResortLocations" Schema="dbo" store:Type="Tables" />
-    <EntitySet Name="UserDetails" EntityType="Self.UserDetails" Schema="dbo" store:Type="Tables" />
     <AssociationSet Name="FK_dbo_AspNetUserRoles_dbo_AspNetRoles_RoleId" Association="Self.FK_dbo_AspNetUserRoles_dbo_AspNetRoles_RoleId">
       <End Role="AspNetRoles" EntitySet="AspNetRoles" />
       <End Role="AspNetUserRoles" EntitySet="AspNetUserRoles" />
@@ -223,10 +206,6 @@
     <AssociationSet Name="FK_Reservations_ResortLocations" Association="Self.FK_Reservations_ResortLocations">
       <End Role="ResortLocations" EntitySet="ResortLocations" />
       <End Role="Reservations" EntitySet="Reservations" />
-    </AssociationSet>
-    <AssociationSet Name="FK_UserDetails_AspNetUsers" Association="Self.FK_UserDetails_AspNetUsers">
-      <End Role="AspNetUsers" EntitySet="AspNetUsers" />
-      <End Role="UserDetails" EntitySet="UserDetails" />
     </AssociationSet>
   </EntityContainer>
 </Schema>

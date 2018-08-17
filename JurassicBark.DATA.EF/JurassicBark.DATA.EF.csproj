@@ -85,7 +85,6 @@
     <Compile Include="Repository\PetsRepository.cs" />
     <Compile Include="Repository\ReservationsRepository.cs" />
     <Compile Include="Repository\ResortLocationRepository.cs" />
-    <Compile Include="Repository\UserDetailRepository.cs" />
     <Compile Include="Reservation.cs">
       <DependentUpon>JurassicBarkModel.tt</DependentUpon>
     </Compile>
@@ -93,9 +92,6 @@
       <DependentUpon>JurassicBarkModel.tt</DependentUpon>
     </Compile>
     <Compile Include="UnitOfWork.cs" />
-    <Compile Include="UserDetail.cs">
-      <DependentUpon>JurassicBarkModel.tt</DependentUpon>
-    </Compile>
   </ItemGroup>
   <ItemGroup>
     <EntityDeploy Include="JurassicBarkModel.edmx">

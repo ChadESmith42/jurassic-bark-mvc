@@ -10,13 +10,11 @@
         <EntityTypeShape EntityType="jurassicbarkModel.Pet" Width="1.5" PointX="4.5" PointY="2.375" IsExpanded="true" />
         <EntityTypeShape EntityType="jurassicbarkModel.Reservation" Width="1.5" PointX="6.625" PointY="2.375" IsExpanded="true" />
         <EntityTypeShape EntityType="jurassicbarkModel.ResortLocation" Width="1.5" PointX="8.5" PointY="4.875" IsExpanded="true" />
-        <EntityTypeShape EntityType="jurassicbarkModel.UserDetail" Width="1.5" PointX="4.625" PointY="6" IsExpanded="true" />
         <AssociationConnector Association="jurassicbarkModel.FK_Pets_AspNetUsers" ManuallyRouted="false" />
-        <AssociationConnector Association="jurassicbarkModel.FK_UserDetails_AspNetUsers" ManuallyRouted="false" />
         <AssociationConnector Association="jurassicbarkModel.FK_Reservations_Pets" ManuallyRouted="false" />
         <AssociationConnector Association="jurassicbarkModel.FK_Reservations_ResortLocations" ManuallyRouted="false" />
         <AssociationConnector Association="jurassicbarkModel.AspNetUserRoles" ManuallyRouted="false" />
-        <EntityTypeShape EntityType="jurassicbarkModel.EmployeeNote" Width="1.5" PointX="6.5" PointY="5.75" />
+        <EntityTypeShape EntityType="jurassicbarkModel.EmployeeNote" Width="1.5" PointX="6.75" PointY="5.5" />
         <AssociationConnector Association="jurassicbarkModel.FK_EmployeeNotes_AspNetUsers" />
         <AssociationConnector Association="jurassicbarkModel.FK_EmployeeNotes_Pets" />
       </Diagram>

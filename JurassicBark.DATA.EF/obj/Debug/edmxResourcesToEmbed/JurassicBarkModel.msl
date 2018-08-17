@@ -12,6 +12,13 @@
     <EntitySetMapping Name="AspNetUsers">
       <EntityTypeMapping TypeName="jurassicbarkModel.AspNetUser">
         <MappingFragment StoreEntitySet="AspNetUsers">
+          <ScalarProperty Name="BirthDay" ColumnName="BirthDay" />
+          <ScalarProperty Name="ZipCode" ColumnName="ZipCode" />
+          <ScalarProperty Name="State" ColumnName="State" />
+          <ScalarProperty Name="City" ColumnName="City" />
+          <ScalarProperty Name="Address" ColumnName="Address" />
+          <ScalarProperty Name="LName" ColumnName="LName" />
+          <ScalarProperty Name="FName" ColumnName="FName" />
           <ScalarProperty Name="Id" ColumnName="Id" />
           <ScalarProperty Name="Email" ColumnName="Email" />
           <ScalarProperty Name="EmailConfirmed" ColumnName="EmailConfirmed" />
@@ -64,18 +71,6 @@
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
-    <EntitySetMapping Name="UserDetails">
-      <EntityTypeMapping TypeName="jurassicbarkModel.UserDetail">
-        <MappingFragment StoreEntitySet="UserDetails">
-          <ScalarProperty Name="UserID" ColumnName="UserID" />
-          <ScalarProperty Name="FName" ColumnName="FName" />
-          <ScalarProperty Name="LName" ColumnName="LName" />
-          <ScalarProperty Name="Phone" ColumnName="Phone" />
-          <ScalarProperty Name="Image" ColumnName="Image" />
-          <ScalarProperty Name="AspNetUsersID" ColumnName="AspNetUsersID" />
-        </MappingFragment>
-      </EntityTypeMapping>
-    </EntitySetMapping>
     <AssociationSetMapping Name="AspNetUserRoles" TypeName="jurassicbarkModel.AspNetUserRoles" StoreEntitySet="AspNetUserRoles">
       <EndProperty Name="AspNetRoles">
         <ScalarProperty Name="Id" ColumnName="RoleId" />
@@ -87,11 +82,11 @@
     <EntitySetMapping Name="EmployeeNotes">
       <EntityTypeMapping TypeName="jurassicbarkModel.EmployeeNote">
         <MappingFragment StoreEntitySet="EmployeeNotes">
+          <ScalarProperty Name="EmpNoteID" ColumnName="EmpNoteID" />
           <ScalarProperty Name="NoteDate" ColumnName="NoteDate" />
           <ScalarProperty Name="Note" ColumnName="Note" />
           <ScalarProperty Name="EmployeeID" ColumnName="EmployeeID" />
           <ScalarProperty Name="PetID" ColumnName="PetID" />
-          <ScalarProperty Name="NoteID" ColumnName="NoteID" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>

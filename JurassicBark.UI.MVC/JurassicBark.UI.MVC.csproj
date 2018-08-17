@@ -179,13 +179,22 @@
     <Compile Include="Controllers\ResortLocationsController.cs" />
     <Compile Include="Controllers\RolesAdminController.cs" />
     <Compile Include="Controllers\UserAdminController.cs" />
-    <Compile Include="Controllers\UserDetailsController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201808131450502_InitialCreate.cs" />
+    <Compile Include="Migrations\201808131450502_InitialCreate.Designer.cs">
+      <DependentUpon>201808131450502_InitialCreate.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201808171724341_FName.cs" />
+    <Compile Include="Migrations\201808171724341_FName.Designer.cs">
+      <DependentUpon>201808171724341_FName.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\AdminViewModel.cs" />
     <Compile Include="Models\ContactViewModel.cs" />
+    <Compile Include="Models\Extensions\IdentityExtensions.cs" />
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -301,11 +310,6 @@
     <Content Include="Views\Reservations\Details.cshtml" />
     <Content Include="Views\Reservations\Edit.cshtml" />
     <Content Include="Views\Reservations\Index.cshtml" />
-    <Content Include="Views\UserDetails\Create.cshtml" />
-    <Content Include="Views\UserDetails\Delete.cshtml" />
-    <Content Include="Views\UserDetails\Details.cshtml" />
-    <Content Include="Views\UserDetails\Edit.cshtml" />
-    <Content Include="Views\UserDetails\Index.cshtml" />
     <Content Include="Views\EmployeeNotes\Create.cshtml" />
     <Content Include="Views\EmployeeNotes\Edit.cshtml" />
     <Content Include="Views\EmployeeNotes\Pet.cshtml" />
@@ -328,6 +332,14 @@
       <Project>{16fa49e7-cfcd-4915-b6e5-de525ea5f1a9}</Project>
       <Name>JurassicBark.DATA.EF</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Migrations\201808131450502_InitialCreate.resx">
+      <DependentUpon>201808131450502_InitialCreate.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201808171724341_FName.resx">
+      <DependentUpon>201808171724341_FName.cs</DependentUpon>
+    </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

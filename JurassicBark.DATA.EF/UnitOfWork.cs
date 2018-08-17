@@ -50,19 +50,6 @@ namespace JurassicBark.DATA.EF
             }
         }
 
-        private UserDetailRepository _userDetailRepository;
-        public UserDetailRepository UserDetailRepository
-        {
-            get
-            {
-                if (this._userDetailRepository == null)
-                {
-                    this._userDetailRepository = new UserDetailRepository(context);
-                }
-                return _userDetailRepository;
-            }
-        }
-
         private EmployeeNotesRepository _employeeNotesRepository;
         public EmployeeNotesRepository EmployeeNotesRepository
         {
