@@ -1,11 +1,8 @@
 ﻿using JurassicBark.UI.MVC.Models;
 using System;
+using System.Net;
 using System.Net.Mail;
 using System.Web.Mvc;
-using System.Net;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
 
 namespace IdentitySample.Controllers
 {
@@ -29,7 +26,7 @@ namespace IdentitySample.Controllers
         [HttpGet]
         public ActionResult Contact()
         {
-            ViewBag.Message = "Let's start a discussion about your next project.";
+            ViewBag.Message = "Let us take care of your good boy or clever girl.";
 
             return View();
         }
@@ -45,14 +42,14 @@ namespace IdentitySample.Controllers
 
                 //SET DEFAULT VALUES
                 contact.DateSent = DateTime.Now;
-                contact.Subject = "From Website: " + contact.Subject;
+                contact.Subject = "From Jurassic Bark: " + contact.Subject;
 
                 string messageContent = $"Name: {contact.FirstName} {contact.LastName} <br/> " +
                     $"Email: {contact.Email}<br/> Subject: {contact.Subject}<br/>" +
-                    $"<h4>Message<h4> {contact.Message}<br/> Date Sent: {contact.DateSent}";
+                    $"<h4>Message<h4>Pet: {contact.PetName} {contact.Message}<br/> Date Sent: {contact.DateSent}";
 
                 //Create a MailMessage Object (System.Net.Mail)
-                //This is the envelop for our letter (messageContent)
+                //This is the envelope for our letter (messageContent)
                 //FROM address is first, TO address is next, SUBJECT, and MESSAGE
                 MailMessage m = new MailMessage("no-reply@codingbychad.com",
                     "chad@codingbychad.com", contact.Subject, messageContent);
@@ -84,7 +81,7 @@ namespace IdentitySample.Controllers
 
                 }//end Client
 
-                return View("ContactConfirm", contact);
+                return View("ContactConfirmation", contact);
 
             }//end IF contact form validation is TRUE;
 

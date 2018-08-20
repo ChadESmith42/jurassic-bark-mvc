@@ -1,24 +1,9 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
   <EntityContainerMapping StorageEntityContainer="jurassicbarkModelStoreContainer" CdmEntityContainer="jurassicbarkEntities">
-    <EntitySetMapping Name="AspNetRoles">
-      <EntityTypeMapping TypeName="jurassicbarkModel.AspNetRole">
-        <MappingFragment StoreEntitySet="AspNetRoles">
-          <ScalarProperty Name="Id" ColumnName="Id" />
-          <ScalarProperty Name="Name" ColumnName="Name" />
-        </MappingFragment>
-      </EntityTypeMapping>
-    </EntitySetMapping>
     <EntitySetMapping Name="AspNetUsers">
-      <EntityTypeMapping TypeName="jurassicbarkModel.AspNetUser">
+      <EntityTypeMapping TypeName="IsTypeOf(jurassicbarkModel.AspNetUser)">
         <MappingFragment StoreEntitySet="AspNetUsers">
-          <ScalarProperty Name="BirthDay" ColumnName="BirthDay" />
-          <ScalarProperty Name="ZipCode" ColumnName="ZipCode" />
-          <ScalarProperty Name="State" ColumnName="State" />
-          <ScalarProperty Name="City" ColumnName="City" />
-          <ScalarProperty Name="Address" ColumnName="Address" />
-          <ScalarProperty Name="LName" ColumnName="LName" />
-          <ScalarProperty Name="FName" ColumnName="FName" />
           <ScalarProperty Name="Id" ColumnName="Id" />
           <ScalarProperty Name="Email" ColumnName="Email" />
           <ScalarProperty Name="EmailConfirmed" ColumnName="EmailConfirmed" />
@@ -31,11 +16,13 @@
           <ScalarProperty Name="LockoutEnabled" ColumnName="LockoutEnabled" />
           <ScalarProperty Name="AccessFailedCount" ColumnName="AccessFailedCount" />
           <ScalarProperty Name="UserName" ColumnName="UserName" />
+          <ScalarProperty Name="FName" ColumnName="FName" />
+          <ScalarProperty Name="LName" ColumnName="LName" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
     <EntitySetMapping Name="Pets">
-      <EntityTypeMapping TypeName="jurassicbarkModel.Pet">
+      <EntityTypeMapping TypeName="IsTypeOf(jurassicbarkModel.Pet)">
         <MappingFragment StoreEntitySet="Pets">
           <ScalarProperty Name="PetID" ColumnName="PetID" />
           <ScalarProperty Name="Name" ColumnName="Name" />
@@ -48,7 +35,7 @@
       </EntityTypeMapping>
     </EntitySetMapping>
     <EntitySetMapping Name="Reservations">
-      <EntityTypeMapping TypeName="jurassicbarkModel.Reservation">
+      <EntityTypeMapping TypeName="IsTypeOf(jurassicbarkModel.Reservation)">
         <MappingFragment StoreEntitySet="Reservations">
           <ScalarProperty Name="ReservationID" ColumnName="ReservationID" />
           <ScalarProperty Name="ResortLocationID" ColumnName="ResortLocationID" />
@@ -58,9 +45,8 @@
       </EntityTypeMapping>
     </EntitySetMapping>
     <EntitySetMapping Name="ResortLocations">
-      <EntityTypeMapping TypeName="jurassicbarkModel.ResortLocation">
+      <EntityTypeMapping TypeName="IsTypeOf(jurassicbarkModel.ResortLocation)">
         <MappingFragment StoreEntitySet="ResortLocations">
-          <ScalarProperty Name="Coordinates" ColumnName="Coordinates" />
           <ScalarProperty Name="ResortLocationID" ColumnName="ResortLocationID" />
           <ScalarProperty Name="ResortName" ColumnName="ResortName" />
           <ScalarProperty Name="Address" ColumnName="Address" />
@@ -71,22 +57,36 @@
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
-    <AssociationSetMapping Name="AspNetUserRoles" TypeName="jurassicbarkModel.AspNetUserRoles" StoreEntitySet="AspNetUserRoles">
-      <EndProperty Name="AspNetRoles">
-        <ScalarProperty Name="Id" ColumnName="RoleId" />
-      </EndProperty>
-      <EndProperty Name="AspNetUsers">
-        <ScalarProperty Name="Id" ColumnName="UserId" />
-      </EndProperty>
-    </AssociationSetMapping>
+    <EntitySetMapping Name="UserDetails">
+      <EntityTypeMapping TypeName="IsTypeOf(jurassicbarkModel.UserDetail)">
+        <MappingFragment StoreEntitySet="UserDetails">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="AspNetUserId" ColumnName="AspNetUserId" />
+          <ScalarProperty Name="Address" ColumnName="Address" />
+          <ScalarProperty Name="City" ColumnName="City" />
+          <ScalarProperty Name="State" ColumnName="State" />
+          <ScalarProperty Name="ZipCode" ColumnName="ZipCode" />
+          <ScalarProperty Name="Birthday" ColumnName="Birthday" />
+          <ScalarProperty Name="Phone" ColumnName="Phone" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
     <EntitySetMapping Name="EmployeeNotes">
       <EntityTypeMapping TypeName="jurassicbarkModel.EmployeeNote">
         <MappingFragment StoreEntitySet="EmployeeNotes">
-          <ScalarProperty Name="EmpNoteID" ColumnName="EmpNoteID" />
           <ScalarProperty Name="NoteDate" ColumnName="NoteDate" />
           <ScalarProperty Name="Note" ColumnName="Note" />
           <ScalarProperty Name="EmployeeID" ColumnName="EmployeeID" />
           <ScalarProperty Name="PetID" ColumnName="PetID" />
+          <ScalarProperty Name="NoteID" ColumnName="NoteID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="AspNetUserRoles">
+      <EntityTypeMapping TypeName="jurassicbarkModel.AspNetUserRole">
+        <MappingFragment StoreEntitySet="AspNetUserRoles">
+          <ScalarProperty Name="RoleId" ColumnName="RoleId" />
+          <ScalarProperty Name="UserId" ColumnName="UserId" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>

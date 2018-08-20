@@ -25,11 +25,12 @@ namespace JurassicBark.DATA.EF
             throw new UnintentionalCodeFirstException();
         }
     
-        public virtual DbSet<AspNetRole> AspNetRoles { get; set; }
         public virtual DbSet<AspNetUser> AspNetUsers { get; set; }
         public virtual DbSet<Pet> Pets { get; set; }
         public virtual DbSet<Reservation> Reservations { get; set; }
         public virtual DbSet<ResortLocation> ResortLocations { get; set; }
+        public virtual DbSet<UserDetail> UserDetails { get; set; }
         public virtual DbSet<EmployeeNote> EmployeeNotes { get; set; }
+        public virtual DbSet<AspNetUserRole> AspNetUserRoles { get; set; }
     }
 }

@@ -13,17 +13,17 @@ namespace JurassicBark.DATA.EF//.Metadata
 
     public class ReservationMetadata
     {
-        [Display(Name ="Jurassic Bark Location")]
+        [Display(Name = "Jurassic Bark Location")]
         public int ReservationID { get; set; }
         public int ResortLocationID { get; set; }
-        [Display(Name ="Pet Name")]
+        [Display(Name = "Pet Name")]
         public int PetID { get; set; }
-        [Display(Name ="Date")]
+        [Display(Name = "Date")]
         [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:d}")]
         public System.DateTime ReservationDate { get; set; }
     }
 
-    
+
 
     [MetadataType(typeof(PetMetadata))]
     public partial class Pet { }
@@ -46,7 +46,8 @@ namespace JurassicBark.DATA.EF//.Metadata
     }
 
     [MetadataType(typeof(ResortLocationMetadata))]
-    public partial class ResortLocation {
+    public partial class ResortLocation
+    {
         UnitOfWork uow = new UnitOfWork();
         public int countRes
         {
@@ -82,8 +83,7 @@ namespace JurassicBark.DATA.EF//.Metadata
         [Required]
         [Display(Name = "Reservation Limit")]
         public byte ReservationLimit { get; set; }
-        [Required]
-        public string Coordinates { get; set; }
+        
     }
 
     [MetadataType(typeof(UserDetailMetadata))]
@@ -92,18 +92,25 @@ namespace JurassicBark.DATA.EF//.Metadata
     public class UserDetailMetadata
     {
         [Required]
-        [Display(Name = "First Name")]
-        [StringLength(50, ErrorMessage = "*Maximum 50 characters")]
-        public string FName { get; set; }
+        [Display(Name = "Address")]
+        [StringLength(120, ErrorMessage = "* Maximum 120 characters.")]
+        public string Address { get; set; }
         [Required]
-        [Display(Name = "Last Name")]
-        [StringLength(50, ErrorMessage = "*Maximum 50 characters")]
-        public string LName { get; set; }
+        [StringLength(20, ErrorMessage = "*Maximum 20 characters.")]
+        public string City { get; set; }
         [Required]
-        [Display(Name = "Phone Number")]
-        [StringLength(10, ErrorMessage = "*Maximum 10 characters. Numbers only.")]
+        [StringLength(2, ErrorMessage = "* Use 2-character state abbreviation.")]
+        public string State { get; set; }
+        [Required]
+        [Display(Name = "Zip Code")]
+        [RegularExpression(@"^\d{5}$|^\d{5}-\d{4}$",ErrorMessage = "* Use a 5 digit or a 5+4 digit zip code.")]
+        public string ZipCode { get; set; }
+        [Required]
+        [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:d}")]
+        public System.DateTime Birthday { get; set; }
+        [Required]
+        [RegularExpression(@"^((\(\d{3}\) ?)|(\d{3}-))?\d{3}-\d{4}$",ErrorMessage ="*Please enter a phone number as XXX-XXX-XXXX")]
         public string Phone { get; set; }
-        public string Image { get; set; }
     }
 
     [MetadataType(typeof(EmployeeNoteMetadata))]
@@ -112,14 +119,14 @@ namespace JurassicBark.DATA.EF//.Metadata
     public class EmployeeNoteMetadata
     {
         [Required]
-        [Display(Name ="Pet Identifier")]
+        [Display(Name = "Pet Identifier")]
         public int PetID { get; set; }
         [Required]
-        [StringLength(500,ErrorMessage = "*Maximum 500 characters.")]
+        [StringLength(500, ErrorMessage = "*Maximum 500 characters.")]
         public string Note { get; set; }
-        [Display(Name ="Date Entered")]
+        [Display(Name = "Date Entered")]
         [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:d}")]
         public System.DateTime NoteDate { get; set; }
-        
+
     }
 }

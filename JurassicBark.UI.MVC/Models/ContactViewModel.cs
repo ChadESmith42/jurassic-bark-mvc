@@ -33,5 +33,9 @@ namespace JurassicBark.UI.MVC.Models
         [Required(ErrorMessage = "* Required")]
         public string Email { get; set; }
 
+        [StringLength(50, ErrorMessage = "* Maximum 50 characters. If your pet's name is longer, leave blank and provide your pet's name in the body of your message.")]
+        [Display(Name = "Pet's Name")]
+        public string PetName { get; set; }
+
     }
 }

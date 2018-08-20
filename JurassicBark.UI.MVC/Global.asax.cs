@@ -18,4 +18,15 @@ namespace IdentitySample
             BundleConfig.RegisterBundles(BundleTable.Bundles);
         }
     }
+
+    public class DatabaseContext : DbContext
+    {
+        //the base accepts the name of the connection string provided in the web.config as a parameter
+        public DatabaseContext()
+            : base("DatabaseContext")
+        {
+            //disable initializer
+            Database.SetInitializer<DatabaseContext>(null);
+        }
+    }
 }

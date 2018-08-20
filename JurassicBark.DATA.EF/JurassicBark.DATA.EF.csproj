@@ -51,10 +51,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AspNetRole.cs">
+    <Compile Include="AspNetUser.cs">
       <DependentUpon>JurassicBarkModel.tt</DependentUpon>
     </Compile>
-    <Compile Include="AspNetUser.cs">
+    <Compile Include="AspNetUserRole.cs">
       <DependentUpon>JurassicBarkModel.tt</DependentUpon>
     </Compile>
     <Compile Include="EmployeeNote.cs">
@@ -85,6 +85,7 @@
     <Compile Include="Repository\PetsRepository.cs" />
     <Compile Include="Repository\ReservationsRepository.cs" />
     <Compile Include="Repository\ResortLocationRepository.cs" />
+    <Compile Include="Repository\UserDetailsRepository.cs" />
     <Compile Include="Reservation.cs">
       <DependentUpon>JurassicBarkModel.tt</DependentUpon>
     </Compile>
@@ -92,6 +93,9 @@
       <DependentUpon>JurassicBarkModel.tt</DependentUpon>
     </Compile>
     <Compile Include="UnitOfWork.cs" />
+    <Compile Include="UserDetail.cs">
+      <DependentUpon>JurassicBarkModel.tt</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <EntityDeploy Include="JurassicBarkModel.edmx">
@@ -112,6 +116,7 @@
       <DependentUpon>JurassicBarkModel.edmx</DependentUpon>
       <LastGenOutput>JurassicBarkModel.Context.cs</LastGenOutput>
     </Content>
+    <Content Include="JurassicBarkModel.edmx.sql" />
     <Content Include="JurassicBarkModel.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
       <DependentUpon>JurassicBarkModel.edmx</DependentUpon>
