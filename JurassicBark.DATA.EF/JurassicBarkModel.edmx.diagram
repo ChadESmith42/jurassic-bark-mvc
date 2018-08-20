@@ -14,7 +14,7 @@
         <AssociationConnector Association="jurassicbarkModel.FK_Reservations_ResortLocations" ManuallyRouted="false" />
         <EntityTypeShape EntityType="jurassicbarkModel.UserDetail" Width="2.75" PointX="3.625" PointY="7.5" IsExpanded="true" />
         <AssociationConnector Association="jurassicbarkModel.FK_UserDetails_AspNetUsers" />
-        <EntityTypeShape EntityType="jurassicbarkModel.EmployeeNote" Width="1.5" PointX="8.75" PointY="1.75" />
+        <EntityTypeShape EntityType="jurassicbarkModel.EmployeeNote" Width="2.375" PointX="8.75" PointY="1.75" />
         <AssociationConnector Association="jurassicbarkModel.FK_EmployeeNotes_AspNetUsers1" />
         <AssociationConnector Association="jurassicbarkModel.FK_EmployeeNotes_Pets1" />
         <EntityTypeShape EntityType="jurassicbarkModel.AspNetUserRole" Width="1.5" PointX="4.75" PointY="11.25" />

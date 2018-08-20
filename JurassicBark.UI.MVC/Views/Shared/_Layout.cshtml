@@ -34,7 +34,8 @@
                     <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                         @if (User.Identity.IsAuthenticated)
                         {
-                            <a class="dropdown-item" href="@Url.Action("Index","Reservations")">Reservations</a>
+                            <a class="dropdown-item" href="@Url.Action("Index","Reservations")">All Reservations</a>
+                            <a class="dropdown-item" href="@Url.Action("Today","Reservations")">Today's Reservations</a>
                         }
 
                         @if (User.IsInRole("Admin") || User.IsInRole("Customer"))

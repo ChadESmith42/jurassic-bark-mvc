@@ -1,4 +1,5 @@
 ﻿@model IEnumerable<JurassicBark.DATA.EF.Pet>
+@using JurassicBark.DATA.EF;
 
 @{
     ViewBag.Title = "Pet List";
@@ -13,6 +14,12 @@
     </p>
 }
 
+<div class="alert alert-danger alert-dismissable collapse" role="alert">
+    @ViewBag.Warning
+    <button type="button" class="close" data-dissmiss="alert" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+    </button>
+</div>
 <div class="row">
     @foreach (var item in Model)
     {
@@ -47,8 +54,10 @@
                     @Html.ActionLink("Back to List", "Index", null, htmlAttributes: new { @class = "btn btn-primary" })
                     @if (User.IsInRole("Employee"))
                     {
-                        @Html.ActionLink("Employee Notes", "Pet","EmployeeNotes",new { id = item.PetID }, htmlAttributes: new { @class = "btn btn-inverse"})
-                        @*<button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#@item.PetID">Get Notes</button>*@
+                        @*@Html.ActionLink("Employee Notes", "Pet","EmployeeNotes",new { id = item.PetID }, htmlAttributes: new { @class = "btn btn-info"})<span class="badge badge-light">@item.EmployeeNotes1.Count</span>*@
+                        <a type="button" class="btn btn-primary" href="@Url.Action("Pet","EmployeeNotes", new { id = item.PetID })">
+                            Employee Notes&ensp;<span class="badge badge-light">@item.EmployeeNotes1.Count </span>
+                        </a>
                     }
 
                 </div>
