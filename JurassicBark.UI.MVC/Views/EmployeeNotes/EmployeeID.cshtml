@@ -24,7 +24,7 @@
                 @Html.DisplayNameFor(model => model.NoteDate)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.AspNetUser.Email)
+                @Html.DisplayNameFor(model => model.Pet.PetPhoto)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.Pet.Name)
@@ -42,7 +42,7 @@
             @Html.DisplayFor(modelItem => item.NoteDate)
         </td>
         <td>
-            @Html.DisplayFor(modelItem => item.AspNetUser.Email)
+            <img class="img-responsive" src="~/Content/images/pets/t_@Html.DisplayFor(modelItem => item.Pet.PetPhoto)" alt="Image for @Html.DisplayFor(modelItem => item.Pet.Name)" />
         </td>
         <td>
             @Html.DisplayFor(modelItem => item.Pet.Name)

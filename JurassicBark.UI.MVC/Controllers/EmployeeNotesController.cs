@@ -16,6 +16,15 @@ namespace JurassicBark.UI.MVC.Controllers
 
         private jurassicbarkEntities db = new jurassicbarkEntities();
         public UnitOfWork uow = new UnitOfWork();
+
+
+        public int CountNotes(int Id)
+        {
+            var petID = Id;
+            int count = uow.EmployeeNotesRepository.Get().Where(n => n.PetID == petID).Count();
+
+            return count;
+        }
         // GET: EmployeeNotes
         //[Authorize(Roles="Employee")]
         //public ActionResult Index()

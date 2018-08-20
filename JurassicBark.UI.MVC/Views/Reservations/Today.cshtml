@@ -1,0 +1,95 @@
+﻿@model IEnumerable<JurassicBark.DATA.EF.Reservation>
+
+@{
+    ViewBag.Title = "Today's Reservations";
+}
+
+<h2>@ViewBag.Title</h2>
+
+<p>
+    @Html.ActionLink("Create New", "Create", null, htmlAttributes: new { @class = "btn btn-primary" })
+</p>
+<div class="toggle-hidden">
+    <table class="table">
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.ReservationDate)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Pet.PetPhoto)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Pet.Name)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ResortLocation.ResortName)
+            </th>
+            <th>
+
+            </th>
+        </tr>
+
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ReservationDate)
+                </td>
+                <td>
+                    <img src="~/Content/images/pets/t_@item.Pet.PetPhoto" class="img-responsive pet-avatar" />
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Pet.Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ResortLocation.ResortName)
+                </td>
+                <td>
+                    <div class="btn-group">
+                        @if (User.IsInRole("Admin") || User.IsInRole("Customer"))
+                {
+                            @Html.ActionLink("Edit", "Edit", new { id = item.ReservationID }, htmlAttributes: new { @class = "btn btn-primary" })
+                            @Html.ActionLink("Details", "Details", new { id = item.ReservationID }, htmlAttributes: new { @class = "btn btn-primary" })
+                            @Html.ActionLink("Delete", "Delete", new { id = item.ReservationID }, htmlAttributes: new { @class = "btn btn-primary" })
+                        }
+                        @if (User.IsInRole("Employee"))
+                {
+                            @Html.ActionLink("Details", "Details", new { id = item.ReservationID }, htmlAttributes: new { @class = "btn btn-primary" })
+                        }
+                    </div>
+                </td>
+            </tr>
+        }
+
+    </table>
+</div>
+
+
+
+<div class="toggle-displayed">
+    @foreach (var item in Model)
+    {
+        <div class="card" style="width: 18rem;">
+            <img class="card-img-top" src="~/Content/images/pets/@item.Pet.PetPhoto" alt="Image for this pet">
+            <div class="card-body">
+                <h5 class="card-title">Reservation for @Html.DisplayFor(modelItem => item.Pet.Name)</h5>
+                <p class="card-text">@Html.DisplayFor(modelItem => item.Pet.Name) has a reservation on @Html.DisplayFor(modelItem => item.ReservationDate) at @Html.DisplayFor(modelItem => item.ResortLocation.ResortName)</p>
+                <div class="btn-group">
+                    @if (User.IsInRole("Admin") || User.IsInRole("Customer"))
+                    {
+                        @Html.ActionLink("Edit", "Edit", new { id = item.ReservationID }, htmlAttributes: new { @class = "btn btn-primary" })
+                        @Html.ActionLink("Delete", "Delete", new { id = item.ReservationID }, htmlAttributes: new { @class = "btn btn-primary" })
+                    }
+                    @if (User.Identity.IsAuthenticated)
+                    {
+                        @Html.ActionLink("Details", "Details", new { id = item.ReservationID }, htmlAttributes: new { @class = "btn btn-primary" })
+                    }
+                </div>
+            </div>
+        </div>
+
+
+
+    }
+
+</div>

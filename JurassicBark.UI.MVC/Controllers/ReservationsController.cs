@@ -4,11 +4,14 @@ using System.Data;
 using System.Data.Entity;
 using System.Linq;
 using System.Net;
+using System.Net.Mail;
 using System.Web;
 using System.Web.Mvc;
 using JurassicBark.DATA.EF;
 using Microsoft.AspNet.Identity;
 using JurassicBark.DATA.EF.Repository;
+using JurassicBark.UI.MVC.Models.Extensions;
+using JurassicBark.UI.MVC.Models;
 
 namespace JurassicBark.UI.MVC.Controllers
 {
@@ -34,7 +37,22 @@ namespace JurassicBark.UI.MVC.Controllers
             return View(reservations.ToList());
         }
 
+        // GET: Reservations
+        [Authorize]
+        public ActionResult Today()
+        {
 
+            List<Reservation> reservations = uow.ReservationRepository.Get().Where(r => r.ReservationDate.ToShortDateString() == DateTime.Now.ToShortDateString()).ToList();
+
+            string currentUser = User.Identity.GetUserId();
+
+            if (User.IsInRole("Customer"))
+            {
+                reservations = reservations.Where(r => r.Pet.OwnerID == currentUser).ToList();
+            }
+
+            return View(reservations.ToList());
+        }
         // GET: Reservations/Details/5
         [Authorize]
         public ActionResult Details(int? id)
@@ -74,7 +92,7 @@ namespace JurassicBark.UI.MVC.Controllers
             {
                 ViewBag.PetID = new SelectList(uow.PetRepository.Get(), "PetID", "Name");
             }
-            
+
             ViewBag.ResortLocationID = new SelectList(db.ResortLocations, "ResortLocationID", "ResortName");
 
             return View();
@@ -119,8 +137,6 @@ namespace JurassicBark.UI.MVC.Controllers
 
 
         // POST: Reservations/Create
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize]
@@ -154,11 +170,40 @@ namespace JurassicBark.UI.MVC.Controllers
                     ViewBag.Warning = "The Jurassic Bark location you have chosen is fully booked for the date indicated. Please try another date. Or notify our offices to request an over-flow space.";
                 }
 
-
             }
 
             ViewBag.PetID = new SelectList(db.Pets, "PetID", "Name", reservation.PetID);
             ViewBag.ResortLocationID = new SelectList(db.ResortLocations, "ResortLocationID", "ResortName", reservation.ResortLocationID);
+
+            string userEmail = reservation.Pet.AspNetUser.Email;
+
+            string messageContent = $"Dear {User.Identity.GetFirstName()} {User.Identity.GetLastName()}, <br /><br />You have a reservation at {resort.ResortName} located at {resort.Address}, {resort.City}, {resort.State} {resort.ZipCode} on {reservation.ReservationDate:d}.<br />" +
+                $"Please notify Jurassic Bark if you require any special items for {reservation.Pet.Name}, or edit your current 'Special Note' on your pet's profile. We look forward to seeing you soon! <br/>Sincerely,<br /> <br /> Jurassic Bark<br /><br /><br /><br />Jurassic Bark: Where everyone is a good boy or a clever girl.";
+            ContactViewModel contact = new ContactViewModel();
+            contact.DateSent = DateTime.Now;
+            contact.Subject = $"Jurassic Bark Reservation for {reservation.Pet.Name}";
+            MailMessage m = new MailMessage("no-reply@codingbychad.com", userEmail, contact.Subject, messageContent);
+            m.IsBodyHtml = true;
+
+            m.ReplyToList.Add(userEmail);
+
+            SmtpClient client = new SmtpClient("mail.codingbychad.com");
+            client.Credentials = new NetworkCredential("no-reply@codingbychad.com", "M@774ew.");
+
+            using (client)
+            {
+                try
+                {
+                    client.Send(m);
+                }
+                catch (Exception)
+                {
+                    ViewBag.EmailError = "There was an error sending your confirmation email. Please use the 'My Reservations' link to verify your reservation was received.";
+                    throw;
+                }
+            }
+
+
             return View(reservation);
         }
 

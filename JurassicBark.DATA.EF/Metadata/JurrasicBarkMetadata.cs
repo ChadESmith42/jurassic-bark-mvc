@@ -13,8 +13,9 @@ namespace JurassicBark.DATA.EF//.Metadata
 
     public class ReservationMetadata
     {
-        [Display(Name = "Jurassic Bark Location")]
+
         public int ReservationID { get; set; }
+        [Display(Name = "Jurassic Bark Location")]
         public int ResortLocationID { get; set; }
         [Display(Name = "Pet Name")]
         public int PetID { get; set; }
@@ -83,7 +84,7 @@ namespace JurassicBark.DATA.EF//.Metadata
         [Required]
         [Display(Name = "Reservation Limit")]
         public byte ReservationLimit { get; set; }
-        
+
     }
 
     [MetadataType(typeof(UserDetailMetadata))]
@@ -103,13 +104,13 @@ namespace JurassicBark.DATA.EF//.Metadata
         public string State { get; set; }
         [Required]
         [Display(Name = "Zip Code")]
-        [RegularExpression(@"^\d{5}$|^\d{5}-\d{4}$",ErrorMessage = "* Use a 5 digit or a 5+4 digit zip code.")]
+        [RegularExpression(@"^\d{5}$|^\d{5}-\d{4}$", ErrorMessage = "* Use a 5 digit or a 5+4 digit zip code.")]
         public string ZipCode { get; set; }
         [Required]
         [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:d}")]
         public System.DateTime Birthday { get; set; }
         [Required]
-        [RegularExpression(@"^((\(\d{3}\) ?)|(\d{3}-))?\d{3}-\d{4}$",ErrorMessage ="*Please enter a phone number as XXX-XXX-XXXX")]
+        [RegularExpression(@"^((\(\d{3}\) ?)|(\d{3}-))?\d{3}-\d{4}$", ErrorMessage = "*Please enter a phone number as XXX-XXX-XXXX")]
         public string Phone { get; set; }
     }
 
@@ -129,4 +130,7 @@ namespace JurassicBark.DATA.EF//.Metadata
         public System.DateTime NoteDate { get; set; }
 
     }
+
+
+
 }
