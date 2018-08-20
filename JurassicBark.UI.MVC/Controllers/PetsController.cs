@@ -9,7 +9,6 @@ using System.Web.Mvc;
 using JurassicBark.DATA.EF;
 using Microsoft.AspNet.Identity;
 using System.IO;
-using JurassicBark.DATA.EF.Repository;
 using System.Drawing;
 using JurassicBark.Utilities;
 

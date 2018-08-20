@@ -16,6 +16,7 @@ C:\Users\Student\Desktop\Project\src\JurassicBark.UI.MVC\bin\JurassicBark.UI.MVC
 C:\Users\Student\Desktop\Project\src\JurassicBark.UI.MVC\bin\Antlr3.Runtime.dll
 C:\Users\Student\Desktop\Project\src\JurassicBark.UI.MVC\bin\EntityFramework.dll
 C:\Users\Student\Desktop\Project\src\JurassicBark.UI.MVC\bin\EntityFramework.SqlServer.dll
+C:\Users\Student\Desktop\Project\src\JurassicBark.UI.MVC\bin\JurassicBark.DATA.EF.dll
 C:\Users\Student\Desktop\Project\src\JurassicBark.UI.MVC\bin\Microsoft.AspNet.Identity.Core.dll
 C:\Users\Student\Desktop\Project\src\JurassicBark.UI.MVC\bin\Microsoft.AspNet.Identity.EntityFramework.dll
 C:\Users\Student\Desktop\Project\src\JurassicBark.UI.MVC\bin\Microsoft.AspNet.Identity.Owin.dll
@@ -40,6 +41,7 @@ C:\Users\Student\Desktop\Project\src\JurassicBark.UI.MVC\bin\System.Web.WebPages
 C:\Users\Student\Desktop\Project\src\JurassicBark.UI.MVC\bin\System.Web.WebPages.dll
 C:\Users\Student\Desktop\Project\src\JurassicBark.UI.MVC\bin\System.Web.WebPages.Razor.dll
 C:\Users\Student\Desktop\Project\src\JurassicBark.UI.MVC\bin\WebGrease.dll
+C:\Users\Student\Desktop\Project\src\JurassicBark.UI.MVC\bin\JurassicBark.DATA.EF.pdb
 C:\Users\Student\Desktop\Project\src\JurassicBark.UI.MVC\bin\Microsoft.AspNet.Identity.Core.xml
 C:\Users\Student\Desktop\Project\src\JurassicBark.UI.MVC\bin\Microsoft.AspNet.Identity.EntityFramework.xml
 C:\Users\Student\Desktop\Project\src\JurassicBark.UI.MVC\bin\Microsoft.AspNet.Identity.Owin.xml
@@ -67,8 +69,3 @@ C:\Users\Student\Desktop\Project\src\JurassicBark.UI.MVC\bin\Microsoft.Owin.Secu
 C:\Users\Student\Desktop\Project\src\JurassicBark.UI.MVC\obj\Debug\JurassicBark.UI.MVC.csprojResolveAssemblyReference.cache
 C:\Users\Student\Desktop\Project\src\JurassicBark.UI.MVC\obj\Debug\JurassicBark.UI.MVC.dll
 C:\Users\Student\Desktop\Project\src\JurassicBark.UI.MVC\obj\Debug\JurassicBark.UI.MVC.pdb
-C:\Users\Student\Desktop\Project\src\JurassicBark.UI.MVC\bin\JurassicBark.DATA.EF.dll
-C:\Users\Student\Desktop\Project\src\JurassicBark.UI.MVC\bin\JurassicBark.DATA.EF.pdb
-C:\Users\Student\Desktop\Project\src\JurassicBark.UI.MVC\obj\Debug\JurassicBark.UI.MVC.Migrations.InitialCreate.resources
-C:\Users\Student\Desktop\Project\src\JurassicBark.UI.MVC\obj\Debug\JurassicBark.UI.MVC.csproj.GenerateResource.Cache
-C:\Users\Student\Desktop\Project\src\JurassicBark.UI.MVC\obj\Debug\JurassicBark.UI.MVC.Migrations.FName.resources

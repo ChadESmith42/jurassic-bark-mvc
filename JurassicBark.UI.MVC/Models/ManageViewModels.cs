@@ -2,13 +2,21 @@
 using Microsoft.Owin.Security;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System;
 
 namespace IdentitySample.Models
 {
     public class IndexViewModel
     {
+        [Display(Name = "First Name")]
+        [StringLength(50, ErrorMessage = "* Maximum 50 characters.")]
+        public string FName { get; set; }
+        [StringLength(50, ErrorMessage = "* Maximum 50 characters.")]
+        [Display(Name = "Last Name")]
+        public string LName { get; set; }
         public bool HasPassword { get; set; }
         public IList<UserLoginInfo> Logins { get; set; }
+        [Display(Name = "Phone Number")]
         public string PhoneNumber { get; set; }
         public bool TwoFactor { get; set; }
         public bool BrowserRemembered { get; set; }

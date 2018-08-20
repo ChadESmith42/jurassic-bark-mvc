@@ -27,7 +27,6 @@ namespace JurassicBark.DATA.EF
         public string State { get; set; }
         public int ZipCode { get; set; }
         public byte ReservationLimit { get; set; }
-        public string Coordinates { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Reservation> Reservations { get; set; }

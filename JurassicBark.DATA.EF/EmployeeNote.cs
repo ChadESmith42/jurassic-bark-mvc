@@ -14,11 +14,11 @@ namespace JurassicBark.DATA.EF
     
     public partial class EmployeeNote
     {
+        public int NoteID { get; set; }
         public int PetID { get; set; }
         public string EmployeeID { get; set; }
         public string Note { get; set; }
         public System.DateTime NoteDate { get; set; }
-        public int EmpNoteID { get; set; }
     
         public virtual AspNetUser AspNetUser { get; set; }
         public virtual Pet Pet { get; set; }

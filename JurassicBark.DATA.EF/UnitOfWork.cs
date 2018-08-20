@@ -63,6 +63,20 @@ namespace JurassicBark.DATA.EF
             }
         }
 
+        private UserDetailsRepository _userDetailsRepository;
+        public UserDetailsRepository UserDetailsRepository
+        {
+            get
+            {
+                if (this._userDetailsRepository == null)
+                {
+                    this._userDetailsRepository = new UserDetailsRepository(context);
+                }
+                return _userDetailsRepository;
+            }
+        }
+
+
         public void Save()
         {
             context.SaveChanges();

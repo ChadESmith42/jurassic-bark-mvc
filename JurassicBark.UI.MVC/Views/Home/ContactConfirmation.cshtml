@@ -1,0 +1,67 @@
+﻿@model JurassicBark.UI.MVC.Models.ContactViewModel
+
+@{
+    ViewBag.Title = "Message Sent!";
+    ViewBag.Message = "A good boy or clever girl is fetching your message to us. After treats and belly rubs, we'll get back to you.";
+}
+
+<h2>@ViewBag.Title</h2>
+
+<p class="lead">
+    @ViewBag.Message;
+</p>
+<div>
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.FirstName)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.FirstName)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.LastName)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.LastName)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Subject)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Subject)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Message)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Message)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Email)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Email)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.PetName)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.PetName)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Home", "Index", null, htmlAttributes: new { @class = "btn btn-primary"})
+</p>
