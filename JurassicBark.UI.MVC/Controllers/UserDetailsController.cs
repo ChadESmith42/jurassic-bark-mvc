@@ -30,7 +30,7 @@ namespace JurassicBark.UI.MVC.Controllers
             {
                 return View(userDetails.ToList());
             }
-            if (User.IsInRole("Customer"))
+            if (User.IsInRole("Customer") || User.IsInRole("Employee"))
             {
                 userDetails = userDetails.Where(u => u.AspNetUserId == currentUser);
                 ViewBag.User = userName;
@@ -127,7 +127,7 @@ namespace JurassicBark.UI.MVC.Controllers
                 ViewBag.AspNetUserId = new SelectList(db.AspNetUsers, "Id", "Email", userDetail.AspNetUserId);
                 return View(userDetail);
             }
-            if (userDetail.AspNetUserId == User.Identity.GetUserId() && User.IsInRole("Customer"))
+            if (userDetail.AspNetUserId == User.Identity.GetUserId())
             {
                 ViewBag.AspNetUserId = User.Identity.GetUserId();
                 return View(userDetail);
@@ -147,7 +147,7 @@ namespace JurassicBark.UI.MVC.Controllers
         public ActionResult Edit([Bind(Include = "Id,AspNetUserId,Address,City,State,ZipCode,Birthday,Phone")] UserDetail userDetail)
         {
             //Customers can only edit their own details. They should not see the other User's details.
-            if (User.IsInRole("Customer"))
+            if (User.IsInRole("Customer") || User.IsInRole("Employee"))
             {
                 userDetail.AspNetUserId = User.Identity.GetUserId();
             }
@@ -189,7 +189,7 @@ namespace JurassicBark.UI.MVC.Controllers
         }
 
         // POST: UserDetails/Delete/5
-        [Authorize(Roles ="Admin")]
+        [Authorize(Roles ="Admin, Customer")]
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)

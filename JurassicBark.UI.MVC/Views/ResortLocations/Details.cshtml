@@ -21,11 +21,6 @@
         <p>@Html.DisplayFor(model => model.ResortName) has <span class="badge badge-info badge-pill">@Html.DisplayFor(model => model.countRes)</span> reservations today.</p>
     }
 
-    @if (User.IsInRole("Admin"))
-    {
-        <p>@Html.DisplayNameFor(model => model.Coordinates): @Html.DisplayFor(model => model.Coordinates)</p>
-    }
-
 </div>
 
 @*<div>
