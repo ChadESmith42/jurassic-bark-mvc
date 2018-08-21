@@ -16,14 +16,12 @@ namespace JurassicBark.UI.MVC.Controllers
         public UnitOfWork uow = new UnitOfWork();
 
         // GET: ResortLocations
-        [Authorize]
         public ActionResult Index()
         {
             return View(db.ResortLocations.ToList());
         }
 
         // GET: ResortLocations/Details/5
-        [Authorize]
         public ActionResult Details(int? id)
         {
             if (id == null)
@@ -54,7 +52,7 @@ namespace JurassicBark.UI.MVC.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize(Roles = "Admin")]
-        public ActionResult Create([Bind(Include = "ResortLocationID,ResortName,Address,City,State,ZipCode,ReservationLimit,Coordinates")] ResortLocation resortLocation)
+        public ActionResult Create([Bind(Include = "ResortLocationID,ResortName,Address,City,State,ZipCode,ReservationLimit")] ResortLocation resortLocation)
         {
             if (ModelState.IsValid)
             {
@@ -88,7 +86,7 @@ namespace JurassicBark.UI.MVC.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize(Roles = "Admin")]
-        public ActionResult Edit([Bind(Include = "ResortLocationID,ResortName,Address,City,State,ZipCode,ReservationLimit, Coordinates")] ResortLocation resortLocation)
+        public ActionResult Edit([Bind(Include = "ResortLocationID,ResortName,Address,City,State,ZipCode,ReservationLimit")] ResortLocation resortLocation)
         {
             if (ModelState.IsValid)
             {

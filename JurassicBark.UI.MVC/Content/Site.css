@@ -13,9 +13,9 @@ body {
     padding-right: 15px;
 }
 
-.body-content.main{
-    min-height: 100vh;
-}
+    .body-content.main {
+        min-height: 90vh;
+    }
 
 /* Set width on the form input elements since they're 100% wide by default */
 input,
@@ -102,11 +102,26 @@ h1, h2, h3, h4, h5, .lead, .jumbrotron {
             font-size: smaller;
         }
 
-    .toggle-hidden{
-        display:none;
+    .toggle-hidden {
+        display: none;
     }
-    .toggle-displayed{
-        display:contents;
+
+    .toggle-displayed {
+        display: contents;
+    }
+
+    .mapbox-directions-component.mapbox-directions-inputs {
+        display: none;
+    }
+
+    h2.jurassic {
+        font-size: 3rem;
+        font-family: Jurassic_Park;
+    }
+
+    h3.jurassic {
+        font-size: 4rem;
+        font-family: Jurassic_Park;
     }
 }
 
@@ -129,29 +144,56 @@ h1, h2, h3, h4, h5, .lead, .jumbrotron {
 
 .spaced {
     margin-left: 20px;
-    margin-top: 20px; 
+    margin-top: 20px;
 }
 
-.btn-spaced{
+.btn-spaced {
     margin-top: 20px;
 }
 
 @media screen and (min-width: 451px) {
 
-    .toggle-displayed{
+    .toggle-displayed {
         display: none;
     }
-    .toggle-hidden{
+
+    .toggle-hidden {
         display: contents;
     }
 
+    .jurassic {
+        font-size: 6rem;
+        font-family: Jurassic_Park;
+    }
+
+
+    h3.jurassic {
+        font-family: Jurassic_Park;
+        font-size: 4rem;
+    }
 }
 
 .footer {
-  bottom: 0;
-  margin-left: 20px;
-  width: 100%;
-  height: 60px; /* Set the fixed height of the footer here */
-  line-height: 60px; /* Vertically center the text there */
- 
+    bottom: 0;
+    margin-left: 20px;
+    width: 100%;
+    height: 60px; /* Set the fixed height of the footer here */
+    line-height: 60px; /* Vertically center the text there */
+}
+
+.jurassic {
+    font-size: 6rem;
+    font-family: Jurassic_Park;
+}
+
+
+h3.jurassic {
+    font-family: Jurassic_Park;
+    font-size: 4rem;
+}
+
+
+@font-face {
+    font-family: 'Jurassic_Park';
+    src: url('../fonts/Jurassic_Park.ttf') format('truetype');
 }
