@@ -197,3 +197,7 @@ h3.jurassic {
     font-family: 'Jurassic_Park';
     src: url('../fonts/Jurassic_Park.ttf') format('truetype');
 }
+
+.alert-message{
+    height: auto;
+}

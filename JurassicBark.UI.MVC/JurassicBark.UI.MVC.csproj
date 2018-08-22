@@ -197,7 +197,15 @@
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
     <Content Include="Content\favicon.ico" />
+    <Content Include="Content\images\Icons\dog-park-15.svg" />
     <Content Include="Content\images\jdp.png" />
+    <Content Include="Content\images\Maps\1.png" />
+    <Content Include="Content\images\Maps\2.png" />
+    <Content Include="Content\images\Maps\3.png" />
+    <Content Include="Content\images\Maps\4.png" />
+    <Content Include="Content\images\Maps\5.png" />
+    <Content Include="Content\images\Maps\6.png" />
+    <Content Include="Content\images\Maps\7.png" />
     <Content Include="Content\images\pet1.jpg" />
     <Content Include="Content\images\pet2.jpg" />
     <Content Include="Content\images\pet3.jpg" />
