@@ -32,7 +32,9 @@ namespace JurassicBark.UI.MVC.Controllers
             {
                 reservations = reservations.Where(r => r.Pet.OwnerID == currentUser).OrderBy(r => r.ReservationDate);
             }
-
+            ViewBag.Warning = TempData["Warning"];
+            ViewBag.Confirmation = TempData["Confirmation"];
+            ViewBag.Toggle = TempData["Toggle"];
             return View(reservations.ToList());
         }
 
@@ -103,8 +105,7 @@ namespace JurassicBark.UI.MVC.Controllers
             {
                 ViewBag.ResortLocationID = new SelectList(db.ResortLocations, "ResortLocationID", "ResortName");
             }
-
-
+            
             return View();
         }
 
@@ -115,9 +116,31 @@ namespace JurassicBark.UI.MVC.Controllers
         [Authorize]
         public ActionResult Create([Bind(Include = "ReservationID,ResortLocationID,PetID,ReservationDate")] Reservation reservation)
         {
-            //Assign User to UserID
+            //*****************************************************//
+            /*Setup the confirmation email variables here, while the reservation object still has values, if
+            the variables are set AFTER the db.Save() ... the reservation values are reset and everything
+            becomes a null string.
+            /***********************************************************/
+            //This Resort and Pet object will be used by both to generate the reservation and confirmation email;
+            ResortLocation resort = uow.ResortLocationRepository.Find(reservation.ResortLocationID);
+            Pet userPet = uow.PetRepository.Find(reservation.PetID);
+            //Get currentUser Identity;
             string currentUser = User.Identity.GetUserId();
-            ResortLocation resort = new ResortLocation();
+            //Get currentUser Email;
+            string currentEmail = User.Identity.GetUserName();
+            //Get Pet Owner Name using custom functions in Identity.Extensions
+            string petOwner = $"{User.Identity.GetFirstName().Trim()} {User.Identity.GetLastName().Trim()}.";
+            //Create additional variables for the Email Content:
+            string resortName = resort.ResortName;
+            string address = resort.Address;
+            string city = resort.City;
+            string state = resort.State;
+            string zip = resort.ZipCode.ToString();
+            string pet = userPet.Name;
+            string date = reservation.ReservationDate.ToShortDateString();
+            string petImage = "<img src='~/Content/images/pets/t_" + userPet.PetPhoto + "/>";
+            string mapImage = "<img src='~/Content/images/Maps/" + resort.ResortLocationID + ".png' />";
+            
             if (ModelState.IsValid)
             {
                 //Count number of reservations for each resort
@@ -126,85 +149,76 @@ namespace JurassicBark.UI.MVC.Controllers
                 {
                     db.Reservations.Add(reservation);
                     db.SaveChanges();
+                    TempData["Confirmation"] = "Your reservation is confirmed!";
+                    TempData["Toggle"] = true;
                     return RedirectToAction("Index");
                 }
-                if (User.IsInRole("Customer"))
+                if (User.IsInRole("Customer") && countReservations < resort.ReservationLimit)
                 {
                     resort = db.ResortLocations.Where(r => r.ResortLocationID == reservation.ResortLocationID).FirstOrDefault();
-                }
-                if (countReservations < resort.ReservationLimit)
-                {
+                
                     db.Reservations.Add(reservation);
                     db.SaveChanges();
+
+                    #region Email Confirmation of Reservation
+                    //Create the message content (with HTML) from [reservation] object. Use navigation
+                    //properties to bring in ResortLocation information and Pet's name
+                    string messageContent = $"<p>Dear {petOwner},<br /><br />You have a reservation at {resortName} located at {address}, {city}, {state} {zip} on {date}.</p><div><div style='width:100px height:100px;'>{petImage}</div><div style='width:100px; height:100px;'>{mapImage}</div></div><p>Please notify Jurassic Bark if you require any special items for {pet}, or edit your current 'Special Note' on your pet's profile. We look forward to seeing you soon!</p><p>Sincerely,<br /> <br /> Jurassic Bark</p><br /><br /><br /><strong>'Jurassic Bark: Where everyone is a good boy or a clever girl.'</strong>";
+
+                    ContactViewModel contact = new ContactViewModel();
+                    //Default DateSent is Now
+                    contact.DateSent = DateTime.Now;
+                    //Set Subject for confirmation message
+                    contact.Subject = $"Jurassic Bark Reservation for {pet}";
+                    //Create new MailMessage. Arguments are [FROM ADDRESS], [TO ADDRESS], [SUBJECT],
+                    //[CONTENT]
+                    MailMessage m = new MailMessage("no-reply@codingbychad.com", currentEmail, contact.Subject, messageContent);
+                    //Message content uses HTML, set this to TRUE
+                    m.IsBodyHtml = true;
+                    //Set the REPLY-TO address:
+                    m.ReplyToList.Add("no-reply@codingbychad.com");
+                    //Create the post office to sent the message:
+                    SmtpClient client = new SmtpClient("mail.codingbychad.com");
+                    //Enter the credentials for the mail server:
+                    client.Credentials = new NetworkCredential("no-reply@codingbychad.com", "M@774ew.");
+                    //Sent the message:
+                    using (client)
+                    {
+                        try
+                        {
+                            client.Send(m);
+                        }
+                        catch (Exception)
+                        {
+                            //Custom error with "branding."
+                            ViewBag.EmailError = "There was an error sending your confirmation email. Please use the 'My Reservations' link to verify your reservation was received.";
+                            throw;
+                        }
+                    }
+
+                    #endregion
+                    //Sending a confirmation message to the INDEX Action in Reservations Controller.
+                    //If the message is NULL, the confirmation dialog will be hidden.
+                    TempData["Toggle"] = true;
+                    TempData["Confirmation"] = "Your reservation is confirmed!";
                     return RedirectToAction("Index");
                 }
                 else
                 {
                     ViewBag.Warning = "The Jurassic Bark location you have chosen is fully booked for the date indicated. Please try another date. Or notify our offices to request an over-flow space.";
+                    ViewBag.PetID = new SelectList(db.Pets, "PetID", "Name", reservation.PetID);
+                    ViewBag.ResortLocationID = new SelectList(db.ResortLocations, "ResortLocationID", "ResortName", reservation.ResortLocationID);
+                    ViewBag.Toggle = true; 
+                    return View(reservation);
                 }
-
             }
 
             ViewBag.PetID = new SelectList(db.Pets, "PetID", "Name", reservation.PetID);
             ViewBag.ResortLocationID = new SelectList(db.ResortLocations, "ResortLocationID", "ResortName", reservation.ResortLocationID);
-
-
-
-            #region Email Confirmation of Reservation
-            //Get user email address from Pet.AspNetUser navigation links
-            string userEmail = reservation.Pet.AspNetUser.Email;
-            //Get Pet Owner Name using custom functions in Identity.Extensions
-            string petOwner = $"{User.Identity.GetFirstName()} {User.Identity.GetLastName()}";
-            //Create additional variables for the Email Content:
-            string resortName = reservation.ResortLocation.ResortName;
-            string address = reservation.ResortLocation.Address;
-            string city = reservation.ResortLocation.City;
-            string state = reservation.ResortLocation.State;
-            string zip = reservation.ResortLocation.ZipCode.ToString();
-            string pet = reservation.Pet.Name;
-            string date = reservation.ReservationDate.ToShortDateString();
-
-            //Create the message content (with HTML) from [reservation] object. Use navigation
-            //properties to bring in ResortLocation information and Pet's name
-            string messageContent = $"<p>Dear {petOwner},<br /><br />You have a reservation at {resortName} located at {address}, {city}, {state} {zip} on {date}.</p>" +
-                $"<p>Please notify Jurassic Bark if you require any special items for {pet}, or edit your current 'Special Note' on your pet's profile. We look forward to seeing you soon!</p> <p>Sincerely,<br /> <br /> Jurassic Bark</p><br /><br /><br /><strong>Jurassic Bark: Where everyone is a good boy or a clever girl.</strong>";
-
-            ContactViewModel contact = new ContactViewModel();
-            //Default DateSent is Now
-            contact.DateSent = DateTime.Now;
-            //Set Subject for confirmation message
-            contact.Subject = $"Jurassic Bark Reservation for {pet}";
-            //Create new MailMessage. Arguments are [FROM ADDRESS], [TO ADDRESS], [SUBJECT],
-            //[CONTENT]
-            MailMessage m = new MailMessage("no-reply@codingbychad.com", "chad.e.smith75@gmail.com", contact.Subject, messageContent);
-            //Message content uses HTML, set this to TRUE
-            m.IsBodyHtml = true;
-            //Set the REPLY-TO address:
-            m.ReplyToList.Add("no-reply@codingbychad.com");
-            //Create the post office to sent the message:
-            SmtpClient client = new SmtpClient("mail.codingbychad.com");
-            //Enter the credentials for the mail server:
-            client.Credentials = new NetworkCredential("no-reply@codingbychad.com", "M@774ew.");
-            //Sent the message:
-            using (client)
-            {
-                try
-                {
-                    client.Send(m);
-                }
-                catch (Exception)
-                {
-                    //Custom error with "branding."
-                    ViewBag.EmailError = "There was an error sending your confirmation email. Please use the 'My Reservations' link to verify your reservation was received.";
-                    throw;
-                }
-                ViewBag.Confirmation = messageContent;
-                return View(reservation);
-            }
-
-            #endregion
-            //Sending a confirmation message to the INDEX Action in Reservations Controller.
-            //If the message is NULL, the confirmation dialog will be hidden.
+            ViewBag.Error = "Your reservation could not be accepted. Please check your reservation request and try again.";
+            ViewBag.Toggle = false;
+            return View(reservation);
+            
         }
 
         // GET: Reservations/Edit/5
@@ -233,15 +247,95 @@ namespace JurassicBark.UI.MVC.Controllers
         [Authorize]
         public ActionResult Edit([Bind(Include = "ReservationID,ResortLocationID,PetID,ReservationDate")] Reservation reservation)
         {
+            //Count number of reservations for each resort
+            int countReservations = db.Reservations.Where(r => r.ReservationDate == reservation.ReservationDate && r.ResortLocationID == reservation.ResortLocationID).Count();
+
             if (ModelState.IsValid)
             {
-                if (User.IsInRole("Admin") || User.IsInRole("Customer"))
+                //This Resort and Pet object will be used by both to generate the reservation and confirmation email;
+                ResortLocation resort = uow.ResortLocationRepository.Find(reservation.ResortLocationID);
+                Pet userPet = uow.PetRepository.Find(reservation.PetID);
+                //Get currentUser Identity;
+                string currentUser = User.Identity.GetUserId();
+                //Get currentUser Email;
+                string currentEmail = User.Identity.GetUserName();
+                //Get Pet Owner Name using custom functions in Identity.Extensions
+                string petOwner = $"{User.Identity.GetFirstName().Trim()} {User.Identity.GetLastName().Trim()}.";
+                //Create additional variables for the Email Content:
+                string resortName = resort.ResortName.Trim();
+                string address = resort.Address.Trim();
+                string city = resort.City.Trim();
+                string state = resort.State;
+                string zip = resort.ZipCode.ToString();
+                string pet = userPet.Name.Trim();
+                string date = reservation.ReservationDate.ToShortDateString();
+                string petImage = "<img src='~/Content/images/pets/t_" + userPet.PetPhoto.Trim() + "/>";
+                string mapImage = "<img src='~/Content/images/Maps/" + resort.ResortLocationID + ".png' />";
+
+
+                if (User.IsInRole("Admin") || (User.IsInRole("Customer") && countReservations < resort.ReservationLimit))
                 {
                     db.Entry(reservation).State = EntityState.Modified;
                     db.SaveChanges();
+
+                    if (User.IsInRole("Customer"))
+                    {
+                        #region Email Confirmation of Reservation
+                        //Create the message content (with HTML) from [reservation] object. Use navigation
+                        //properties to bring in ResortLocation information and Pet's name
+                        string messageContent = $"<p>Dear {petOwner},<br /><br />You have a reservation at {resortName} located at {address}, {city}, {state} {zip} on {date}.</p><div><div style='width:100px height:100px;'>{petImage}</div><div style='width:100px; height:100px;'>{mapImage}</div></div><p>Please notify Jurassic Bark if you require any special items for {pet}, or edit your current 'Special Note' on your pet's profile. We look forward to seeing you soon!</p><p>Sincerely,<br /> <br /> Jurassic Bark</p><br /><br /><br /><strong>'Jurassic Bark: Where everyone is a good boy or a clever girl.'</strong>";
+
+                        ContactViewModel contact = new ContactViewModel();
+                        //Default DateSent is Now
+                        contact.DateSent = DateTime.Now;
+                        //Set Subject for confirmation message
+                        contact.Subject = $"Jurassic Bark Reservation for {pet}";
+                        //Create new MailMessage. Arguments are [FROM ADDRESS], [TO ADDRESS], [SUBJECT],
+                        //[CONTENT]
+                        MailMessage m = new MailMessage("no-reply@codingbychad.com", currentEmail, contact.Subject, messageContent);
+                        //Message content uses HTML, set this to TRUE
+                        m.IsBodyHtml = true;
+                        //Set the REPLY-TO address:
+                        m.ReplyToList.Add("no-reply@codingbychad.com");
+                        //Create the post office to sent the message:
+                        SmtpClient client = new SmtpClient("mail.codingbychad.com");
+                        //Enter the credentials for the mail server:
+                        client.Credentials = new NetworkCredential("no-reply@codingbychad.com", "M@774ew.");
+                        //Sent the message:
+                        using (client)
+                        {
+                            try
+                            {
+                                client.Send(m);
+                            }
+                            catch (Exception)
+                            {
+                                //Custom error with "branding."
+                                ViewBag.EmailError = "There was an error sending your confirmation email. Please use the 'My Reservations' link to verify your reservation was received.";
+                                throw;
+                            }
+                            ViewBag.Confirmation = "Your reservation is confirmed!";
+
+                        }
+
+                        #endregion
+                    }
+
+                    TempData["Confirmation"] = "Your reservation is confirmed!";
+                    TempData["Toggle"] = true;
                     return RedirectToAction("Index");
                 }
-
+                if (countReservations >= resort.ReservationLimit)
+                {
+                    ViewBag.Warning = "The Jurassic Bark location you have chosen is fully booked for the date indicated. Please try another date. Or notify our offices to request an over-flow space.";
+                    ViewBag.Toggle = true;
+                    return View(reservation);
+                }
+                
+                    TempData["Warning"] = "You cannot edit this Jurassic Bark reservation at this time. Please contact our team if you need assistance.";
+                    TempData["Toggle"] = true;
+                
+                return RedirectToAction("Index", uow.ReservationRepository.Get());
             }
             ViewBag.PetID = new SelectList(db.Pets, "PetID", "Name", reservation.PetID);
             ViewBag.ResortLocationID = new SelectList(db.ResortLocations, "ResortLocationID", "ResortName", reservation.ResortLocationID);
@@ -276,8 +370,9 @@ namespace JurassicBark.UI.MVC.Controllers
                 db.Reservations.Remove(reservation);
                 db.SaveChanges();
             }
-            
-            return RedirectToAction("Index");
+            TempData["Confirmation"] = "Your reservation has been cancelled.";
+            TempData["Toggle"] = true;
+            return RedirectToAction("Index",uow.ReservationRepository.Get());
         }
 
         protected override void Dispose(bool disposing)

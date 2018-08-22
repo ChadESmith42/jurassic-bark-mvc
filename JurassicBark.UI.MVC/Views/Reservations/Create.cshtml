@@ -2,6 +2,10 @@
 
 @{
     ViewBag.Title = "Create a New Reservation";
+    if (ViewBag.Toggle == null)
+    {
+        ViewBag.Toggle = false;
+    }
 }
 
 <h2>@ViewBag.Title</h2>
@@ -11,12 +15,15 @@
 {
     @Html.AntiForgeryToken()
 
-    if (ViewBag.Warning != null)
+    if (ViewBag.Toggle)
     {
-        <div class="alert alert-primary alert-dismissable collapse" role="alert">
+        <div class="alert alert-info alert-dismissable" role="alert">
             <button type="button" class="close" data-dismiss="alert">&times;</button>
             <h4>
                 @ViewBag.Warning
+            </h4>
+            <h4>
+                @ViewBag.Error
             </h4>
         </div>
     }

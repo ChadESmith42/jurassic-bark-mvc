@@ -23,17 +23,32 @@ namespace JurassicBark.UI.MVC.Controllers
         [Authorize]
         public ActionResult Index()
         {
+            bool IsUserExist = false;
+
             string userName = $"{User.Identity.GetFirstName()} {User.Identity.GetLastName()}";
-            string currentUser = User.Identity.GetUserId();
+            
             var userDetails = context.UserDetailsRepository.Include(u => u.AspNetUser);
+
+            //Compare currentUser to AspNetUserId. If found in UserDetails, hide "Create Details" button on Index;
+            string currentUser = User.Identity.GetUserId();
+            string userCheck = context.UserDetailsRepository.Get().Where(u => u.AspNetUserId == currentUser).ToString();
+            if (currentUser == userCheck)
+            {
+                IsUserExist = true;
+            }
             if (User.IsInRole("Admin"))
             {
                 return View(userDetails.ToList());
             }
-            if (User.IsInRole("Customer") || User.IsInRole("Employee"))
+            if (IsUserExist)
+            {
+                return RedirectToAction("Index", "Home");
+            }
+            if ((User.IsInRole("Customer") || User.IsInRole("Employee")) && !IsUserExist)
             {
                 userDetails = userDetails.Where(u => u.AspNetUserId == currentUser);
                 ViewBag.User = userName;
+                IsUserExist = false;
                 return View(userDetails);
             }
             else
@@ -64,6 +79,7 @@ namespace JurassicBark.UI.MVC.Controllers
             }
             if (currentUser == userDetail.AspNetUserId)
             {
+                ViewBag.UserName = userName;
                 return View(userDetail);
             }
             else
@@ -77,8 +93,17 @@ namespace JurassicBark.UI.MVC.Controllers
         [Authorize]
         public ActionResult Create()
         {
-            ViewBag.AspNetUserId = new SelectList(db.AspNetUsers, "Id", "Email");
-            return View();
+            UserDetail user = context.UserDetailsRepository.Get().Where(u => u.AspNetUserId == User.Identity.GetUserId()).First();
+            if (!User.IsInRole("Admin") && (user.Id.ToString() != null))
+            {
+                return RedirectToAction("Index", context.UserDetailsRepository.Get());
+            }
+            else
+            {
+                ViewBag.AspNetUserId = new SelectList(db.AspNetUsers, "Id", "Email");
+                return View();
+            }
+            
 
         }
 
@@ -91,13 +116,13 @@ namespace JurassicBark.UI.MVC.Controllers
         public ActionResult Create([Bind(Include = "Id,AspNetUserId,Address,City,State,ZipCode,Birthday,Phone")] UserDetail userDetail)
         {
 
-            if (User.IsInRole("Customer"))
-            {
-                userDetail.AspNetUserId = User.Identity.GetUserId();
-            }
             if (User.IsInRole("Admin"))
             {
                 ViewBag.AspNetUserId = new SelectList(db.AspNetUsers, "Id", "Email", userDetail.AspNetUserId);
+            }
+            if (User.Identity.IsAuthenticated)
+            {
+                userDetail.AspNetUserId = User.Identity.GetUserId();
             }
             if (ModelState.IsValid)
             {
@@ -113,6 +138,7 @@ namespace JurassicBark.UI.MVC.Controllers
         [Authorize]
         public ActionResult Edit(int? id)
         {
+            
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
@@ -139,28 +165,27 @@ namespace JurassicBark.UI.MVC.Controllers
         }
 
         // POST: UserDetails/Edit/5
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize]
         public ActionResult Edit([Bind(Include = "Id,AspNetUserId,Address,City,State,ZipCode,Birthday,Phone")] UserDetail userDetail)
         {
-            //Customers can only edit their own details. They should not see the other User's details.
-            if (User.IsInRole("Customer") || User.IsInRole("Employee"))
-            {
-                userDetail.AspNetUserId = User.Identity.GetUserId();
-            }
+            
             //Admins can edit all users' details.
             if (User.IsInRole("Admin"))
             {
                 ViewBag.AspNetUserId = new SelectList(db.AspNetUsers, "Id", "Email", userDetail.AspNetUserId);
             }
+            //Customers can only edit their own details. They should not see the other User's details.
+            if (User.Identity.IsAuthenticated)
+            {
+                userDetail.AspNetUserId = User.Identity.GetUserId();
+            }
             if (ModelState.IsValid)
             {
                 db.Entry(userDetail).State = EntityState.Modified;
                 db.SaveChanges();
-                return RedirectToAction("Index");
+                return View("Index", context.UserDetailsRepository.Get());
             }
             else
             {
@@ -172,34 +197,50 @@ namespace JurassicBark.UI.MVC.Controllers
         [Authorize]
         public ActionResult Delete(int? id)
         {
+            string currentUser = User.Identity.GetUserId();
+           
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
+
             UserDetail userDetail = db.UserDetails.Find(id);
-            if (userDetail == null)
+            if (userDetail.AspNetUserId == currentUser)
             {
-                return HttpNotFound();
+                if (userDetail == null)
+                {
+                    return HttpNotFound();
+                }
+
+                return View(userDetail);
             }
-            if (User.IsInRole("Customer"))
+            if (User.IsInRole("Admin"))
+            {
+                if (userDetail == null)
+                {
+                    return HttpNotFound();
+                }
+
+                return View(userDetail);
+            }
+            else
             {
                 return RedirectToAction("Index", "Home");
             }
-            return View(userDetail);
+            
         }
 
         // POST: UserDetails/Delete/5
-        [Authorize(Roles ="Admin, Customer")]
+        [Authorize]
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
-            if (User.IsInRole("Admin"))
-            {
-                UserDetail userDetail = db.UserDetails.Find(id);
-                db.UserDetails.Remove(userDetail);
-                db.SaveChanges();
-            }
+            
+            UserDetail userDetail = db.UserDetails.Find(id);
+            db.UserDetails.Remove(userDetail);
+            db.SaveChanges();
+            
             return RedirectToAction("Index");
         }
 

@@ -22,5 +22,12 @@ namespace JurassicBark.UI.MVC.Models.Extensions
 
             return (claim != null) ? claim.Value : string.Empty;
         }
+
+        public static string GetEmail(this IIdentity identity)
+        {
+            var claim = ((ClaimsIdentity)identity).FindFirst("UserName");
+
+            return (claim != null) ? claim.Value : string.Empty;
+        }
     }
 }
