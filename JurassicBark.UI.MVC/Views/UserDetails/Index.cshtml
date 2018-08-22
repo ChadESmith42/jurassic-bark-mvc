@@ -7,13 +7,11 @@
 
 <h2>@ViewBag.Title</h2>
 
-@if (User.Identity.IsAuthenticated)
-{
-    
     <p>
-        @Html.ActionLink("Update Your Information", "Create", null, htmlAttributes: new { @class = "btn btn-primary" })
+        @Html.ActionLink("Add Your Information", "Create", null, htmlAttributes: new { @class = "btn btn-primary" })
     </p>
 
+   <div class="toggle-hidden">
     <table class="table">
         <tr>
             <th>
@@ -73,33 +71,33 @@
         }
 
     </table>
-}//End for ADMIN view
-else
-{
-    foreach (var item in Model)
-    {
-        <div class="card" style="width: 18rem;">
-            <div class="card-body">
-                <h5 class="card-title">@User.Identity.GetFirstName() @User.Identity.GetLastName()</h5>
-                <h6 class="card-subtitle mb-2 text-muted">User Account Details</h6>
-                <p class="card-text">
-                    @Html.DisplayNameFor(model => model.Address):
-                    <address>
-                        @Html.DisplayFor(modelItem => item.Address)<br />
-                        @Html.DisplayFor(modelItem => item.City), @Html.DisplayFor(modelItem => item.State) @Html.DisplayFor(modelItem => item.ZipCode) <br />
-                        @Html.DisplayFor(modelItem => item.Phone) <br />
-                    </address>
-                    <address>
-                        @Html.DisplayFor(modelItem => item.AspNetUser.Email)
-                    </address>
-                </p>
-                <a href="@Url.Action("Index","Reservations")" class="card-link">My Reservations</a>
-                <a href="@Url.Action("Index","Pets")" class="card-link">My Pets</a>
-            </div>
-        </div>
-        <div class="btn-spaced">
-            @Html.ActionLink("Edit My Details", "Edit", new { id = item.Id }, htmlAttributes: new { @class = "btn btn-primary" })
-        </div>
-    }//end foreach for user view
+</div>
 
-}@*End section for USER actions.*@
+<div class="toggle-displayed">
+    @foreach (var item in Model)
+    {
+    <div class="card" style="width: 18rem;">
+        <div class="card-body">
+            <h5 class="card-title">@User.Identity.GetFirstName() @User.Identity.GetLastName()</h5>
+            <h6 class="card-subtitle mb-2 text-muted">User Account Details</h6>
+            <p class="card-text">
+                @Html.DisplayNameFor(model => model.Address):
+                <address>
+                    @Html.DisplayFor(modelItem => item.Address)<br />
+                    @Html.DisplayFor(modelItem => item.City), @Html.DisplayFor(modelItem => item.State) @Html.DisplayFor(modelItem => item.ZipCode) <br />
+                    @Html.DisplayFor(modelItem => item.Phone) <br />
+                </address>
+                <address>
+                    @Html.DisplayFor(modelItem => item.AspNetUser.Email)
+                </address>
+            </p>
+            <a href="@Url.Action("Index","Reservations")" class="card-link">My Reservations</a>
+            <a href="@Url.Action("Index","Pets")" class="card-link">My Pets</a>
+        </div>
+    </div>
+    <div class="btn-spaced">
+        @Html.ActionLink("Edit My Details", "Edit", new { id = item.Id }, htmlAttributes: new { @class = "btn btn-primary" })
+    </div>
+    }@*End responsive view section*@
+
+</div>
