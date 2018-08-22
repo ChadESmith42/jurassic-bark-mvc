@@ -1,150 +1,76 @@
-﻿@{
+﻿@model JurassicBark.UI.MVC.Models.ContactViewModel
+
+@{
     ViewBag.Title = "Contact Jurassic Bark";
 }
 
+<h2>@ViewBag.Title</h2>
+
+<p class="lead">@ViewBag.Message</p>
+
+@using (Html.BeginForm()) 
+{
+    @Html.AntiForgeryToken()
+    
+    <div class="form-horizontal">
+        <hr />
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        <div class="form-group">
+            @Html.LabelFor(model => model.FirstName, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.FirstName, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.FirstName, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.LastName, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.LastName, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.LastName, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Subject, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Subject, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Subject, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Message, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Message, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Message, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Email, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Email, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Email, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.PetName, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.PetName, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.PetName, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Send" class="btn btn-success" />
+            </div>
+        </div>
+    </div>
+}
+
 <div>
-    @ViewBag.Title
+    @Html.ActionLink("Cancel", "Index")
 </div>
-<div id='map' class="col-md-12">
-</div>
-
-<script src='https://api.tiles.mapbox.com/mapbox-gl-js/v0.46.0/mapbox-gl.js'></script>
-<link href='https://api.tiles.mapbox.com/mapbox-gl-js/v0.46.0/mapbox-gl.css' rel='stylesheet' />
-
-<script>
-    mapboxgl.accessToken = 'pk.eyJ1IjoiY3NtaXRoNzU1MyIsImEiOiJjaWY4OXU3NXkxbzA4c2hsem00Y3pscmMyIn0.9GAiQ-7yW9AnQKcAooeytA';
-var map = new mapboxgl.Map({
-    container: 'map', // container id
-    style: 'mapbox://styles/mapbox/streets-v10', // stylesheet location
-    center: [-94.60, 39.00], // starting position [lng, lat]
-    zoom: 10 // starting zoom
-});
-map.on('load', function () {
-    map.loadImage('https://i.imgur.com/MK4NUzI.png', function (error, image) {
-        if (error) throw error;
-        map.addImage('point', image);
-        map.addLayer({
-            "id": "points",
-            "type": "symbol",
-            "source": {
-                "type": "geojson",
-                "data": {
-                    "type": "FeatureCollection",
-                    "features": [{
-                        "type": "Feature", "properties": {
-                            "description": "<h3>Betty Brook</h3><p>Located at 8646 Lee Blvd, Leawood, KS 66206.</p><div> <a href='http://localhost:51171/Reservations/Create' class='btn btn-primary' role='button'>Book now!</a></div>"
-                        },
-                        "geometry": {
-                            "type": "Point",
-                            "coordinates": [-94.614705, 38.971796]
-                        }
-                    },
-                    {
-                        "type": "Feature", "properties": {
-                            "description": "<h3>Leawoof</h3><p>Located at 106th & Lee Boulevard, Leawood, KS 66211.</p><div> <a href='http://localhost:51171/Reservations/Create' class='btn btn-primary' role='button'>Book now!</a></div>"
-                        },
-                        "geometry": {
-                            "type": "Point",
-                            "coordinates": [-94.6116024, 38.9332894]
-                        }
-                    },
-                    {
-                        "type": "Feature", "properties": {
-                            "description": "<div class='mobile'><h3>Swope Dog Park</h3><p>Located at 5051 E Gregory Blvd, Kansas City, MO 64132.</p><div> <a href='http://localhost:51171/Reservations/Create' class='btn btn-primary' role='button'>Book now!</a></div></div>"
-                        },
-                        "geometry": {
-                            "type": "Point",
-                            "coordinates": [-94.5275897, 38.9966864]
-                        }
-                    },
-                    {
-                        "type": "Feature", "properties": {
-                            "description": "<div class='mobile'><h3>Penn Valley Off Leash Dog Park</h3><p>Located at W 28th & Wyandotte St, Kansas City, MO 64108.</p><div> <a href='http://localhost:51171/Reservations/Create' class='btn btn-primary' role='button'>Book now!</a></div></div>"
-                        },
-                        "geometry": {
-                            "type": "Point",
-                            "coordinates": [-94.588766, 39.0757432]
-                        }
-                    },
-                    {
-                        "type": "Feature", "properties": {
-                            "description": "<div class='mobile'><h3>Stoll Off-Leash Dog Park</h3><p>Located at 12500 W 119th St, Overland Park, KS 66210.</p><div> <a href='http://localhost:51171/Reservations/Create' class='btn btn-primary' role='button'>Book now!</a></div></div>"
-                        },
-                        "geometry": {
-                            "type": "Point",
-                            "coordinates": [-94.730676, 38.916525]
-                        }
-                    },
-                    {
-                        "type": "Feature", "properties": {
-                            "description": "<div class='mobile'><h3>Tails & Trails Dog Park</h3><p>Located at 8005 E 139th St, Grandview, MO 64030.</p><div> <a href='http://localhost:51171/Reservations/Create' class='btn btn-primary' role='button'>Book now!</a></div></div>"
-                        },
-                        "geometry": {
-                            "type": "Point",
-                            "coordinates": [-94.507984, 38.871705]
-                        }
-                    },
-                    {
-                        "type": "Feature", "properties": {
-                            "description": "<div class='mobile'><h3>West Terrace Dog Park</h3><p>Located at 750 Pennsylvania Ave, Kansas City, MO 64105.</p><div> <a href='http://localhost:51171/Reservations/Create' class='btn btn-primary' role='button'>Book now!</a></div></div>"
-                        },
-                        "geometry": {
-                            "type": "Point",
-                            "coordinates": [-94.59091, 39.105213]
-                        }
-                    }
-
-                    ]
-                }
-            },
-            "layout": {
-                "icon-image": "point",
-                "icon-size": .70
-            }
-        });
-    });
-});
-
-//Creates a pop-up when you click on the icon for each feature
-map.on('click', 'points', function (e) {
-    var coordinates = e.features[0].geometry.coordinates.slice();
-    var description = e.features[0].properties.description;
-
-    while (Math.abs(e.lngLat.lng - coordinates[0]) > 180) {
-        coordinates[0] += e.lngLat.lng > coordinates[0] ? 360 : -360;
-    }
-    //Create the actual pop-up
-    new mapboxgl.Popup()
-        .setLngLat(coordinates)
-        .setHTML(description)
-        .addTo(map);
-});
-//Changes the mouse to a pointer when over the icon
-map.on('mouseenter', 'points', function () {
-    map.getCanvas().style.cursor = 'pointer';
-});
-
-//Changes the mouse back to default when moving off of the icon
-map.on('mouseleave', 'points', function () {
-    map.getCanvas().style.cursor = '';
-});
-
-// Add geolocate control to the map.
-map.addControl(new mapboxgl.GeolocateControl({
-    positionOptions: {
-        enableHighAccuracy: true
-    },
-    trackUserLocation: true
-}));
-
-    //Add scale bar to the bottom of the map for spatial reference
-var scale = new mapboxgl.ScaleControl({
-    maxWidth: 100,
-    unit: 'imperial'
-});
-map.addControl(scale);
-
-//scale.setUnit('metric');
-</script>
-
-

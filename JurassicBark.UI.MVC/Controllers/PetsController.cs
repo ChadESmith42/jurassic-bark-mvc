@@ -9,7 +9,6 @@ using System.Web.Mvc;
 using JurassicBark.DATA.EF;
 using Microsoft.AspNet.Identity;
 using System.IO;
-using JurassicBark.DATA.EF.Repository;
 using System.Drawing;
 using JurassicBark.Utilities;
 
@@ -22,15 +21,19 @@ namespace JurassicBark.UI.MVC.Controllers
         // GET: Pets
         public ActionResult Index()
         {
-            List<Pet> petList = new List<Pet>();
+            List<Pet> petList = uow.PetRepository.Get().ToList();
             string currentUserID = User.Identity.GetUserId();
-            if (User.IsInRole("Admin") || User.IsInRole("Employee"))
+            if (User.IsInRole("Admin"))
             {
-                petList = uow.PetRepository.Get();
+                return View(petList.ToList());
+            }
+            if (User.IsInRole("Employee"))
+            {
+                petList = petList.Where(p => p.IsActive == true).ToList();
             }
             else
             {
-                petList = uow.PetRepository.Get().Where(i => i.AspNetUser.Id == currentUserID).ToList();
+                petList = petList.Where(p => p.IsActive == true && p.OwnerID == currentUserID).ToList();
             }
             return View(petList.ToList());
         }
@@ -39,11 +42,12 @@ namespace JurassicBark.UI.MVC.Controllers
         [Authorize]
         public ActionResult Details(int? id)
         {
+            List<Pet> pets = uow.PetRepository.Get().ToList();
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Pet pet = uow.PetRepository.Find(id);
+            Pet pet = pets.Find(p => p.PetID == id);
             if (pet == null)
             {
                 return HttpNotFound();
@@ -52,12 +56,13 @@ namespace JurassicBark.UI.MVC.Controllers
             {
                 return View(pet);
             }
-            if (User.Identity.GetUserId() == pet.OwnerID)
+            if (User.Identity.GetUserId() == pet.OwnerID && pet.IsActive == true)
             {
                 return View(pet);
             }
             else
             {
+                ViewBag.Warning = "The pet you requested cannot be found. Please contact Jurassic Bark if you feel you've received this message in error.";
                 return RedirectToAction("Index");
             }
         }
@@ -79,6 +84,7 @@ namespace JurassicBark.UI.MVC.Controllers
             if (!User.IsInRole("Admin") && User.IsInRole("Customer"))
             {
                 pet.OwnerID = User.Identity.GetUserId();
+                pet.IsActive = true;
             }
 
             if (User.IsInRole("Admin"))
@@ -124,14 +130,14 @@ namespace JurassicBark.UI.MVC.Controllers
         [Authorize]
         public ActionResult Edit(int? id)
         {
-
+            List<Pet> pets = uow.PetRepository.Get().ToList();
             string currentUserID = User.Identity.GetUserId();
 
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Pet pet = uow.PetRepository.Find(id);
+            Pet pet = pets.Find(p => p.PetID == id);
             if (pet == null)
             {
                 return HttpNotFound();
@@ -141,12 +147,13 @@ namespace JurassicBark.UI.MVC.Controllers
                 ViewBag.OwnerID = new SelectList(db.AspNetUsers, "Id", "Email", pet.OwnerID);
                 return View(pet);
             }
-            if (pet.OwnerID == currentUserID)
+            if (pet.OwnerID == currentUserID && pet.IsActive == true)
             {
                 return View(pet);
             }
             else
             {
+                ViewBag.Warning = "The pet you requested cannot be found. Please contact Jurassic Bark if you feel you've received this message in error.";
                 return RedirectToAction("Index");
             }
         }
@@ -242,12 +249,12 @@ namespace JurassicBark.UI.MVC.Controllers
             //Check if user is Admin and remove record:
             if (User.IsInRole("Admin"))
             {
-                uow.PetRepository.Remove(pet);
+                pet.IsActive = false;
                 uow.Save();
             }
             if (pet.OwnerID == currentUser)
             {
-                uow.PetRepository.Remove(pet);
+                pet.IsActive = false;
                 uow.Save();
             }
             else

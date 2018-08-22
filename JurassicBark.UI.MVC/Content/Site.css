@@ -2,7 +2,7 @@
 
 body {
     padding-top: 50px;
-    padding-bottom: 20px;
+    padding-bottom: 80px;
     font-family: "Oswald";
     font-size: 16px;
 }
@@ -12,6 +12,11 @@ body {
     padding-left: 15px;
     padding-right: 15px;
 }
+
+/*Sets min height to account for sticky footer.*/
+    .body-content.main {
+        min-height: 90vh;
+    }
 
 /* Set width on the form input elements since they're 100% wide by default */
 input,
@@ -83,6 +88,9 @@ h1, h2, h3, h4, h5, .lead, .jumbrotron {
     margin-bottom: 10px;
 }
 
+/*
+    Sets CSS for small-screen specific display values.
+*/
 @media screen and (max-width: 450px) {
     #map {
         height: 300px;
@@ -97,12 +105,35 @@ h1, h2, h3, h4, h5, .lead, .jumbrotron {
         .mapboxgl-popup.h3 {
             font-size: smaller;
         }
-
-    .toggle-hidden{
-        display:none;
+    /*For small screens, cards replace tables. The tables are displayed
+        by default. This section hides the tables.
+    */
+    .toggle-hidden {
+        display: none;
     }
-    .toggle-displayed{
-        display:contents;
+    /*For small screens, cards replace tables. The cards are hidden by default.
+        This section toggles the cards to displayed.
+    */
+    .toggle-displayed {
+        display: contents;
+    }
+
+    .mapbox-directions-component.mapbox-directions-inputs {
+        display: none;
+    }
+/*
+    Specific to Jurassic_Park font.
+*/
+    h2.jurassic {
+        font-size: 3rem;
+        font-family: Jurassic_Park;
+    }
+/*
+    Specific to Jurassic_Park font.
+*/
+    h3.jurassic {
+        font-size: 4rem;
+        font-family: Jurassic_Park;
     }
 }
 
@@ -122,19 +153,87 @@ h1, h2, h3, h4, h5, .lead, .jumbrotron {
     margin-left: 16px;
 }
 
-
+/*
+    Adds some space for navigation buttons at the bottom of the pages.
+*/
 .spaced {
     margin-left: 20px;
-    margin-top: 20px; 
+    margin-top: 20px;
 }
 
+.btn-spaced {
+    margin-top: 20px;
+}
+
+
+/*
+    Sets CSS values for large-screen specific items.
+*/
 @media screen and (min-width: 451px) {
 
-    .toggle-displayed{
+/*
+    Data-tables are replaced by cards for specific pages. The cards are
+    hidden and the tables are visible by default. This hides the tables.
+*/
+    .toggle-displayed {
         display: none;
     }
-    .toggle-hidden{
+
+/*
+    Data-tables are replaced by cards for specific pages. The cards are
+    hidden and the tables are visible by default. This displays the cards.
+*/
+    .toggle-hidden {
         display: contents;
     }
 
+/*
+    Specific to Jurassic_Park font.
+*/
+    .jurassic {
+        font-size: 6rem;
+        font-family: Jurassic_Park;
+    }
+
+/*
+    Specific to Jurassic_Park font.
+*/
+    h3.jurassic {
+        font-family: Jurassic_Park;
+        font-size: 4rem;
+    }
+}
+
+.footer {
+    bottom: 0;
+    margin-left: 20px;
+    width: 100%;
+    height: 60px; /* Set the fixed height of the footer here */
+    line-height: 60px; /* Vertically center the text there */
+}
+/*
+    Specific to Jurassic_Park font.
+*/
+.jurassic {
+    font-size: 6rem;
+    font-family: Jurassic_Park;
+}
+
+/*
+    Specific to Jurassic_Park font.
+*/
+h3.jurassic {
+    font-family: Jurassic_Park;
+    font-size: 4rem;
+}
+
+
+@font-face {
+    font-family: 'Jurassic_Park';
+    src: url('../fonts/Jurassic_Park.ttf') format('truetype');
+}
+
+
+.alert-message{
+    height: auto;
 }

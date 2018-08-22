@@ -2,6 +2,10 @@
 
 @{
     ViewBag.Title = "Existing Reservations";
+    if (ViewBag.Toggle == null)
+    {
+        ViewBag.Toggle = false;
+    }
 }
 
 <h2>@ViewBag.Title</h2>
@@ -11,8 +15,21 @@
         @Html.ActionLink("New Reservation", "Create", null, htmlAttributes: new { @class = "btn btn-primary" })
     </p>
 }
+
+@if (ViewBag.Toggle)
+{
+    <div class="alert alert-success alert-dismissable alert-info" role="alert">
+        <button type="button" class="close" data-dismiss="alert">&times;</button>
+        <h4>@ViewBag.Confirmation</h4>
+        <h4>@ViewBag.Warning</h4>
+        <h4>@ViewBag.Error</h4>
+    </div>
+}
+    
+
+
 <div class="toggle-hidden">
-    <table class="table data-table">
+    <table id="data-table" class="table data-table">
         <thead>
             <tr>
                 <th>
@@ -30,40 +47,40 @@
                 <th></th>
             </tr>
         </thead>
-
-        @foreach (var item in Model)
-        {
         <tbody>
-            <tr>
-                <td>
-                    @Html.DisplayFor(modelItem => item.ReservationDate)
-                </td>
-                <td>
-                    <img src="~/Content/images/pets/t_@item.Pet.PetPhoto" class="img-responsive pet-avatar" />
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Pet.Name)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.ResortLocation.ResortName)
-                </td>
-                <td class="btn-group">
-                    @if (User.IsInRole("Admin") || User.IsInRole("Customer"))
-                        {
-                        @Html.ActionLink("Edit", "Edit", new { id = item.ReservationID }, htmlAttributes: new { @class = "btn btn-primary" })
-                        @Html.ActionLink("Delete", "Delete", new { id = item.ReservationID }, htmlAttributes: new { @class = "btn btn-primary" })
+            @foreach (var item in Model)
+            {
+
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.ReservationDate)
+                    </td>
+                    <td>
+                        <img src="~/Content/images/pets/t_@item.Pet.PetPhoto" class="img-responsive pet-avatar" />
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Pet.Name)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.ResortLocation.ResortName)
+                    </td>
+                    <td class="btn-group">
+                        @if (User.IsInRole("Admin") || User.IsInRole("Customer"))
+                {
+                            @Html.ActionLink("Edit", "Edit", new { id = item.ReservationID }, htmlAttributes: new { @class = "btn btn-primary" })
+                            @Html.ActionLink("Delete", "Delete", new { id = item.ReservationID }, htmlAttributes: new { @class = "btn btn-primary" })
                         }
-                    @if (User.Identity.IsAuthenticated)
-                        {
-                        @Html.ActionLink("Details", "Details", new { id = item.ReservationID }, htmlAttributes: new { @class = "btn btn-primary" })
+                        @if (User.Identity.IsAuthenticated)
+                {
+                            @Html.ActionLink("Details", "Details", new { id = item.ReservationID }, htmlAttributes: new { @class = "btn btn-primary" })
                         }
 
 
-                </td>
-            </tr>
+                    </td>
+                </tr>
+
+            }
         </tbody>
-        }
-
     </table>
 </div>
 
@@ -93,4 +110,14 @@
 
     }
 
-    </div>
+</div>
+
+<script>
+
+    var testWarning = "@ViewBag.Warning";
+    var testConfirm = "@ViewBag.Confirmation";
+
+    console.log(testWarning);
+    console.log(testConfirm);
+
+</script>

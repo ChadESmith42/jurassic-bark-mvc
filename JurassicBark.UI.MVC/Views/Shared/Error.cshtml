@@ -1,10 +1,29 @@
 ﻿@model System.Web.Mvc.HandleErrorInfo
 
 @{
-    ViewBag.Title = "Error";
+    ViewBag.Title = "Oops";
 }
 
-<hgroup>
-    <h1 class="text-error">Error.</h1>
-    <h2 class="text-error">An error occurred while processing your request.</h2>
-</hgroup>
+<h2>@ViewBag.Title</h2>
+
+<div class="lead">
+    We tried fetching that page, but were distracted by a squirrel.
+</div>
+
+<div>
+    <p>These are the pages that we sniff at the most:</p>
+    <ul class="nav flex-column">
+        <li class="nav-item">
+            <a class="nav-link" href="@Url.Action("Index","Home")">Jurassic Bark</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="@Url.Action("Index","Reservations")">Reservations</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="@Url.Action("Index","Pets")">Pets</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="@Url.Action("Index","Locations")">Locations</a>
+        </li>
+    </ul>
+</div>

@@ -18,7 +18,7 @@ namespace JurassicBark.DATA.EF
         public Pet()
         {
             this.Reservations = new HashSet<Reservation>();
-            this.EmployeeNotes = new HashSet<EmployeeNote>();
+            this.EmployeeNotes1 = new HashSet<EmployeeNote>();
         }
     
         public int PetID { get; set; }
@@ -33,6 +33,6 @@ namespace JurassicBark.DATA.EF
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Reservation> Reservations { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<EmployeeNote> EmployeeNotes { get; set; }
+        public virtual ICollection<EmployeeNote> EmployeeNotes1 { get; set; }
     }
 }

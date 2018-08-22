@@ -2,17 +2,22 @@
 @using JurassicBark.UI.MVC.Models.Extensions;
 
 @if (Request.IsAuthenticated)
-            {
-               
-                using (Html.BeginForm("LogOff", "Account", FormMethod.Post, new { id = "logoutForm", @class = "navbar-right" }))
-                {
-                    @Html.AntiForgeryToken()
+{
 
-                    <ul class="nav navbar-nav navbar-right">
-            <li class="nav-item">
-                @Html.ActionLink("Hello " + User.Identity.GetUserName() + "!", "Index", "Manage", routeValues: null, htmlAttributes: new { title = "Manage", @class = "nav-link" })
+    using (Html.BeginForm("LogOff", "Account", FormMethod.Post, new { id = "logoutForm", @class = "navbar-right" }))
+    {
+        @Html.AntiForgeryToken()
+
+        <ul class="nav navbar-nav navbar-right">
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Hello, @User.Identity.GetFirstName() @User.Identity.GetLastName()!</a>
+
+                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                    <a class="dropdown-item" href="@Url.Action("Index","Manage")">Manage Your Login</a>
+                    <a class="dropdown-item" href="@Url.Action("Index","UserDetails")">Manage Your Information</a>
+                    <a class="dropdown-item" href="javascript:document.getElementById('logoutForm').submit()" >Log off</a>
+            </div>
             </li>
-            <li class="nav-item"><a href="javascript:document.getElementById('logoutForm').submit()" class="nav-link">Log off</a></li>
         </ul>
     }
 }

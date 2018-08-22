@@ -179,18 +179,10 @@
     <Compile Include="Controllers\ResortLocationsController.cs" />
     <Compile Include="Controllers\RolesAdminController.cs" />
     <Compile Include="Controllers\UserAdminController.cs" />
+    <Compile Include="Controllers\UserDetailsController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\201808131450502_InitialCreate.cs" />
-    <Compile Include="Migrations\201808131450502_InitialCreate.Designer.cs">
-      <DependentUpon>201808131450502_InitialCreate.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201808171724341_FName.cs" />
-    <Compile Include="Migrations\201808171724341_FName.Designer.cs">
-      <DependentUpon>201808171724341_FName.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\AdminViewModel.cs" />
     <Compile Include="Models\ContactViewModel.cs" />
@@ -205,7 +197,15 @@
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
     <Content Include="Content\favicon.ico" />
+    <Content Include="Content\images\Icons\dog-park-15.svg" />
     <Content Include="Content\images\jdp.png" />
+    <Content Include="Content\images\Maps\1.png" />
+    <Content Include="Content\images\Maps\2.png" />
+    <Content Include="Content\images\Maps\3.png" />
+    <Content Include="Content\images\Maps\4.png" />
+    <Content Include="Content\images\Maps\5.png" />
+    <Content Include="Content\images\Maps\6.png" />
+    <Content Include="Content\images\Maps\7.png" />
     <Content Include="Content\images\pet1.jpg" />
     <Content Include="Content\images\pet2.jpg" />
     <Content Include="Content\images\pet3.jpg" />
@@ -232,12 +232,14 @@
     <Content Include="Content\images\pets\t_buttons.jpg" />
     <Content Include="Content\images\pets\t_mittens.jpg" />
     <Content Include="Content\images\tagline.png" />
+    <Content Include="Content\mapbox-gl-directions.css" />
     <Content Include="favicon.ico" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
+    <Content Include="fonts\Jurassic_Park.ttf" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />
     <Content Include="Scripts\jquery-1.10.2.min.js" />
@@ -250,6 +252,8 @@
     <Content Include="Scripts\respond.js" />
     <Content Include="Scripts\respond.min.js" />
     <Content Include="Scripts\_references.js" />
+    <Content Include="Error.html" />
+    <Content Include="Error.aspx" />
     <Content Include="Web.config" />
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
@@ -261,7 +265,6 @@
     <Content Include="Views\_ViewStart.cshtml" />
     <Content Include="Views\Shared\Error.cshtml" />
     <Content Include="Views\Shared\_Layout.cshtml" />
-    <Content Include="Views\Home\About.cshtml" />
     <Content Include="Views\Home\Contact.cshtml" />
     <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Views\Account\_ExternalLoginsListPartial.cshtml" />
@@ -314,6 +317,14 @@
     <Content Include="Views\EmployeeNotes\Edit.cshtml" />
     <Content Include="Views\EmployeeNotes\Pet.cshtml" />
     <Content Include="Views\EmployeeNotes\EmployeeID.cshtml" />
+    <Content Include="Views\UserDetails\Create.cshtml" />
+    <Content Include="Views\UserDetails\Delete.cshtml" />
+    <Content Include="Views\UserDetails\Details.cshtml" />
+    <Content Include="Views\UserDetails\Edit.cshtml" />
+    <Content Include="Views\UserDetails\Index.cshtml" />
+    <Content Include="Views\Home\ContactConfirmation.cshtml" />
+    <Content Include="Views\Reservations\Today.cshtml" />
+    <Content Include="Views\Oops.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -332,14 +343,6 @@
       <Project>{16fa49e7-cfcd-4915-b6e5-de525ea5f1a9}</Project>
       <Name>JurassicBark.DATA.EF</Name>
     </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Migrations\201808131450502_InitialCreate.resx">
-      <DependentUpon>201808131450502_InitialCreate.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201808171724341_FName.resx">
-      <DependentUpon>201808171724341_FName.cs</DependentUpon>
-    </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
