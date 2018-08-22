@@ -25,8 +25,10 @@ namespace JurassicBark.UI.MVC.Controllers
         {
 
             string currentUser = User.Identity.GetUserId();
-
-            var reservations = db.Reservations.Include(r => r.Pet).Include(r => r.ResortLocation).OrderBy(r => r.ReservationDate);
+            //Added this code to limit the number of previous reservations shown. Sets a date 2 days in the past as 
+            //the starting point for the reservations list.
+            DateTime dt = DateTime.Now.AddDays(-2);
+            var reservations = db.Reservations.Include(r => r.Pet).Include(r => r.ResortLocation).OrderBy(r => r.ReservationDate).Where(r => r.ReservationDate >= dt);
 
             if (User.IsInRole("Customer") && !User.IsInRole("Admin"))
             {
