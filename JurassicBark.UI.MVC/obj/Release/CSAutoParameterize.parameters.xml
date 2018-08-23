@@ -1,0 +1,12 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<parameters>
+  <parameter name="DefaultConnection-Web.config Connection String" description="DefaultConnection Connection String used in web.config by the application to access the database." defaultValue="Data Source=SQL5002.site4now.net;Initial Catalog=DB_A3C1E2_jurassicbark;User Id=DB_A3C1E2_jurassicbark_admin;Password=Ma774ew.243576;" tags="SqlConnectionString">
+    <parameterEntry kind="XmlFile" scope="C:\\Users\\Student\\Desktop\\Project\\src\\JurassicBark\.UI\.MVC\\obj\\Release\\Package\\PackageTmp\\Web\.config$" match="/configuration/connectionStrings/add[@name='DefaultConnection']/@connectionString" />
+  </parameter>
+  <parameter name="jurassicbarkEntities-Web.config Connection String" description="jurassicbarkEntities Connection String used in web.config by the application to access the database." defaultValue="metadata=res://*/JurassicBarkModel.csdl|res://*/JurassicBarkModel.ssdl|res://*/JurassicBarkModel.msl;provider=System.Data.SqlClient;provider connection string=&quot;Data Source=SQL5002.site4now.net;Initial Catalog=DB_A3C1E2_jurassicbark;User Id=DB_A3C1E2_jurassicbark_admin;Password=Ma774ew.243576;MultipleActiveResultSets=True;App=EntityFramework&quot;" tags="SqlConnectionString">
+    <parameterEntry kind="XmlFile" scope="C:\\Users\\Student\\Desktop\\Project\\src\\JurassicBark\.UI\.MVC\\obj\\Release\\Package\\PackageTmp\\Web\.config$" match="/configuration/connectionStrings/add[@name='jurassicbarkEntities']/@connectionString" />
+  </parameter>
+  <parameter name="DatabaseContext-Web.config Connection String" description="DatabaseContext Connection String used in web.config by the application to access the database." defaultValue="DatabaseContext_ConnectionString" tags="SqlConnectionString">
+    <parameterEntry kind="XmlFile" scope="C:\\Users\\Student\\Desktop\\Project\\src\\JurassicBark\.UI\.MVC\\obj\\Release\\Package\\PackageTmp\\Web\.config$" match="/configuration/connectionStrings/add[@name='DatabaseContext']/@connectionString" />
+  </parameter>
+</parameters>

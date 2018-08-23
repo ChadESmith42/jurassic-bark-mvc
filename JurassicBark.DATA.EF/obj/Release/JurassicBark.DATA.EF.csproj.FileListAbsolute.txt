@@ -1,0 +1,10 @@
+C:\Users\Student\Desktop\Project\src\JurassicBark.DATA.EF\bin\Release\JurassicBark.DATA.EF.dll.config
+C:\Users\Student\Desktop\Project\src\JurassicBark.DATA.EF\bin\Release\JurassicBark.DATA.EF.dll
+C:\Users\Student\Desktop\Project\src\JurassicBark.DATA.EF\bin\Release\JurassicBark.DATA.EF.pdb
+C:\Users\Student\Desktop\Project\src\JurassicBark.DATA.EF\bin\Release\EntityFramework.dll
+C:\Users\Student\Desktop\Project\src\JurassicBark.DATA.EF\bin\Release\EntityFramework.SqlServer.dll
+C:\Users\Student\Desktop\Project\src\JurassicBark.DATA.EF\bin\Release\EntityFramework.xml
+C:\Users\Student\Desktop\Project\src\JurassicBark.DATA.EF\bin\Release\EntityFramework.SqlServer.xml
+C:\Users\Student\Desktop\Project\src\JurassicBark.DATA.EF\obj\Release\JurassicBark.DATA.EF.csprojResolveAssemblyReference.cache
+C:\Users\Student\Desktop\Project\src\JurassicBark.DATA.EF\obj\Release\JurassicBark.DATA.EF.dll
+C:\Users\Student\Desktop\Project\src\JurassicBark.DATA.EF\obj\Release\JurassicBark.DATA.EF.pdb

@@ -218,7 +218,7 @@ namespace JurassicBark.UI.MVC.Controllers
         }
 
         // GET: Pets/Delete/5
-        [Authorize]
+        [Authorize(Roles ="Admin")]
         public ActionResult Delete(int? id)
         {
             if (id == null)
@@ -256,10 +256,6 @@ namespace JurassicBark.UI.MVC.Controllers
             {
                 pet.IsActive = false;
                 uow.Save();
-            }
-            else
-            {
-                return RedirectToAction("Index");
             }
 
             return RedirectToAction("Index");
