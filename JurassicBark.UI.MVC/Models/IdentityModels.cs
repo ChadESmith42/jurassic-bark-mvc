@@ -23,6 +23,7 @@ namespace IdentitySample.Models
             // Add custom user claims here
             userIdentity.AddClaim(new Claim("FName", this.FName));
             userIdentity.AddClaim(new Claim("LName", this.LName));
+            userIdentity.AddClaim(new Claim("Email", this.Email));
 
             return userIdentity;
         }

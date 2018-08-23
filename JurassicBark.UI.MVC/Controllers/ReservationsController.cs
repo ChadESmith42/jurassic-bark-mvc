@@ -177,11 +177,25 @@ namespace JurassicBark.UI.MVC.Controllers
             //The Resort and Pet object will be used to generate the reservation and the confirmation email;
             ResortLocation resort = uow.ResortLocationRepository.Find(reservation.ResortLocationID);
             Pet userPet = uow.PetRepository.Find(reservation.PetID);
-            //Get currentUser Email;
+            
             //Create new user, which gives access to AspNetUser via Navigational properties
-            UserDetail user = db.UserDetails.Include(u => u.AspNetUser)
-                .Where(u => u.AspNetUserId == currentUser).First();
-            string currentEmail = user.AspNetUser.Email;
+            UserDetail user = new UserDetail();
+            //Get currentUser Email;
+            string currentEmail = null;
+            //Creating a reservation without having valid UserDetails will cause an error
+            //Check if the user has UserDetails and reroute to Create UserDetails if not.
+            try
+            {
+                user = db.UserDetails
+                                .Where(u => u.AspNetUserId == currentUser)
+                                .Include(u => u.AspNetUser).SingleOrDefault();
+                currentEmail = user.AspNetUser.Email;
+            }
+            catch (Exception)
+            {
+                return RedirectToAction("Create", "UserDetails");
+            }
+            
             //Get Pet Owner Name using custom functions in Identity.Extensions
             string petOwner = $"{User.Identity.GetFirstName().Trim()} {User.Identity.GetLastName().Trim()}";
             //Create additional variables for the Email Content:
@@ -199,6 +213,7 @@ namespace JurassicBark.UI.MVC.Controllers
             {
                 //Count number of reservations for each resort
                 int countReservations = db.Reservations.Where(r => r.ReservationDate == reservation.ReservationDate && r.ResortLocationID == reservation.ResortLocationID).Count();
+                //Admin can do anything with reservations
                 if (User.IsInRole("Admin"))
                 {
                     db.Reservations.Add(reservation);
@@ -207,6 +222,7 @@ namespace JurassicBark.UI.MVC.Controllers
                     TempData["Toggle"] = true;
                     return RedirectToAction("Index");
                 }
+                //Customers can only make a reservation if there is a spot available
                 if (User.IsInRole("Customer") && countReservations < resort.ReservationLimit)
                 {
                     resort = db.ResortLocations.Where(r => r.ResortLocationID == reservation.ResortLocationID).FirstOrDefault();
