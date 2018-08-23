@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using System.Security.Claims;
+﻿using System.Security.Claims;
 using System.Security.Principal;
 
 namespace JurassicBark.UI.MVC.Models.Extensions
@@ -25,8 +21,8 @@ namespace JurassicBark.UI.MVC.Models.Extensions
 
         public static string GetEmail(this IIdentity identity)
         {
-            var claim = ((ClaimsIdentity)identity).FindFirst("UserName");
-
+            var claim = ((ClaimsIdentity)identity).FindFirst("Email");
+            
             return (claim != null) ? claim.Value : string.Empty;
         }
     }
