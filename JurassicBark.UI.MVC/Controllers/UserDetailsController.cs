@@ -23,13 +23,14 @@ namespace JurassicBark.UI.MVC.Controllers
         [Authorize]
         public ActionResult Index()
         {
-            bool IsUserExist = false;
+            
 
             string userName = $"{User.Identity.GetFirstName()} {User.Identity.GetLastName()}";
             
             var userDetails = context.UserDetailsRepository.Include(u => u.AspNetUser);
 
-            //Compare currentUser to AspNetUserId. If found in UserDetails, hide "Create Details" button on Index;
+            //Compare currentUser to AspNetUserId.
+            bool IsUserExist = false;
             string currentUser = User.Identity.GetUserId();
             string userCheck = context.UserDetailsRepository.Get().Where(u => u.AspNetUserId == currentUser).ToString();
             if (currentUser == userCheck)
@@ -62,7 +63,14 @@ namespace JurassicBark.UI.MVC.Controllers
         public ActionResult Details(int? id)
         {
             string userName = $"{User.Identity.GetFirstName()} {User.Identity.GetLastName()}";
+            //Compare currentUser to AspNetUserId. If found in UserDetails, hide "Create Details" button on Index;
+            bool IsUserExist = false;
             string currentUser = User.Identity.GetUserId();
+            string userCheck = context.UserDetailsRepository.Get().Where(u => u.AspNetUserId == currentUser).ToString();
+            if (currentUser == userCheck)
+            {
+                IsUserExist = true;
+            }
 
             if (id == null)
             {
@@ -82,6 +90,11 @@ namespace JurassicBark.UI.MVC.Controllers
                 ViewBag.UserName = userName;
                 return View(userDetail);
             }
+            if (!IsUserExist)
+            {
+                ViewBag.UserName = userName;
+                return View(userDetail);
+            }
             else
             {
                 return RedirectToAction("Index", "Home");
@@ -93,15 +106,33 @@ namespace JurassicBark.UI.MVC.Controllers
         [Authorize]
         public ActionResult Create()
         {
-            UserDetail user = context.UserDetailsRepository.Get().Where(u => u.AspNetUserId == User.Identity.GetUserId()).First();
-            if (!User.IsInRole("Admin") && (user.Id.ToString() != null))
+            string userName = $"{User.Identity.GetFirstName()} {User.Identity.GetLastName()}";
+            //Compare currentUser to AspNetUserId. If found in UserDetails, hide "Create Details" button on Index;
+            bool IsUserExist = false;
+            string currentUser = User.Identity.GetUserId();
+            string userCheck = context.UserDetailsRepository.Get().Where(u => u.AspNetUserId == currentUser).ToString();
+            if (currentUser == userCheck)
             {
-                return RedirectToAction("Index", context.UserDetailsRepository.Get());
+                IsUserExist = true;
             }
-            else
+
+            //UserDetail user = context.UserDetailsRepository.Get().Where(u => u.AspNetUserId == User.Identity.GetUserId()).First();
+            if (User.IsInRole("Admin"))
             {
                 ViewBag.AspNetUserId = new SelectList(db.AspNetUsers, "Id", "Email");
                 return View();
+            }
+            if ((User.IsInRole("Customer") || User.IsInRole("Employee")) && !IsUserExist)
+            {
+                ViewBag.AspNetUserId = new SelectList(db.AspNetUsers.Where(u => u.Id == currentUser), "Id", "Email");
+                ViewBag.User = userName;
+                ViewBag.IsUserExist = IsUserExist;
+                IsUserExist = true;
+                return View();
+            }
+            else
+            {
+                return View("Index");
             }
             
 

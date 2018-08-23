@@ -79,29 +79,60 @@ namespace JurassicBark.UI.MVC.Controllers
         [Authorize]
         public ActionResult Create(int? id)
         {
+            //Employees can't make reservations. This routes employees back to the Index should they attempt
+            //to access the controller through direct URL request.
+            #region Handle Employees trying to make reservations via HTTP
+            if (User.IsInRole("Employee"))
+            {
+                return View("Index");
+
+            } 
+            #endregion
+
+            #region Checks if Customer has a Pet. If not, routes the user to the Create() Pets View.
+
             //Identify the current user for filtering of records based on AspNetUserID
             string currentUser = User.Identity.GetUserId();
-
+            
             //Generate a complete list of all pets for the drop-down. This will be filtered later by user role
             List<Pet> myPets = uow.PetRepository.Get().Where(p => p.OwnerID == currentUser).ToList();
+            
+            //Check if the customer has any pets by getting the count of records in their myPets list.
+            //If less than one, route the customer to the Create() controller.
+            if (myPets.Count < 1)
+            {
+                return RedirectToAction("Create", "Pets");
+            }
+            #endregion
 
+            #region Display only the specific Customer's Reservations
             //Since a customer should only see their pets, we limit the list of pets based on
             //the current user's AspNetUserID if they are in a customer role
             if (User.IsInRole("Customer"))
             {
                 ViewBag.PetID = new SelectList(myPets, "PetID", "Name");
             }
+            #endregion
 
+            #region Create List of All Reservations for Admin to view
             //The Admin should see ALL pets as an option. So we "revert" back to the default
             //list of pets from the repository
             if (User.IsInRole("Admin"))
             {
                 ViewBag.PetID = new SelectList(uow.PetRepository.Get(), "PetID", "Name");
-            }
-            //Using the nullable int id, create a SelectList with the passed value of id as the sole item. This allows for incoming links from other controllers to specify which Resort will be selected. This is especially useful from the Locations/Index, where the count of Today's Reservations is shown next to the Limit for Reservations. It also let's the user determine the location from the map and know they are selecting the same location.
+            } 
+            #endregion
+
+            /*Using the nullable int id, create a SelectList with the passed value of id as the sole item. This allows 
+            for incoming links from other controllers to specify which Resort will be selected. This is especially 
+            useful from the Locations/Index, where the count of Today's Reservations is shown next to the Limit for
+            Reservations. It also let's the user determine the location from the map and know they are selecting the 
+            same location.*/
             if (id != null)
             {
-                ViewBag.ResortLocationID = new SelectList(uow.ResortLocationRepository.Get().Where(r => r.ResortLocationID == id).ToList(), "ResortLocationID", "ResortName", id);
+                ViewBag.ResortLocationID = new SelectList(uow.ResortLocationRepository.Get()
+                    .Where(r => r.ResortLocationID == id)
+                    .ToList(), "ResortLocationID", "ResortName", id);
             }
             else
             {
@@ -118,20 +149,41 @@ namespace JurassicBark.UI.MVC.Controllers
         [Authorize]
         public ActionResult Create([Bind(Include = "ReservationID,ResortLocationID,PetID,ReservationDate")] Reservation reservation)
         {
+            #region Checks if Customer has a Pet. If not, routes the user to the Create() Pets View.
+
+            //Identify the current user for filtering of records based on AspNetUserID
+            string currentUser = User.Identity.GetUserId();
+
+            //Generate a complete list of all pets for the drop-down. This will be filtered later by user role
+            List<Pet> myPets = uow.PetRepository.Get().Where(p => p.OwnerID == currentUser).ToList();
+
+            //Check if the customer has any pets by getting the count of records in their myPets list.
+            //If less than one, route the customer to the Create() controller.
+            if (myPets.Count < 1)
+            {
+                return RedirectToAction("Create", "Pets");
+            }
+            #endregion
+
+            if (User.IsInRole("Employee"))
+            {
+                return View("Index");
+            }
             //*****************************************************//
             /*Setup the confirmation email variables here, while the reservation object still has values, if
             the variables are set AFTER the db.Save() ... the reservation values are reset and everything
             becomes a null string.
             /***********************************************************/
-            //This Resort and Pet object will be used by both to generate the reservation and confirmation email;
+            //The Resort and Pet object will be used to generate the reservation and the confirmation email;
             ResortLocation resort = uow.ResortLocationRepository.Find(reservation.ResortLocationID);
             Pet userPet = uow.PetRepository.Find(reservation.PetID);
-            //Get currentUser Identity;
-            string currentUser = User.Identity.GetUserId();
             //Get currentUser Email;
-            string currentEmail = User.Identity.GetUserName();
+            //Create new user, which gives access to AspNetUser via Navigational properties
+            UserDetail user = db.UserDetails.Include(u => u.AspNetUser)
+                .Where(u => u.AspNetUserId == currentUser).First();
+            string currentEmail = user.AspNetUser.Email;
             //Get Pet Owner Name using custom functions in Identity.Extensions
-            string petOwner = $"{User.Identity.GetFirstName().Trim()} {User.Identity.GetLastName().Trim()}.";
+            string petOwner = $"{User.Identity.GetFirstName().Trim()} {User.Identity.GetLastName().Trim()}";
             //Create additional variables for the Email Content:
             string resortName = resort.ResortName;
             string address = resort.Address;
@@ -140,7 +192,7 @@ namespace JurassicBark.UI.MVC.Controllers
             string zip = resort.ZipCode.ToString();
             string pet = userPet.Name;
             string date = reservation.ReservationDate.ToShortDateString();
-            string petImage = "<img src='~/Content/images/pets/t_" + userPet.PetPhoto + "/>";
+            string petImage = "<img src='~/Content/images/pets/t_" + userPet.PetPhoto + "' />";
             string mapImage = "<img src='~/Content/images/Maps/" + resort.ResortLocationID + ".png' />";
             
             if (ModelState.IsValid)
@@ -214,6 +266,7 @@ namespace JurassicBark.UI.MVC.Controllers
                     return View(reservation);
                 }
             }
+            
 
             ViewBag.PetID = new SelectList(db.Pets, "PetID", "Name", reservation.PetID);
             ViewBag.ResortLocationID = new SelectList(db.ResortLocations, "ResortLocationID", "ResortName", reservation.ResortLocationID);
