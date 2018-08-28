@@ -3,6 +3,7 @@ using System;
 using System.Net;
 using System.Net.Mail;
 using System.Web.Mvc;
+using JurassicBark.UI.MVC.Models.Extensions;
 
 namespace IdentitySample.Controllers
 {
@@ -48,39 +49,43 @@ namespace IdentitySample.Controllers
                     $"Email: {contact.Email}<br/> Subject: {contact.Subject}<br/>" +
                     $"<h4>Message<h4>Pet: {contact.PetName} {contact.Message}<br/> Date Sent: {contact.DateSent}";
 
-                //Create a MailMessage Object (System.Net.Mail)
-                //This is the envelope for our letter (messageContent)
-                //FROM address is first, TO address is next, SUBJECT, and MESSAGE
-                MailMessage m = new MailMessage("no-reply@codingbychad.com",
-                    "chad@codingbychad.com", contact.Subject, messageContent);
+                EmailHandler.SendEmail(contact.Email, "chad@codingbychad.com",contact.Subject,contact.Message);
+                #region Old Email Process
 
-                //allow for HTML in the body
-                m.IsBodyHtml = true;
-                // replyto set to reply to the original emailer, not your website.
-                m.ReplyToList.Add(contact.Email);
-                //Priority
-                //m.Priority = MailPriority.High; //optional setting
 
-                //SMTP Client
-                SmtpClient client = new SmtpClient("mail.codingbychad.com");
+                ////Create a MailMessage Object (System.Net.Mail)
+                ////This is the envelope for our letter (messageContent)
+                ////FROM address is first, TO address is next, SUBJECT, and MESSAGE
+                //MailMessage m = new MailMessage("no-reply@codingbychad.com",
+                //    "chad@codingbychad.com", contact.Subject, messageContent);
 
-                client.Credentials = new NetworkCredential("no-reply@codingbychad.com", "M@774ew.");
+                ////allow for HTML in the body
+                //m.IsBodyHtml = true;
+                //// replyto set to reply to the original emailer, not your website.
+                //m.ReplyToList.Add(contact.Email);
+                ////Priority
+                ////m.Priority = MailPriority.High; //optional setting
 
-                using (client)
-                {
-                    try
-                    {
-                        client.Send(m);
-                    }//end try
-                    catch (Exception)
-                    {
-                        ViewBag.ErrorMessage = "There was an error sending your message. Please try again.";
+                ////SMTP Client
+                //SmtpClient client = new SmtpClient("mail.codingbychad.com");
 
-                        return View(contact);
-                    }//end catch
+                //client.Credentials = new NetworkCredential("no-reply@codingbychad.com", "M@774ew.");
 
-                }//end Client
+                //using (client)
+                //{
+                //    try
+                //    {
+                //        client.Send(m);
+                //    }//end try
+                //    catch (Exception)
+                //    {
+                //        ViewBag.ErrorMessage = "There was an error sending your message. Please try again.";
 
+                //        return View(contact);
+                //    }//end catch
+
+                //}//end Client
+                #endregion
                 return View("ContactConfirmation", contact);
 
             }//end IF contact form validation is TRUE;

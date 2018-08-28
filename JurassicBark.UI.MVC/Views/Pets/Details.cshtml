@@ -33,6 +33,7 @@
             @if (User.IsInRole("Admin") || User.IsInRole("Customer"))
             {
                 @Html.ActionLink("Edit", "Edit", new { id = Model.PetID }, htmlAttributes: new { @class = "btn btn-primary" })
+                @Html.ActionLink("Delete","Delete", new { id = Model.PetID}, htmlAttributes: new { @class = "btn btn-outline-primary"})
             }
             @Html.ActionLink("Back to List", "Index", null, htmlAttributes: new { @class = "btn btn-primary" })
         </div>

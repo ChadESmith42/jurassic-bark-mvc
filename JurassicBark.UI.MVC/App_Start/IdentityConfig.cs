@@ -10,6 +10,10 @@ using System.Collections.Generic;
 using System.Data.Entity;
 using System.Threading.Tasks;
 using System.Web;
+using System.Net.Mail;
+using System.Net;
+using System.Configuration;
+using IdentitySample.Models;
 
 namespace IdentitySample.Models
 {
@@ -71,7 +75,7 @@ namespace IdentitySample.Models
     // Configure the RoleManager used in the application. RoleManager is defined in the ASP.NET Identity core assembly
     public class ApplicationRoleManager : RoleManager<IdentityRole>
     {
-        public ApplicationRoleManager(IRoleStore<IdentityRole,string> roleStore)
+        public ApplicationRoleManager(IRoleStore<IdentityRole, string> roleStore)
             : base(roleStore)
         {
         }
@@ -86,73 +90,116 @@ namespace IdentitySample.Models
     {
         public Task SendAsync(IdentityMessage message)
         {
-            // Plug in your email service here to send an email.
-            return Task.FromResult(0);
+            // Credentials:
+            var credentialUserName = "no-reply@codingbychad.com";
+            var sentFrom = "no-reply@codingbychad.com";
+            var pwd = "Ma774ew.";
+
+            // Configure the client:
+            System.Net.Mail.SmtpClient client =
+                new System.Net.Mail.SmtpClient("mail.codingbychad.com");
+            //Specific port instructions from SmarterASP.Net for Gmail users
+            //Tests the TO email for being a gmail account and sets the port
+            //if necessary, otherwise goes to default Port 25.
+            if (message.Destination.ToLower().Contains("gmail.com"))
+            {
+                client.Port = 587;
+            }
+            else
+            {
+                client.Port = 25;
+            }
+            //client.Port = 587;
+            client.DeliveryMethod = System.Net.Mail.SmtpDeliveryMethod.Network;
+            client.UseDefaultCredentials = false;
+
+            // Creatte the credentials:
+            System.Net.NetworkCredential credentials =
+                new System.Net.NetworkCredential(credentialUserName, pwd);
+
+            client.EnableSsl = false;
+            client.Credentials = credentials;
+
+            // Create the message:
+            var mail =
+                new System.Net.Mail.MailMessage(sentFrom, message.Destination);
+
+            mail.Subject = message.Subject;
+            mail.Body = message.Body;
+
+            // Send:
+            return client.SendMailAsync(mail);
         }
     }
+}
 
-    public class SmsService : IIdentityMessageService
+public class SmsService : IIdentityMessageService
+{
+    public Task SendAsync(IdentityMessage message)
     {
-        public Task SendAsync(IdentityMessage message)
-        {
-            // Plug in your sms service here to send a text message.
-            return Task.FromResult(0);
-        }
+        // Plug in your sms service here to send a text message.
+        return Task.FromResult(0);
+    }
+}
+
+// This is useful if you do not want to tear down the database each time you run the application.
+// public class ApplicationDbInitializer : DropCreateDatabaseAlways<ApplicationDbContext>
+// This example shows you how to create a new database if the Model changes
+public class ApplicationDbInitializer : DropCreateDatabaseIfModelChanges<ApplicationDbContext>
+{
+    protected override void Seed(ApplicationDbContext context)
+    {
+        InitializeIdentityForEF(context);
+        base.Seed(context);
     }
 
-    // This is useful if you do not want to tear down the database each time you run the application.
-    // public class ApplicationDbInitializer : DropCreateDatabaseAlways<ApplicationDbContext>
-    // This example shows you how to create a new database if the Model changes
-    public class ApplicationDbInitializer : DropCreateDatabaseIfModelChanges<ApplicationDbContext> 
+    //Create User=Admin@Admin.com with password=Admin@123456 in the Admin role        
+    public static void InitializeIdentityForEF(ApplicationDbContext db)
     {
-        protected override void Seed(ApplicationDbContext context) {
-            InitializeIdentityForEF(context);
-            base.Seed(context);
+        var userManager = HttpContext.Current.GetOwinContext().GetUserManager<ApplicationUserManager>();
+        var roleManager = HttpContext.Current.GetOwinContext().Get<ApplicationRoleManager>();
+        const string name = "chad@codingbychad.com";
+        const string password = "Ma774ew.243576";
+        const string roleName = "Admin";
+
+        //Create Role Admin if it does not exist
+        var role = roleManager.FindByName(roleName);
+        if (role == null)
+        {
+            role = new IdentityRole(roleName);
+            var roleresult = roleManager.Create(role);
         }
 
-        //Create User=Admin@Admin.com with password=Admin@123456 in the Admin role        
-        public static void InitializeIdentityForEF(ApplicationDbContext db) {
-            var userManager = HttpContext.Current.GetOwinContext().GetUserManager<ApplicationUserManager>();
-            var roleManager = HttpContext.Current.GetOwinContext().Get<ApplicationRoleManager>();
-            const string name = "admin@example.com";
-            const string password = "Admin@123456";
-            const string roleName = "Admin";
+        var user = userManager.FindByName(name);
+        if (user == null)
+        {
+            user = new ApplicationUser { UserName = name, Email = name, FName = "Chad", LName = "Smith", EmailConfirmed = true  };
+            var result = userManager.Create(user, password);
+            result = userManager.SetLockoutEnabled(user.Id, false);
+        }
 
-            //Create Role Admin if it does not exist
-            var role = roleManager.FindByName(roleName);
-            if (role == null) {
-                role = new IdentityRole(roleName);
-                var roleresult = roleManager.Create(role);
-            }
-
-            var user = userManager.FindByName(name);
-            if (user == null) {
-                user = new ApplicationUser { UserName = name, Email = name };
-                var result = userManager.Create(user, password);
-                result = userManager.SetLockoutEnabled(user.Id, false);
-            }
-
-            // Add user admin to Role Admin if not already added
-            var rolesForUser = userManager.GetRoles(user.Id);
-            if (!rolesForUser.Contains(role.Name)) {
-                var result = userManager.AddToRole(user.Id, role.Name);
-            }
+        // Add user admin to Role Admin if not already added
+        var rolesForUser = userManager.GetRoles(user.Id);
+        if (!rolesForUser.Contains(role.Name))
+        {
+            var result = userManager.AddToRole(user.Id, role.Name);
         }
     }
+}
 
-    public class ApplicationSignInManager : SignInManager<ApplicationUser, string>
+public class ApplicationSignInManager : SignInManager<ApplicationUser, string>
+{
+    public ApplicationSignInManager(ApplicationUserManager userManager, IAuthenticationManager authenticationManager) :
+        base(userManager, authenticationManager)
+    { }
+
+    public override Task<ClaimsIdentity> CreateUserIdentityAsync(ApplicationUser user)
     {
-        public ApplicationSignInManager(ApplicationUserManager userManager, IAuthenticationManager authenticationManager) : 
-            base(userManager, authenticationManager) { }
+        return user.GenerateUserIdentityAsync((ApplicationUserManager)UserManager);
+    }
 
-        public override Task<ClaimsIdentity> CreateUserIdentityAsync(ApplicationUser user)
-        {
-            return user.GenerateUserIdentityAsync((ApplicationUserManager)UserManager);
-        }
-
-        public static ApplicationSignInManager Create(IdentityFactoryOptions<ApplicationSignInManager> options, IOwinContext context)
-        {
-            return new ApplicationSignInManager(context.GetUserManager<ApplicationUserManager>(), context.Authentication);
-        }
+    public static ApplicationSignInManager Create(IdentityFactoryOptions<ApplicationSignInManager> options, IOwinContext context)
+    {
+        return new ApplicationSignInManager(context.GetUserManager<ApplicationUserManager>(), context.Authentication);
     }
 }

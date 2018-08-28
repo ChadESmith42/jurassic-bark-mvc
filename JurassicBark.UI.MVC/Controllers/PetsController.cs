@@ -230,7 +230,7 @@ namespace JurassicBark.UI.MVC.Controllers
             {
                 return HttpNotFound();
             }
-            if ((pet.OwnerID == User.Identity.GetUserId() && !User.IsInRole("Admin")))
+            if ((pet.OwnerID == User.Identity.GetUserId() || User.IsInRole("Admin")))
             {
                 return View(pet);
             }
@@ -249,7 +249,13 @@ namespace JurassicBark.UI.MVC.Controllers
             //Check if user is Admin and remove record:
             if (User.IsInRole("Admin"))
             {
-                pet.IsActive = false;
+                List<Reservation> reservationList = new List<Reservation>();
+                reservationList = uow.ReservationRepository.Get().Where(r => r.PetID == id).ToList();
+                foreach (Reservation item in reservationList)
+                {
+                    uow.ReservationRepository.Remove(item);
+                }
+                uow.PetRepository.Remove(pet);
                 uow.Save();
             }
             if (pet.OwnerID == currentUser)
