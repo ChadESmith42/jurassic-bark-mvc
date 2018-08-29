@@ -6,6 +6,8 @@
 
 <h2>@ViewBag.Title @Html.DisplayFor(model => model.Name)</h2>
 
+<!--Warning about file size appears here if the size of the photo is larger than 10MB. -->
+<div id="warning" class="alert-warning"></div>
 
 @using (Html.BeginForm("Edit", "Pets", FormMethod.Post, new { enctype = "multipart/form-data" }))
 {
@@ -34,6 +36,9 @@
         }
         <div class="form-group">
             @Html.LabelFor(model => model.PetPhoto, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="spaced alert-info">
+                Maximum file size is 10MB. (Don't worry. We'll check the size before you upload.)
+            </div>
             <div class="col-md-10">
                 <input type="file" name="fileUpload" />
                 @Html.HiddenFor(model => model.PetPhoto)
@@ -47,17 +52,19 @@
                 @Html.ValidationMessageFor(model => model.SpecialNotes, "", new { @class = "text-danger" })
             </div>
         </div>
-
-        <div class="form-group">
-            @Html.LabelFor(model => model.IsActive, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                <div class="checkbox">
-                    @Html.EditorFor(model => model.IsActive)
-                    @Html.ValidationMessageFor(model => model.IsActive, "", new { @class = "text-danger" })
+        @if (User.IsInRole("Admin"))
+        {
+            <div class="form-group">
+                @Html.LabelFor(model => model.IsActive, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    <div class="checkbox">
+                        @Html.EditorFor(model => model.IsActive)
+                        @Html.ValidationMessageFor(model => model.IsActive, "", new { @class = "text-danger" })
+                    </div>
                 </div>
             </div>
-        </div>
-
+        }
+        
         <div class="form-group">
             @Html.LabelFor(model => model.DateAdded, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
@@ -81,4 +88,20 @@
 
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")
+
+<script type="text/javascript">
+    var warning = "Your photo is too large. Please choose a file less than 10MB and try again."
+    $('#PetPhoto').bind('change', function () {
+        alert('This file size is: ' + this.files[0].size / 1024 / 1024 + "MB");
+        if ((this.files[0].size / 1024 / 1024) > 10.0) {
+            document.getElementById("warning").textContent = warning;
+        }
+        else {
+            document.getElementById("warning").textContent = null;
+        }
+    });
+
+</script>
+
+
 }

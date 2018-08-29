@@ -28,6 +28,7 @@
         </p>
         <p class="card-text">
             Owner Contact Information: @Html.DisplayFor(model => model.AspNetUser.Email)
+            Owner Name: @Html.DisplayFor(model => model.AspNetUser.FName.TrimEnd()) @Html.DisplayFor(model => model.AspNetUser.LName.TrimEnd())
         </p>
         <div class="btn-group">
             @if (User.IsInRole("Admin") || User.IsInRole("Customer"))
