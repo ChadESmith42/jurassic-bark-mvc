@@ -141,7 +141,8 @@ h1, h2, h3, h4, h5, .lead, .jumbrotron {
     width: 80px;
     height: 80px;
     border-radius: 50%;
-    box-shadow: rgba(0,0,0,4), 10px, 10px, inset;
+    float: left;
+    margin: 10px;
 }
 
 .pet-avatar {
@@ -241,4 +242,9 @@ h3.jurassic {
 
 .rounded{
     border-radius: 20px;
+}
+
+.section{
+    margin-bottom: 30px;
+
 }

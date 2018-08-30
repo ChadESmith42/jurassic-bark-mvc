@@ -1,0 +1,147 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset='utf-8' />
+    <title></title>
+    <meta name='viewport' content='initial-scale=1,maximum-scale=1,user-scalable=no' />
+    <link rel="icon" type="image/png" href="/Content/images/favicons/favicon.ico">
+    <link href="https://fonts.googleapis.com/css?family=Oswald" rel="stylesheet">
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
+    <link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" crossorigin="anonymous">
+    <link href='https://api.tiles.mapbox.com/mapbox-gl-js/v0.46.0/mapbox-gl.css' rel='stylesheet' />
+    <style>
+        body {
+            padding: 0;
+            font-family: 'Oswald', sans-serif;
+            font-size: 18px;
+        }
+
+        #map {
+            position: absolute;
+            top: 200px;
+            bottom: 0;
+            width: 100%;
+        }
+
+        .icon {
+            background-image: url("https://i.imgur.com/MK4NUzI.png");
+            background-size: cover;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            cursor: pointer;
+        }
+
+        .mapboxgl-popup {
+            width: 60%;
+            max-width: 225px;
+        }
+
+        .mapboxgl-popup-content {
+            font-family: 'Oswald', sans-serif;
+            font-size: 1.2em;
+        }
+
+        .jumbotron {
+            margin: auto 0;
+            background-color: white;
+        }
+    </style>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-122057456-1"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag() { dataLayer.push(arguments); }
+        gtag('js', new Date());
+
+        gtag('config', 'UA-122057456-1');
+    </script>
+</head>
+<body>
+    <div class="jumbotron">
+        <h1 class="text-center">Kansas City, Missouri</h1>
+        <p class="lead text-center">Home, sweet home.</p>
+    </div>
+    <div id='map'></div>
+
+
+    <!-- Scripts -->
+    <script src='https://api.tiles.mapbox.com/mapbox-gl-js/v0.46.0/mapbox-gl.js'></script>
+    <script>
+
+        mapboxgl.accessToken = 'pk.eyJ1IjoiY3NtaXRoNzU1MyIsImEiOiJjaWY4OXU3NXkxbzA4c2hsem00Y3pscmMyIn0.9GAiQ-7yW9AnQKcAooeytA';
+
+        var map = new mapboxgl.Map({
+            container: 'map',
+            style: 'mapbox://styles/mapbox/streets-v9',
+            center: [-94.5786, 39.0997],
+            zoom: 11.5
+        });
+        map.loadImage("https://i.imgur.com/MK4NUzI.png", function (error, image) {
+            if (error) throw error;
+            map.addImage("custom-marker", image);
+            map.on('load', function () {
+                map.addLayer({
+                    "id": "places",
+                    "type": "symbol",
+                    "source": {
+                        "type": "geojson",
+                        "data": {
+                            "type": "FeatureCollection",
+                            "features": [{
+                                "type": "Feature",
+                                "properties": {
+                                    "description": "<strong>Kansas City, Missouri!</strong><p>KCMO is my home, sweet home. I've lived in KCMO since 2012. While I would love to work locally, a remote position would be awesome, too. (I have awesome Google Fiber internet service, so I won't even lag in the inter-office Xbox tournament.)</p>",
+                                    "icon": "star"
+                                },
+                                "geometry": {
+                                    "type": "Point",
+                                    "coordinates": [-94.5786, 39.0997]
+                                }
+                            }, {
+                                "type": "Feature",
+                                "properties": {
+                                    "description": "<strong>Centriq Training Career Program</strong><p>I am a graduate of the Centriq Training Career Program's Web Development Track. If you want a desire to learn, look no further. I went ''from HTM-what?'' to ''Hey, let's debug this Razor statement!'' in just 4 months. I had to want it. I still want to learn more.</p>",
+                                    "icon": "school"
+                                },
+                                "geometry": {
+                                    "type": "Point",
+                                    "coordinates": [-94.61131, 38.96930]
+                                }
+                            }]
+                        }
+                    },
+                    "layout": {
+                        "icon-image": "custom-marker",
+                        "icon-allow-overlap": true
+                    }
+                });
+
+                map.on('click', 'places', function (e) {
+                    var coordinates = e.features[0].geometry.coordinates.slice();
+                    var description = e.features[0].properties.description;
+
+                    while (Math.abs(e.lngLat.lng - coordinates[0]) > 180) {
+                        coordinates[0] += e.lngLat.lng > coordinates[0] ? 360 : -360;
+                    }
+
+                    new mapboxgl.Popup()
+                        .setLngLat(coordinates)
+                        .setHTML(description)
+                        .addTo(map);
+                });
+
+                map.on('mouseenter', 'places', function () {
+                    map.getCanvas().style.cursor = 'pointer';
+                });
+
+                map.on('mouseleave', 'places', function () {
+                    map.getCanvas().style.cursor = '';
+                });
+
+            });
+        });
+    </script>
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.2/js/bootstrap.min.js" crossorigin="anonymous"></script>
+</body>
+</html>

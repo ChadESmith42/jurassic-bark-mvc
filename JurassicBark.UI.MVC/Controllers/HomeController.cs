@@ -15,14 +15,13 @@ namespace IdentitySample.Controllers
             return View();
         }
 
-        //[HttpGet]
-        //[Authorize]
-        //public ActionResult About()
-        //{
-        //    ViewBag.Message = "We care for your good boys and clever girls.";
+        [HttpGet]
+        public ActionResult About()
+        {
+            ViewBag.Message = "We care for your good boys and clever girls.";
 
-        //    return View();
-        //}
+            return View();
+        }
 
         [HttpGet]
         public ActionResult Contact()

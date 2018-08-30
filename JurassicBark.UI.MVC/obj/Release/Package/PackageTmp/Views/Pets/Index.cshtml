@@ -42,9 +42,12 @@
                 <p class="card-text">
                     @Html.DisplayNameFor(model => model.DateAdded): @Html.DisplayFor(modelItem => item.DateAdded)
                 </p>
-                <p class="card-text">
-                    Owner Contact Information: @Html.DisplayFor(modelItem => item.AspNetUser.Email)
-                </p>
+                <span class="list-group-item-heading">Owner Contact Info:</span>
+                <ul class="card-text list-group">
+                    <li class="list-group-item">Name: @item.AspNetUser.FName.TrimEnd() @item.AspNetUser.LName.Trim()</li>
+                    <li class="list-group-item">Email: @item.AspNetUser.Email</li>
+                    
+                </ul>
                 
                 <div class="btn-group">
                     @if (User.IsInRole("Admin") || User.IsInRole("Customer"))

@@ -198,6 +198,7 @@
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
     <Content Include="Content\favicon.ico" />
+    <Content Include="Content\images\chad_avatar.jpg" />
     <Content Include="Content\images\Icons\dog-park-15.svg" />
     <Content Include="Content\images\jdp.png" />
     <Content Include="Content\images\Maps\1.png" />
@@ -212,32 +213,12 @@
     <Content Include="Content\images\pet3.jpg" />
     <Content Include="Content\images\pet4.png" />
     <Content Include="Content\images\pet5.jpg" />
-    <Content Include="Content\images\pets\20180814130504963_buddy.jpg" />
-    <Content Include="Content\images\pets\20180814130542399_blue.jpg" />
-    <Content Include="Content\images\pets\20180814130629539_rex.jpg" />
-    <Content Include="Content\images\pets\20180816154043717_pet2.jpg" />
-    <Content Include="Content\images\pets\20180816154056244_buttons.jpg" />
-    <Content Include="Content\images\pets\20180816163541680_pet2.jpg" />
-    <Content Include="Content\images\pets\20180816163617541_buttons.jpg" />
-    <Content Include="Content\images\pets\20180816163903033_pet2.jpg" />
-    <Content Include="Content\images\pets\buttons.jpg" />
-    <Content Include="Content\images\pets\mittens.jpg" />
-    <Content Include="Content\images\pets\t_20180814130504963_buddy.jpg" />
-    <Content Include="Content\images\pets\t_20180814130542399_blue.jpg" />
-    <Content Include="Content\images\pets\t_20180814130629539_rex.jpg" />
-    <Content Include="Content\images\pets\t_20180816154043717_pet2.jpg" />
-    <Content Include="Content\images\pets\t_20180816154056244_buttons.jpg" />
-    <Content Include="Content\images\pets\t_20180816163541680_pet2.jpg" />
-    <Content Include="Content\images\pets\t_20180816163617541_buttons.jpg" />
-    <Content Include="Content\images\pets\t_20180816163903033_pet2.jpg" />
-    <Content Include="Content\images\pets\t_buttons.jpg" />
-    <Content Include="Content\images\pets\t_mittens.jpg" />
-    <Content Include="Content\images\tagline.png" />
     <Content Include="Content\mapbox-gl-directions.css" />
     <Content Include="favicon.ico" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />
+    <Content Include="mapexample.html" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
     <Content Include="fonts\Jurassic_Park.ttf" />
@@ -327,9 +308,11 @@
     <Content Include="Views\Home\ContactConfirmation.cshtml" />
     <Content Include="Views\Reservations\Today.cshtml" />
     <Content Include="Views\Oops.cshtml" />
+    <Content Include="Views\Home\About.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="Content\images\pets\" />
     <Folder Include="Content\images\users\" />
   </ItemGroup>
   <ItemGroup>
