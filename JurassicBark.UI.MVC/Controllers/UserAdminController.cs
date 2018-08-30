@@ -1,11 +1,16 @@
 ﻿using IdentitySample.Models;
 using Microsoft.AspNet.Identity.Owin;
+using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
+using JurassicBark.DATA.EF;
+using JurassicBark.DATA.EF.Repository;
+using JurassicBark.UI.MVC.Models.Extensions;
+using System;
 
 namespace IdentitySample.Controllers
 {
@@ -215,12 +220,26 @@ namespace IdentitySample.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> DeleteConfirmed(string id)
         {
+            UnitOfWork uow = new UnitOfWork();
+
             if (ModelState.IsValid)
             {
                 if (id == null)
                 {
                     return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
                 }
+                /*
+                *************** Delete User Account *****************
+                Before a user can be deleted, the user's reservations
+                and pets must be deleted. The dependencies in the DB require
+                the AspNetUserId for multiple tables. The following code was 
+                added to purge the Reservations and Pets objects prior to 
+                deleting the User.
+                */
+                //Delete the reservations based on AspNetUserId
+                DeleteUserHelper.DeleteReservations(id);
+                //Delete the pets based on AspNetUserId
+                DeleteUserHelper.DeletePets(id);
 
                 var user = await UserManager.FindByIdAsync(id);
                 if (user == null)
